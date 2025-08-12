@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Generator - CMR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="cover-letter-page">
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="logo">
+                    <h1>CMR</h1>
+                    <span>Cover Letter</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="index.html">Templates</a>
+                    <a href="form.html">Builder</a>
+                    <a href="cover.html" class="active">Cover Letter</a>
+                </nav>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="cover-container">
+        <div class="cover-form">
+            <h2>Generate Cover Letter</h2>
+            
+            <div class="form-group">
+                <label>Company Name</label>
+                <input type="text" id="companyName" placeholder="Company Name" oninput="updateCoverPreview()">
+            </div>
+            
+            <div class="form-group">
+                <label>Position</label>
+                <input type="text" id="position" placeholder="Job Position" oninput="updateCoverPreview()">
+            </div>
+            
+            <div class="form-group">
+                <label>Hiring Manager</label>
+                <input type="text" id="hiringManager" placeholder="Hiring Manager Name (Optional)" oninput="updateCoverPreview()">
+            </div>
+            
+            <div class="form-group">
+                <label>Opening Paragraph</label>
+                <textarea id="opening" placeholder="Why are you interested in this position?" oninput="updateCoverPreview()"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Body Paragraph</label>
+                <textarea id="body" placeholder="Highlight your relevant experience and skills..." oninput="updateCoverPreview()"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Closing Paragraph</label>
+                <textarea id="closing" placeholder="Express enthusiasm and next steps..." oninput="updateCoverPreview()"></textarea>
+            </div>
+            
+            <div class="actions">
+                <button onclick="downloadCoverPDF()" class="btn btn-primary">Download PDF</button>
+                <button onclick="generateAICover()" class="btn btn-accent">AI Assist</button>
+            </div>
+
+            <!-- Ad Slot -->
+            <div class="ad-slot ad-form">
+                <div class="ad-placeholder">[Form Ad - 300x250]</div>
+            </div>
+        </div>
+        
+        <div class="cover-preview">
+            <h3>Preview</h3>
+            <div id="coverPreview" class="cover-letter-preview">
+                <!-- Cover letter preview will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

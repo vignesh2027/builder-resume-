@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder - CMR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <div class="logo-icon">📄</div>
+                    <div class="logo-text">
+                        <h1>CMR</h1>
+                        <span>Resume Builder</span>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Templates</a>
+                    <a href="form.html" class="nav-link active">Builder</a>
+                    <a href="cover.html" class="nav-link">Cover Letter</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div id="offlineIndicator" class="offline-indicator hidden">
+      <span class="offline-icon">📡</span>
+      <span>You are offline - Your work is saved locally</span>
+    </div>
+
+    <div class="builder-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Template</h3>
+                    <div class="template-selector">
+                        <select id="templateSelect" onchange="changeTemplate()" class="select-input">
+                            <option value="modern">Modern Professional</option>
+                            <option value="classic">Classic Traditional</option>
+                            <option value="elegant">Elegant Minimal</option>
+                            <option value="creative">Creative Bold</option>
+                            <option value="ats-friendly">ATS Optimized</option>
+                            <option value="executive">Executive Premium</option>
+                            <option value="tech">Tech Specialist</option>
+                            <option value="academic">Academic Scholar</option>
+                            <option value="creative13">Creative Hexagon</option>
+                            <option value="creative14">Creative Arrow</option>
+                            <option value="creative15">Creative Spiral</option>
+                            <option value="creative16">Creative Lightning</option>
+                            <option value="creative17">Creative Crystal</option>
+                            <option value="creative18">Creative Flame</option>
+                        </select>
+                    </div>
+                    <button onclick="toggleATSMode()" class="ats-toggle-btn" id="atsToggle">
+                        <span class="ats-icon">🤖</span>
+                        <span>ATS Optimize</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Customize</h3>
+                    <div class="customization-grid">
+                        <div class="color-picker">
+                            <label class="input-label">Accent Color</label>
+                            <div class="color-options">
+                                <button class="color-btn active" data-color="#6366f1" style="background: #6366f1" title="Indigo"></button>
+                                <button class="color-btn" data-color="#3b82f6" style="background: #3b82f6" title="Blue"></button>
+                                <button class="color-btn" data-color="#10b981" style="background: #10b981" title="Emerald"></button>
+                                <button class="color-btn" data-color="#f59e0b" style="background: #f59e0b" title="Amber"></button>
+                                <button class="color-btn" data-color="#ef4444" style="background: #ef4444" title="Red"></button>
+                                <button class="color-btn" data-color="#8b5cf6" style="background: #8b5cf6" title="Violet"></button>
+                                <button class="color-btn" data-color="#06b6d4" style="background: #06b6d4" title="Cyan"></button>
+                                <button class="color-btn" data-color="#84cc16" style="background: #84cc16" title="Lime"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="font-picker">
+                            <label class="input-label">Font Style</label>
+                            <select id="fontSelect" onchange="changeFont()" class="select-input">
+                                <option value="inter">Inter (Modern)</option>
+                                <option value="playfair">Playfair (Elegant)</option>
+                                <option value="system">System (Clean)</option>
+                                <option value="serif">Times (Classic)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Actions</h3>
+                    <div class="action-buttons">
+                        <button onclick="downloadPDF()" class="btn btn-primary btn-full">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7,10 12,15 17,10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download PDF
+                        </button>
+                        <button onclick="exportData()" class="btn btn-secondary btn-full">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="12" y1="18" x2="8" y2="18"/>
+                                <line x1="12" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                            Export Data
+                        </button>
+                        <button onclick="importData()" class="btn btn-outline btn-full">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="12" y1="13" x2="8" y2="13"/>
+                                <line x1="12" y1="17" x2="8" y2="17"/>
+                                <polyline points="9,15 8,12 9,9"/>
+                            </svg>
+                            Import Data
+                        </button>
+                        <button onclick="analyzeResume()" class="btn btn-accent btn-full">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m6-6h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4m-6 0a2 2 0 0 0-2-2v-3a2 2 0 0 0 2-2m6 0a2 2 0 0 1 2-2v-3a2 2 0 0 1-2-2"/>
+                            </svg>
+                            Analyze Resume
+                        </button>
+                        <button onclick="loadSampleData()" class="btn btn-outline btn-full">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                            Load Sample
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="progress-indicator">
+                        <h4>Completion Progress</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0% Complete</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                  <h3 class="sidebar-title">ATS Score</h3>
+                  <div class="ats-score-panel">
+                    <div class="ats-score-circle">
+                      <div class="ats-score-value" id="atsScore">0</div>
+                      <div class="ats-score-label">ATS Score</div>
+                    </div>
+                    <div class="ats-tips" id="atsTips">
+                      <div class="ats-tip">Add more content to improve score</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sidebar-section">
+                  <h3 class="sidebar-title">Cover Letter</h3>
+                  <button onclick="toggleCoverLetter()" class="btn btn-outline btn-full" id="coverLetterToggle">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                    Generate Cover Letter
+                  </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="builder-main">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 class="form-title">Build Your Resume</h2>
+                    <div class="form-tabs">
+                        <button class="tab-btn active" onclick="showTab('personal')" data-tab="personal">
+                            <span class="tab-icon">👤</span>
+                            Personal
+                        </button>
+                        <button class="tab-btn" onclick="showTab('experience')" data-tab="experience">
+                            <span class="tab-icon">💼</span>
+                            Experience
+                        </button>
+                        <button class="tab-btn" onclick="showTab('education')" data-tab="education">
+                            <span class="tab-icon">🎓</span>
+                            Education
+                        </button>
+                        <button class="tab-btn" onclick="showTab('skills')" data-tab="skills">
+                            <span class="tab-icon">⚡</span>
+                            Skills
+                        </button>
+                        <button class="tab-btn" onclick="showTab('additional')" data-tab="additional">
+                            <span class="tab-icon">➕</span>
+                            Additional
+                        </button>
+                        <button class="tab-btn" onclick="showTab('coverletter')" data-tab="coverletter">
+                          <span class="tab-icon">📄</span>
+                          Cover Letter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Personal Info Tab -->
+                <div id="personal" class="tab-content active">
+                    <div class="tab-header">
+                        <h3>Personal Information</h3>
+                        <p>Add your contact details and professional summary</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="input-label">Full Name *</label>
+                            <input type="text" id="fullName" class="form-input" placeholder="e.g., John Smith" oninput="updatePreview()">
+                            <small class="input-help">Use your full legal name</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Professional Title</label>
+                            <input type="text" id="jobTitle" class="form-input" placeholder="e.g., Senior Software Engineer" oninput="updatePreview()">
+                            <small class="input-help">Your current or desired job title</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Email Address *</label>
+                            <input type="email" id="email" class="form-input" placeholder="e.g., john.smith@email.com" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Phone Number *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="e.g., +1 (555) 123-4567" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Location</label>
+                            <input type="text" id="location" class="form-input" placeholder="e.g., New York, NY" oninput="updatePreview()">
+                            <small class="input-help">City, State or City, Country</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">LinkedIn Profile</label>
+                            <input type="url" id="linkedin" class="form-input" placeholder="e.g., linkedin.com/in/johnsmith" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Professional Summary *</label>
+                            <textarea id="summary" class="form-textarea" placeholder="Write a compelling 2-3 sentence summary highlighting your key strengths and career objectives..." oninput="updatePreview()"></textarea>
+                            <small class="input-help">Keep it concise and impactful (2-3 sentences)</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Profile Photo</label>
+                            <div class="photo-upload">
+                                <input type="file" id="photo" accept="image/*" onchange="handlePhotoUpload(event)" class="photo-input">
+                                <div class="photo-preview" id="photoPreview">
+                                    <span class="photo-placeholder">📷</span>
+                                    <span class="photo-text">Click to upload photo</span>
+                                </div>
+                            </div>
+                            <small class="input-help">Optional: Professional headshot (recommended for some industries)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Tab -->
+                <div id="experience" class="tab-content">
+                    <div class="tab-header">
+                        <h3>Work Experience</h3>
+                        <p>Add your professional work history</p>
+                    </div>
+                    <div id="experienceList">
+                        <!-- Experience items will be added here -->
+                    </div>
+                    <button onclick="addExperience()" class="btn btn-outline btn-add">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        Add Work Experience
+                    </button>
+                </div>
+
+                <!-- Education Tab -->
+                <div id="education" class="tab-content">
+                    <div class="tab-header">
+                        <h3>Education</h3>
+                        <p>Add your educational background</p>
+                    </div>
+                    <div id="educationList">
+                        <!-- Education items will be added here -->
+                    </div>
+                    <button onclick="addEducation()" class="btn btn-outline btn-add">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        Add Education
+                    </button>
+                </div>
+
+                <!-- Skills Tab -->
+                <div id="skills" class="tab-content">
+                    <div class="tab-header">
+                        <h3>Skills & Competencies</h3>
+                        <p>Highlight your key skills and abilities</p>
+                    </div>
+                    <div class="skills-grid">
+                        <div class="form-group full-width">
+                            <label class="input-label">Technical Skills</label>
+                            <textarea id="technicalSkills" class="form-textarea" placeholder="e.g., JavaScript, Python, React, Node.js, AWS, Docker..." oninput="updatePreview()"></textarea>
+                            <small class="input-help">Separate skills with commas</small>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Soft Skills</label>
+                            <textarea id="softSkills" class="form-textarea" placeholder="e.g., Leadership, Communication, Problem Solving, Team Collaboration..." oninput="updatePreview()"></textarea>
+                            <small class="input-help">Separate skills with commas</small>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Languages</label>
+                            <textarea id="languages" class="form-textarea" placeholder="e.g., English (Native), Spanish (Fluent), French (Conversational)..." oninput="updatePreview()"></textarea>
+                            <small class="input-help">Include proficiency levels</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Tab -->
+                <div id="additional" class="tab-content">
+                    <div class="tab-header">
+                        <h3>Additional Information</h3>
+                        <p>Add certifications, projects, and other relevant information</p>
+                    </div>
+                    <div class="additional-sections">
+                        <div class="form-group full-width">
+                            <label class="input-label">Certifications</label>
+                            <textarea id="certifications" class="form-textarea" placeholder="e.g., AWS Certified Solutions Architect (2023), PMP Certification (2022)..." oninput="updatePreview()"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Projects</label>
+                            <textarea id="projects" class="form-textarea" placeholder="e.g., E-commerce Platform - Built a full-stack web application using React and Node.js..." oninput="updatePreview()"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Awards & Achievements</label>
+                            <textarea id="awards" class="form-textarea" placeholder="e.g., Employee of the Year 2023, Dean's List (2019-2021)..." oninput="updatePreview()"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="input-label">Volunteer Experience</label>
+                            <textarea id="volunteer" class="form-textarea" placeholder="e.g., Volunteer Web Developer at Local Non-profit (2022-Present)..." oninput="updatePreview()"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cover Letter Tab -->
+                <div id="coverletter" class="tab-content">
+                  <div class="tab-header">
+                    <h3>Cover Letter Generator</h3>
+                    <p>Create a personalized cover letter to accompany your resume</p>
+                  </div>
+                  <div class="cover-letter-form">
+                    <div class="form-group">
+                      <label class="input-label">Job Title *</label>
+                      <input type="text" id="coverJobTitle" class="form-input" placeholder="e.g., Senior Software Engineer" oninput="updateCoverPreview()">
+                    </div>
+                    <div class="form-group">
+                      <label class="input-label">Company Name *</label>
+                      <input type="text" id="coverCompany" class="form-input" placeholder="e.g., Google Inc." oninput="updateCoverPreview()">
+                    </div>
+                    <div class="form-group">
+                      <label class="input-label">Hiring Manager (Optional)</label>
+                      <input type="text" id="coverManager" class="form-input" placeholder="e.g., John Smith" oninput="updateCoverPreview()">
+                    </div>
+                    <div class="form-group full-width">
+                      <label class="input-label">Why are you a perfect fit? *</label>
+                      <textarea id="coverFit" class="form-textarea" placeholder="Explain why you're the ideal candidate for this position..." oninput="updateCoverPreview()"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                      <label class="input-label">Additional Information (Optional)</label>
+                      <textarea id="coverAdditional" class="form-textarea" placeholder="Any additional information you'd like to include..." oninput="updateCoverPreview()"></textarea>
+                    </div>
+                    <div class="cover-letter-actions">
+                      <button onclick="downloadCoverLetterPDF()" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7,10 12,15 17,10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Cover Letter PDF
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Preview Panel -->
+        <aside class="preview-panel">
+            <div class="preview-header">
+                <h3 class="preview-title">Live Preview</h3>
+                <div class="preview-actions">
+                    <button onclick="togglePreviewSize()" class="btn-icon" title="Toggle size">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                        </svg>
+                    </button>
+                    <button onclick="togglePreview()" class="btn-icon" title="Hide/Show preview">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="preview-content" id="previewContent">
+                <!-- Resume preview will be rendered here -->
+            </div>
+        </aside>
+    </div>
+
+    <!-- Resume Analyzer Modal -->
+    <div id="analyzerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Resume Analysis</h2>
+                <button class="modal-close" onclick="closeAnalyzer()">&times;</button>
+            </div>
+            <div class="analyzer-content">
+                <div class="score-display">
+                    <div class="score-circle">
+                        <div class="score-value" id="scoreValue">85</div>
+                        <div class="score-label">Score</div>
+                    </div>
+                    <div class="score-details">
+                        <div class="score-breakdown">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Content Quality</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="breakdown-score">85%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">ATS Compatibility</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 92%"></div>
+                                </div>
+                                <span class="breakdown-score">92%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Completeness</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 78%"></div>
+                                </div>
+                                <span class="breakdown-score">78%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggestions-section">
+                    <h3>💡 Improvement Suggestions</h3>
+                    <ul id="suggestionsList" class="suggestions-list">
+                        <!-- Suggestions will be populated here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal before the closing </body> tag -->
+
+    <!-- Quit Bot Modal -->
+    <div id="quitBotModal" class="quit-bot-modal">
+      <div class="quit-bot-content">
+        <div class="quit-bot-header">
+          <div class="bot-avatar">🤖</div>
+          <h3>Wait! Let me help you finish your resume</h3>
+          <button class="quit-bot-close" onclick="closeQuitBot()">&times;</button>
+        </div>
+        
+        <div class="quit-bot-body">
+          <div class="quit-bot-tips" id="quitBotTips">
+            <!-- Dynamic tips will be inserted here -->
+          </div>
+          
+          <div class="quit-bot-actions">
+            <button onclick="continueBuilding()" class="btn btn-primary">Continue Building</button>
+            <button onclick="generateCoverLetter()" class="btn btn-accent">Add Cover Letter</button>
+            <button onclick="loadQuickTips()" class="btn btn-outline">Get More Tips</button>
+          </div>
+          
+          <div class="quit-bot-footer">
+            <p>💡 <strong>Pro Tip:</strong> Resumes with cover letters get 40% more interviews!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resume Preview Modal -->
+    <div id="resumePreviewModal" class="modal">
+      <div class="modal-content resume-preview-modal-content">
+        <div class="modal-header">
+          <h2>Resume Preview</h2>
+          <button class="modal-close" onclick="closeResumePreview()">&times;</button>
+        </div>
+        <div class="resume-preview-content" id="resumePreviewContent">
+          <!-- Preview content will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button onclick="usePreviewedResume()" class="btn btn-primary">Use This Template</button>
+          <button onclick="closeResumePreview()" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

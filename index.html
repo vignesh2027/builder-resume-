@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMR - Free AI-Powered Resume & Cover Letter Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <div class="logo-icon">📄</div>
+                    <div class="logo-text">
+                        <h1>CMR</h1>
+                        <span>Craftez My Resume</span>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <a href="#templates" class="nav-link">Templates</a>
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="form.html" class="nav-link">Builder</a>
+                    <a href="cover.html" class="nav-link">Cover Letter</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <select id="languageSelector" class="language-selector" onchange="changeLanguage()">
+                      <option value="en">English</option>
+                      <option value="ta">தமிழ்</option>
+                      <option value="hi">हिंदी</option>
+                    </select>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content container">
+                <div class="hero-badge">✨ Now with AI-Assist & 8+ Professional Templates</div>
+                <h1 class="hero-title">Build a Job-Winning Resume, <span class="gradient-text">Completely Free</span></h1>
+                <p class="hero-description">Create a professional resume and cover letter in minutes with our intuitive builder. ATS-friendly, customizable, and powered by AI to help you land your dream job.</p>
+                <div class="hero-actions">
+                    <a href="form.html" class="btn btn-primary btn-large">Start Building for Free</a>
+                    <a href="#templates" class="btn btn-secondary btn-large">Explore Templates</a>
+                </div>
+                <div class="feature-highlights">
+                  <div class="feature-item">
+                    <span class="feature-icon">📄</span>
+                    <span>Resume + Cover Letter</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">🤖</span>
+                    <span>ATS Optimizer</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span>Multiple Templates</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">💾</span>
+                    <span>Auto-Save</span>
+                  </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">500k+</span>
+                        <span class="stat-label">Resumes Created</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">8+</span>
+                        <span class="stat-label">Pro Templates</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Free Forever</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add this section after the hero section and before the templates section -->
+        <section class="selected-resumes-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">Job-Winning Resume Examples</h2>
+              <p class="section-description">Get inspired by real resumes that landed jobs at top companies. Click "Use This Template" to auto-fill your resume with proven content.</p>
+            </div>
+            <div class="selected-resumes-grid">
+              <div class="resume-example-card">
+                <div class="company-badge">
+                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004c8c' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold'%3ETCS%3C/text%3E%3C/svg%3E" alt="TCS" class="company-logo">
+                  <span class="job-title">Software Engineer</span>
+                </div>
+                <div class="resume-preview">
+                  <h4>Rajesh Kumar</h4>
+                  <p class="preview-summary">Full-stack developer with 3+ years experience in Java, React, and cloud technologies...</p>
+                  <div class="preview-skills">
+                    <span class="skill-preview">Java</span>
+                    <span class="skill-preview">React</span>
+                    <span class="skill-preview">AWS</span>
+                    <span class="skill-preview">+5 more</span>
+                  </div>
+                </div>
+                <div class="resume-actions">
+                  <button onclick="loadTCSResume()" class="btn btn-primary btn-full">Use This Template</button>
+                  <button onclick="previewResume('tcs')" class="btn btn-outline btn-full">Quick Preview</button>
+                </div>
+              </div>
+
+              <div class="resume-example-card">
+                <div class="company-badge">
+                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23007cc3' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='12' font-weight='bold'%3EInfosys%3C/text%3E%3C/svg%3E" alt="Infosys" class="company-logo">
+                  <span class="job-title">System Analyst</span>
+                </div>
+                <div class="resume-preview">
+                  <h4>Priya Sharma</h4>
+                  <p class="preview-summary">Business analyst with expertise in requirements gathering, process optimization...</p>
+                  <div class="preview-skills">
+                    <span class="skill-preview">SQL</span>
+                    <span class="skill-preview">Python</span>
+                    <span class="skill-preview">Tableau</span>
+                    <span class="skill-preview">+4 more</span>
+                  </div>
+                </div>
+                <div class="resume-actions">
+                  <button onclick="loadInfosysResume()" class="btn btn-primary btn-full">Use This Template</button>
+                  <button onclick="previewResume('infosys')" class="btn btn-outline btn-full">Quick Preview</button>
+                </div>
+              </div>
+
+              <div class="resume-example-card">
+                <div class="company-badge">
+                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23ff6b35' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold'%3EZoho%3C/text%3E%3C/svg%3E" alt="Zoho" class="company-logo">
+                  <span class="job-title">Product Manager</span>
+                </div>
+                <div class="resume-preview">
+                  <h4>Arjun Patel</h4>
+                  <p class="preview-summary">Product manager with 5+ years driving user-centric solutions and cross-functional teams...</p>
+                  <div class="preview-skills">
+                    <span class="skill-preview">Product Strategy</span>
+                    <span class="skill-preview">Agile</span>
+                    <span class="skill-preview">Analytics</span>
+                    <span class="skill-preview">+6 more</span>
+                  </div>
+                </div>
+                <div class="resume-actions">
+                  <button onclick="loadZohoResume()" class="btn btn-primary btn-full">Use This Template</button>
+                  <button onclick="previewResume('zoho')" class="btn btn-outline btn-full">Quick Preview</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="templates" class="templates-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Find Your Perfect Template</h2>
+                    <p class="section-description">Choose from a variety of professionally designed templates to match your industry and style. All templates are fully customizable and ATS-friendly.</p>
+                </div>
+                <div class="template-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="professional">Professional</button>
+                    <button class="filter-btn" data-filter="creative">Creative</button>
+                    <button class="filter-btn" data-filter="modern">Modern</button>
+                </div>
+                <div class="template-grid">
+                    <div class="template-card" data-category="modern professional">
+                        <div class="template-thumbnail">📄</div>
+                        <div class="template-info">
+                            <h3>Modern Professional</h3>
+                            <p>A clean, contemporary design perfect for most industries.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🎨</div>
+                        <div class="template-info">
+                            <h3>Creative Bold</h3>
+                            <p>An eye-catching design for creative roles.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏛️</div>
+                        <div class="template-info">
+                            <h3>Classic Traditional</h3>
+                            <p>A timeless layout for conservative fields like law and finance.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">✨</div>
+                        <div class="template-info">
+                            <h3>Elegant Minimal</h3>
+                            <p>A sophisticated and minimal design that focuses on content.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern professional">
+                        <div class="template-thumbnail">🤖</div>
+                        <div class="template-info">
+                            <h3>ATS Optimized</h3>
+                            <p>A simple, text-based template to beat the bots.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏆</div>
+                        <div class="template-info">
+                            <h3>Executive Premium</h3>
+                            <p>An authoritative design for senior leaders and executives.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 6 new creative template cards -->
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🌊</div>
+                        <div class="template-info">
+                            <h3>Creative Wave</h3>
+                            <p>A flowing wave design with modern gradients for creative professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">💎</div>
+                        <div class="template-info">
+                            <h3>Creative Diamond</h3>
+                            <p>A vibrant diamond-themed layout with bold colors and geometric shapes.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">⭕</div>
+                        <div class="template-info">
+                            <h3>Creative Circle</h3>
+                            <p>A soft circular design with pastel gradients for a gentle creative touch.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🔺</div>
+                        <div class="template-info">
+                            <h3>Creative Triangle</h3>
+                            <p>A sharp triangular design with modern gradients for dynamic professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">⭐</div>
+                        <div class="template-info">
+                            <h3>Creative Star</h3>
+                            <p>A stellar design with star elements and soft pink gradients.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🔷</div>
+                        <div class="template-info">
+                            <h3>Creative Polygon</h3>
+                            <p>A geometric polygon design with professional blue gradients.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🔶</div>
+                        <div class="template-info">
+                            <h3>Creative Hexagon</h3>
+                            <p>A vibrant hexagonal design with red gradients for bold professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">➡️</div>
+                        <div class="template-info">
+                            <h3>Creative Arrow</h3>
+                            <p>A dynamic arrow-themed layout with teal gradients for forward-thinking professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🌀</div>
+                        <div class="template-info">
+                            <h3>Creative Spiral</h3>
+                            <p>A flowing spiral design with purple gradients for innovative professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">⚡</div>
+                        <div class="template-info">
+                            <h3>Creative Lightning</h3>
+                            <p>An energetic lightning design with orange gradients for dynamic professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">💎</div>
+                        <div class="template-info">
+                            <h3>Creative Crystal</h3>
+                            <p>A sophisticated crystal design with cyan gradients for refined professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🔥</div>
+                        <div class="template-info">
+                            <h3>Creative Flame</h3>
+                            <p>A passionate flame design with pink gradients for creative professionals.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new professional template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏢</div>
+                        <div class="template-info">
+                            <h3>Professional Corporate</h3>
+                            <p>A clean corporate design with blue header for business professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📋</div>
+                        <div class="template-info">
+                            <h3>Professional Sidebar</h3>
+                            <p>A structured sidebar layout with organized sections for detailed resumes.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📊</div>
+                        <div class="template-info">
+                            <h3>Professional Executive</h3>
+                            <p>An executive-style template with formal structure and red accents.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📝</div>
+                        <div class="template-info">
+                            <h3>Professional Minimal</h3>
+                            <p>Ultra-minimal design with clean typography and subtle accents.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎯</div>
+                        <div class="template-info">
+                            <h3>Professional Premium</h3>
+                            <p>Premium corporate template with formal styling and elegant presentation.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">💼</div>
+                        <div class="template-info">
+                            <h3>Professional Modern</h3>
+                            <p>Modern professional with blue accents and contemporary feel.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏆</div>
+                        <div class="template-info">
+                            <h3>Professional Leadership</h3>
+                            <p>Executive premium with sophisticated brown/gold color scheme for leaders.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">✅</div>
+                        <div class="template-info">
+                            <h3>Professional Clean</h3>
+                            <p>Clean design with green accents and perfect balance for any industry.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new international template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌍</div>
+                        <div class="template-info">
+                            <h3>International Global</h3>
+                            <p>Professional design with photo placeholder and blue gradients for global applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🇬🇧</div>
+                        <div class="template-info">
+                            <h3>International UK</h3>
+                            <p>Traditional sidebar layout with serif fonts perfect for UK job applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🇪🇺</div>
+                        <div class="template-info">
+                            <h3>International European</h3>
+                            <p>Executive-style template with green accents ideal for European markets.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🇦🇺</div>
+                        <div class="template-info">
+                            <h3>International Australian</h3>
+                            <p>Business-friendly design with warm brown tones for Australian applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌏</div>
+                        <div class="template-info">
+                            <h3>International Middle East</h3>
+                            <p>Professional banner design with red gradients for Middle Eastern markets.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🇨🇦</div>
+                        <div class="template-info">
+                            <h3>International Canadian</h3>
+                            <p>Corporate sidebar template with dark theme for Canadian job applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌎</div>
+                        <div class="template-info">
+                            <h3>International Latin</h3>
+                            <p>Dynamic design with orange header perfect for Latin American markets.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌏</div>
+                        <div class="template-info">
+                            <h3>International Asian</h3>
+                            <p>Modern business template with purple gradients for Asian job markets.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new company-preferred template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏢</div>
+                        <div class="template-info">
+                            <h3>Company Corporate</h3>
+                            <p>ATS-friendly corporate design with blue gradients for top companies.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📊</div>
+                        <div class="template-info">
+                            <h3>Company Executive</h3>
+                            <p>Dark sidebar layout optimized for executive positions and corporate recruiters.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📋</div>
+                        <div class="template-info">
+                            <h3>Company Classic</h3>
+                            <p>Traditional serif design with elegant styling for conservative industries.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📝</div>
+                        <div class="template-info">
+                            <h3>Company Minimal</h3>
+                            <p>Ultra-clean Helvetica design perfect for tech and consulting roles.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎯</div>
+                        <div class="template-info">
+                            <h3>Company Premium</h3>
+                            <p>Georgian serif with top accent bar for finance and healthcare positions.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">💼</div>
+                        <div class="template-info">
+                            <h3>Company Modern</h3>
+                            <p>Modern gradient header design ideal for corporate hiring managers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏆</div>
+                        <div class="template-info">
+                            <h3>Company Leadership</h3>
+                            <p>Structured layout with accent lines for senior leadership positions.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">✅</div>
+                        <div class="template-info">
+                            <h3>Company Professional</h3>
+                            <p>Dark header with rounded elements optimized for ATS systems.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new MNC-preferred template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏛️</div>
+                        <div class="template-info">
+                            <h3>MNC Executive</h3>
+                            <p>Premium executive design with gradient header for multinational corporations.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌐</div>
+                        <div class="template-info">
+                            <h3>MNC Global</h3>
+                            <p>Professional sidebar layout optimized for global corporate applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">💼</div>
+                        <div class="template-info">
+                            <h3>MNC Corporate</h3>
+                            <p>Elegant banner design with serif typography for international business.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎯</div>
+                        <div class="template-info">
+                            <h3>MNC Leadership</h3>
+                            <p>Minimal Helvetica design perfect for corporate leadership positions.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏢</div>
+                        <div class="template-info">
+                            <h3>MNC Director</h3>
+                            <p>Green accent design with executive profile section for senior roles.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">⚡</div>
+                        <div class="template-info">
+                            <h3>MNC Modern</h3>
+                            <p>Contemporary design with geometric patterns for modern corporations.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎖️</div>
+                        <div class="template-info">
+                            <h3>MNC Premium</h3>
+                            <p>Formal serif design with structured layout for prestigious companies.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🚀</div>
+                        <div class="template-info">
+                            <h3>MNC Elite</h3>
+                            <p>Rounded modern design with gradient banner for top-tier positions.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new tech-preferred template cards -->
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">💻</div>
+                        <div class="template-info">
+                            <h3>Tech Software</h3>
+                            <p>Modern gradient design with grid patterns perfect for software engineers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">🔧</div>
+                        <div class="template-info">
+                            <h3>Tech Full Stack</h3>
+                            <p>Dark sidebar layout with tech patterns for full stack developers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">📊</div>
+                        <div class="template-info">
+                            <h3>Tech Data Science</h3>
+                            <p>Animated gradient header with geometric patterns for data scientists.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">⚙️</div>
+                        <div class="template-info">
+                            <h3>Tech DevOps</h3>
+                            <p>Dark theme with code patterns and monospace fonts for DevOps engineers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🎨</div>
+                        <div class="template-info">
+                            <h3>Tech UI/UX</h3>
+                            <p>Colorful gradient design with animated elements for UI/UX designers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">🔒</div>
+                        <div class="template-info">
+                            <h3>Tech Security</h3>
+                            <p>Dark red theme with security patterns for cybersecurity specialists.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">🤖</div>
+                        <div class="template-info">
+                            <h3>Tech AI/ML</h3>
+                            <p>Purple gradient with animated elements for AI/ML engineers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">📱</div>
+                        <div class="template-info">
+                            <h3>Tech Product</h3>
+                            <p>Teal gradient with data visualization elements for product managers.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new elite-unique template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">👑</div>
+                        <div class="template-info">
+                            <h3>Elite Executive</h3>
+                            <p>Premium executive design with profile circle and elegant typography for senior leaders.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎯</div>
+                        <div class="template-info">
+                            <h3>Elite Strategic</h3>
+                            <p>Sophisticated sidebar layout with timeline design for strategic consultants.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🎨</div>
+                        <div class="template-info">
+                            <h3>Elite Creative</h3>
+                            <p>Modern gradient banner with geometric accents for creative directors.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">💡</div>
+                        <div class="template-info">
+                            <h3>Elite Innovation</h3>
+                            <p>Dynamic design with impact metrics and modern icons for innovation leaders.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏛️</div>
+                        <div class="template-info">
+                            <h3>Elite Distinguished</h3>
+                            <p>Classic serif design with elegant lines and premium styling for executives.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">✨</div>
+                        <div class="template-info">
+                            <h3>Elite Visionary</h3>
+                            <p>Floating shapes design with gradient cards for creative directors.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📜</div>
+                        <div class="template-info">
+                            <h3>Elite Formal</h3>
+                            <p>Traditional letterhead design with formal structure for senior executives.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">🚀</div>
+                        <div class="template-info">
+                            <h3>Elite Futuristic</h3>
+                            <p>Animated avatar design with modern panels for chief executive officers.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new unique style template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">✨</div>
+                        <div class="template-info">
+                            <h3>Minimal Luxe</h3>
+                            <p>Elegant white background with gold accents and thin modern fonts for luxury brands.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🎨</div>
+                        <div class="template-info">
+                            <h3>Creative Portfolio</h3>
+                            <p>Split layout with left portfolio section and right work history for creative professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📅</div>
+                        <div class="template-info">
+                            <h3>Corporate Timeline</h3>
+                            <p>Vertical timeline layout for work experience with professional corporate styling.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">⚡</div>
+                        <div class="template-info">
+                            <h3>Tech Grid</h3>
+                            <p>Grid-based skill and project sections perfect for developers and engineers.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">📱</div>
+                        <div class="template-info">
+                            <h3>Bold Sidebar</h3>
+                            <p>Dark left sidebar for contact and skills with white main body for experience.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">👔</div>
+                        <div class="template-info">
+                            <h3>Executive Profile</h3>
+                            <p>Prominent name and headline at top with short executive summary section.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🌍</div>
+                        <div class="template-info">
+                            <h3>Global Professional</h3>
+                            <p>Multi-language ready with clean, region-neutral design for international use.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">📊</div>
+                        <div class="template-info">
+                            <h3>Infographic Resume</h3>
+                            <p>Subtle skill bars, icons, and percentage visuals while remaining ATS-safe.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new occupation-based template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">👔</div>
+                        <div class="template-info">
+                            <h3>Management Executive</h3>
+                            <p>Formal design with bold section headings and minimal color for senior leaders.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📋</div>
+                        <div class="template-info">
+                            <h3>Office Administrative</h3>
+                            <p>Clean two-column layout with emphasis on skills for administrative roles.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">💼</div>
+                        <div class="template-info">
+                            <h3>Business Finance</h3>
+                            <p>Professional serif fonts with muted color palette for finance professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">🛍️</div>
+                        <div class="template-info">
+                            <h3>Retail Sales</h3>
+                            <p>Modern card-style layout highlighting achievements for sales professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🏥</div>
+                        <div class="template-info">
+                            <h3>Healthcare Medical</h3>
+                            <p>Clean white background with clear section icons for healthcare professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="creative">
+                        <div class="template-thumbnail">🍽️</div>
+                        <div class="template-info">
+                            <h3>Food Beverage</h3>
+                            <p>Simple, approachable design with light accent colors for culinary professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern">
+                        <div class="template-thumbnail">💻</div>
+                        <div class="template-info">
+                            <h3>Technology</h3>
+                            <p>Grid sections for skills, projects, and certifications for tech professionals.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎓</div>
+                        <div class="template-info">
+                            <h3>Education</h3>
+                            <p>Teacher and academic-focused layout with clear hierarchy for educators.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 8 new style-based template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📜</div>
+                        <div class="template-info">
+                            <h3>Traditional Classic</h3>
+                            <p>Single-column serif design with black/white minimalism for conservative fields.</p>
+                        </div>
+                    </div>
+                    <!-- Adding 12 new ATS-friendly template cards -->
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📋</div>
+                        <div class="template-info">
+                            <h3>ATS Prime Classic</h3>
+                            <p>Single-column serif design with clear headers, optimized for maximum ATS compatibility.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="modern professional">
+                        <div class="template-thumbnail">📄</div>
+                        <div class="template-info">
+                            <h3>ATS Modern Professional</h3>
+                            <p>Clean sans-serif with subtle dividers and large headings for modern ATS systems.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">⏰</div>
+                        <div class="template-info">
+                            <h3>ATS Chronological Focus</h3>
+                            <p>Timeline-focused layout prioritizing work history for easy ATS parsing.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎯</div>
+                        <div class="template-info">
+                            <h3>ATS Skills First</h3>
+                            <p>Skills and certifications prominently featured at the top for keyword optimization.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🎓</div>
+                        <div class="template-info">
+                            <h3>ATS Academic Profile</h3>
+                            <p>Academic-focused design optimized for research and educational applications.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">👔</div>
+                        <div class="template-info">
+                            <h3>ATS Executive Minimal</h3>
+                            <p>Bold headings and minimal sections designed for fast executive-level scanning.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📝</div>
+                        <div class="template-info">
+                            <h3>ATS Compact Pro</h3>
+                            <p>Condensed layout fitting maximum content on one page without crowding.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📊</div>
+                        <div class="template-info">
+                            <h3>ATS Wide Header</h3>
+                            <p>Full-width header design with clean contact information layout.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">🔄</div>
+                        <div class="template-info">
+                            <h3>ATS Career Switch</h3>
+                            <p>Highlights transferable skills over experience for career transition candidates.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">📅</div>
+                        <div class="template-info">
+                            <h3>ATS Simple Timeline</h3>
+                            <p>Clean timeline with aligned dates for optimal ATS date parsing.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">💻</div>
+                        <div class="template-info">
+                            <h3>ATS Technical Layout</h3>
+                            <p>Tech-optimized structure with skills-rich sections and monospace fonts.</p>
+                        </div>
+                    </div>
+                    <div class="template-card" data-category="professional">
+                        <div class="template-thumbnail">⚖️</div>
+                        <div class="template-info">
+                            <h3>ATS Legal Finance Ready</h3>
+                            <p>Conservative serif design with formal spacing for legal and finance industries.</p>
+                        </div>
+                    </div>
+                </div>
+
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Everything You Need, Nothing You Don't</h2>
+                    <p class="section-description">Our features are designed to make resume building fast, easy, and effective.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-Powered Suggestions</h3>
+                        <p>Get smart suggestions for your summary and job descriptions to make your resume shine.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>Easy Customization</h3>
+                        <p>Change colors, fonts, and layouts with a single click to match your personal brand.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📥</div>
+                        <h3>PDF & Data Export</h3>
+                        <p>Download a pixel-perfect PDF or export your data as JSON to use anywhere.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Privacy Focused</h3>
+                        <p>Your data is saved directly in your browser. We never see or store your personal information.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✍️</div>
+                        <h3>Cover Letter Builder</h3>
+                        <p>Create a matching cover letter for your resume to complete your job application.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🆓</div>
+                        <h3>100% Free Forever</h3>
+                        <p>No subscriptions, no watermarks, no hidden fees. Just a powerful, free tool for everyone.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 CMR Resume Builder. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
