@@ -1,5 +1,23 @@
 {
-    "rewrites": [
-      { "source": "/manifest.json", "destination": "/manifest.json" }
-    ]
-  }
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "installCommand": null,
+  "devCommand": null,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/form", "destination": "/form.html" },
+    { "source": "/cover", "destination": "/cover.html" },
+    { "source": "/tech", "destination": "/tech.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
