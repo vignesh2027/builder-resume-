@@ -2811,7 +2811,7 @@ body {
 
 /* Gradient text still visible in dark mode */
 [data-theme="dark"] .gradient-text {
-  background: linear-gradient(45deg, #f59e0b, #fbbf24);
+  background: linear-gradient(45deg, var(--accent-color), #fbbf24);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

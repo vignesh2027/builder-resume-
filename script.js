@@ -848,7 +848,7 @@ function populateForm() {
     <option value="businessFinance">Business Finance</option>
     <option value="retailSales">Retail Sales</option>
     <option value="healthcareMedical">Healthcare Medical</option>
-    <option value="foodBeverage">Food &amp; Beverage</option>
+    <option value="foodBeverage">Food & Beverage</option>
     <option value="technology">Technology</option>
     <option value="education">Education</option>
     </optgroup>
@@ -1614,7 +1614,7 @@ function addExperience(data = {}) {
   item.innerHTML = `
     <div class="item-header">
       <h4 class="item-title">${escapeHtml(data.title || "New Experience")}</h4>
-      <button type="button" class="btn-remove" onclick="removeExperience('${escapeHtml(id)}')">&times;</button>
+      <button type="button" class="btn-remove" onclick="removeExperience('${id}')">&times;</button>
     </div>
     <div class="form-grid">
       <div class="form-group">
@@ -1666,7 +1666,7 @@ function addEducation(data = {}) {
   item.innerHTML = `
     <div class="item-header">
       <h4 class="item-title">${escapeHtml(data.degree || "New Education")}</h4>
-      <button type="button" class="btn-remove" onclick="removeEducation('${escapeHtml(id)}')">&times;</button>
+      <button type="button" class="btn-remove" onclick="removeEducation('${id}')">&times;</button>
     </div>
     <div class="form-grid">
       <div class="form-group">
