@@ -6,12 +6,20 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/form", "destination": "/form.html" },
-    { "source": "/cover", "destination": "/cover.html" },
-    { "source": "/tech", "destination": "/tech.html" }
+    { "source": "/cover", "destination": "/cover.html" }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/(.*\\.html)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(js|css|png|ico|json|xml|webp|svg|woff2?))",
       "headers": [
         {
           "key": "Cache-Control",

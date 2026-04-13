@@ -128,6 +128,7 @@
                             </svg>
                             Import Data
                         </button>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="handleImportFile(event)">
                         <button onclick="analyzeResume()" class="btn btn-accent btn-full">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m6-6h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4m-6 0a2 2 0 0 0-2-2v-3a2 2 0 0 0 2-2m6 0a2 2 0 0 1 2-2v-3a2 2 0 0 1-2-2"/>
@@ -399,7 +400,10 @@
         <!-- Preview Panel -->
         <aside class="preview-panel">
             <div class="preview-header">
-                <h3 class="preview-title">Live Preview</h3>
+                <div class="preview-title-group">
+                    <h3 class="preview-title">Live Preview</h3>
+                    <span id="previewStatus" class="preview-status"></span>
+                </div>
                 <div class="preview-actions">
                     <button onclick="togglePreviewSize()" class="btn-icon" title="Toggle size">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -36,6 +36,8 @@ let coverLetterData = {
   manager: "",
   fit: "",
   additional: "",
+  opening: "",
+  closing: "",
 }
 
 let uiSettings = {
@@ -44,7 +46,7 @@ let uiSettings = {
   font: "inter",
   atsMode: false,
   previewSize: "normal",
-  theme: "light",
+  theme: "dark",
   language: "en",
   showCoverLetter: false,
 }
@@ -53,7 +55,7 @@ let atsScore = 0
 let debounceTimer = null
 
 // Add these variables at the top of the file after existing state variables
-const quitBotTimer = null
+let quitBotTimer = null
 let userInactiveTimer = null
 let exitIntentTriggered = false
 let lastActivity = Date.now()
@@ -599,14 +601,16 @@ function setupLandingPageListeners() {
 
 // --- ENHANCED DATA MANAGEMENT ---
 function collectDataFromForm() {
-  // Personal
-  resumeData.personal.fullName = getValue("fullName")
-  resumeData.personal.jobTitle = getValue("jobTitle")
-  resumeData.personal.email = getValue("email")
-  resumeData.personal.phone = getValue("phone")
-  resumeData.personal.location = getValue("location")
-  resumeData.personal.linkedin = getValue("linkedin")
-  resumeData.personal.summary = getValue("summary")
+  // Personal — only collect when builder form fields exist
+  if (document.getElementById("fullName") !== null) {
+    resumeData.personal.fullName = getValue("fullName")
+    resumeData.personal.jobTitle = getValue("jobTitle")
+    resumeData.personal.email = getValue("email")
+    resumeData.personal.phone = getValue("phone")
+    resumeData.personal.location = getValue("location")
+    resumeData.personal.linkedin = getValue("linkedin")
+    resumeData.personal.summary = getValue("summary")
+  }
 
   // Experience - Enhanced collection
   resumeData.experience = Array.from(document.querySelectorAll("#experienceList .experience-item")).map((item) => ({
@@ -637,12 +641,27 @@ function collectDataFromForm() {
   resumeData.additional.awards = getValue("awards")
   resumeData.additional.volunteer = getValue("volunteer")
 
-  // Cover Letter
-  coverLetterData.jobTitle = getValue("coverJobTitle")
-  coverLetterData.company = getValue("coverCompany")
-  coverLetterData.manager = getValue("coverManager")
-  coverLetterData.fit = getValue("coverFit")
-  coverLetterData.additional = getValue("coverAdditional")
+  // Cover Letter — support both builder tab IDs and standalone cover page IDs
+  const coverCompanyEl = document.getElementById("coverCompany")
+  if (coverCompanyEl !== null) coverLetterData.company = coverCompanyEl.value
+
+  const coverJobTitleEl = document.getElementById("coverJobTitle")
+  if (coverJobTitleEl !== null) coverLetterData.jobTitle = coverJobTitleEl.value
+
+  const coverManagerEl = document.getElementById("coverManager")
+  if (coverManagerEl !== null) coverLetterData.manager = coverManagerEl.value
+
+  const coverFitEl = document.getElementById("coverFit")
+  if (coverFitEl !== null) coverLetterData.fit = coverFitEl.value
+
+  const coverAdditionalEl = document.getElementById("coverAdditional")
+  if (coverAdditionalEl !== null) coverLetterData.additional = coverAdditionalEl.value
+
+  const coverOpeningEl = document.getElementById("coverOpening")
+  if (coverOpeningEl !== null) coverLetterData.opening = coverOpeningEl.value
+
+  const coverClosingEl = document.getElementById("coverClosing")
+  if (coverClosingEl !== null) coverLetterData.closing = coverClosingEl.value
 }
 
 function getValue(id) {
@@ -699,11 +718,14 @@ function populateForm() {
   setValue("coverManager", coverLetterData.manager)
   setValue("coverFit", coverLetterData.fit)
   setValue("coverAdditional", coverLetterData.additional)
+  setValue("coverOpening", coverLetterData.opening || "")
+  setValue("coverClosing", coverLetterData.closing || "")
 
   // Update the template selector in the populateForm function or wherever template options are set
   const templateSelectElement = document.getElementById("templateSelect")
   if (templateSelectElement) {
     templateSelectElement.innerHTML = `
+    <optgroup label="── Core Templates ──">
     <option value="modern">Modern Professional</option>
     <option value="classic">Classic Traditional</option>
     <option value="elegant">Elegant Minimal</option>
@@ -712,49 +734,35 @@ function populateForm() {
     <option value="executive">Executive Premium</option>
     <option value="tech">Tech Specialist</option>
     <option value="academic">Academic Scholar</option>
+    </optgroup>
+    <optgroup label="── Modern ──">
     <option value="modern1">Modern Gradient</option>
     <option value="modern2">Modern Sidebar</option>
     <option value="modern3">Modern Banner</option>
+    </optgroup>
+    <optgroup label="── Elegant ──">
     <option value="elegant1">Elegant Classic</option>
     <option value="elegant2">Elegant Purple</option>
     <option value="elegant3">Elegant Serif</option>
+    </optgroup>
+    <optgroup label="── Creative ──">
     <option value="creative1">Creative Pink</option>
     <option value="creative2">Creative Zigzag</option>
     <option value="creative3">Creative Geometric</option>
-    <option value="professional1">Professional Corporate</option>
-    <option value="professional2">Professional Executive</option>
-    <option value="professional3">Professional Clean</option>
-    <option value="minimalist1">Minimalist Simple</option>
-    <option value="minimalist2">Minimalist Sidebar</option>
-    <option value="minimalist3">Minimalist Lines</option>
-    <option value="corporate1">Corporate Executive</option>
-    <option value="corporate2">Corporate Letterhead</option>
-    <option value="corporate3">Corporate Business</option>
     <option value="creative4">Creative Wave</option>
     <option value="creative5">Creative Diamond</option>
     <option value="creative6">Creative Circle</option>
     <option value="creative7">Creative Triangle</option>
     <option value="creative8">Creative Star</option>
     <option value="creative9">Creative Polygon</option>
-    <option value="creative10">Creative Wave</option>
-    <option value="creative11">Creative Diamond</option>
-    <option value="creative12">Creative Polygon</option>
-    <option value="creative13">Creative Hexagon</option>
-    <option value="creative14">Creative Arrow</option>
-    <option value="creative15">Creative Spiral</option>
-    <option value="creative16">Creative Lightning</option>
-    <option value="creative17">Creative Crystal</option>
-    <option value="creative18">Creative Flame</option>
-    <!-- Adding 8 new unique style templates to the dropdown -->
-    <option value="minimalLuxe">Minimal Luxe</option>
-    <option value="creativePortfolio">Creative Portfolio</option>
-    <option value="corporateTimeline">Corporate Timeline</option>
-    <option value="techGrid">Tech Grid</option>
-    <option value="boldSidebar">Bold Sidebar</option>
-    <option value="executiveProfile">Executive Profile</option>
-    <option value="globalProfessional">Global Professional</option>
-    <option value="infographicResume">Infographic Resume</option>
-    <!-- Adding 8 professional templates to the dropdown -->
+    <option value="creative10">Creative Hexagon</option>
+    <option value="creative11">Creative Arrow</option>
+    <option value="creative12">Creative Spiral</option>
+    <option value="creative13">Creative Lightning</option>
+    <option value="creative14">Creative Crystal</option>
+    <option value="creative15">Creative Flame</option>
+    </optgroup>
+    <optgroup label="── Professional ──">
     <option value="professional1">Professional Corporate</option>
     <option value="professional2">Professional Sidebar</option>
     <option value="professional3">Professional Executive</option>
@@ -763,16 +771,28 @@ function populateForm() {
     <option value="professional6">Professional Modern</option>
     <option value="professional7">Professional Leadership</option>
     <option value="professional8">Professional Clean</option>
-    <!-- Adding 8 international templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Minimalist ──">
+    <option value="minimalist1">Minimalist Simple</option>
+    <option value="minimalist2">Minimalist Sidebar</option>
+    <option value="minimalist3">Minimalist Lines</option>
+    </optgroup>
+    <optgroup label="── Corporate ──">
+    <option value="corporate1">Corporate Executive</option>
+    <option value="corporate2">Corporate Letterhead</option>
+    <option value="corporate3">Corporate Business</option>
+    </optgroup>
+    <optgroup label="── International ──">
     <option value="international1">International Global</option>
     <option value="international2">International UK</option>
     <option value="international3">International European</option>
     <option value="international4">International Australian</option>
     <option value="international5">International Middle East</option>
-    <!-- Adding 8 company-preferred templates to the dropdown -->
     <option value="international6">International Canadian</option>
     <option value="international7">International Latin</option>
     <option value="international8">International Asian</option>
+    </optgroup>
+    <optgroup label="── Company ──">
     <option value="company1">Company Corporate</option>
     <option value="company2">Company Executive</option>
     <option value="company3">Company Classic</option>
@@ -781,7 +801,8 @@ function populateForm() {
     <option value="company6">Company Modern</option>
     <option value="company7">Company Leadership</option>
     <option value="company8">Company Professional</option>
-    <!-- Adding 8 MNC-preferred templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── MNC ──">
     <option value="mnc1">MNC Executive</option>
     <option value="mnc2">MNC Global</option>
     <option value="mnc3">MNC Corporate</option>
@@ -790,7 +811,8 @@ function populateForm() {
     <option value="mnc6">MNC Modern</option>
     <option value="mnc7">MNC Premium</option>
     <option value="mnc8">MNC Elite</option>
-    <!-- Adding 8 tech-preferred templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Tech ──">
     <option value="tech1">Tech Software</option>
     <option value="tech2">Tech Full Stack</option>
     <option value="tech3">Tech Data Science</option>
@@ -799,7 +821,8 @@ function populateForm() {
     <option value="tech6">Tech Security</option>
     <option value="tech7">Tech AI/ML</option>
     <option value="tech8">Tech Product</option>
-    <!-- Adding 8 elite-unique templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Elite ──">
     <option value="elite1">Elite Executive</option>
     <option value="elite2">Elite Strategic</option>
     <option value="elite3">Elite Creative</option>
@@ -808,16 +831,28 @@ function populateForm() {
     <option value="elite6">Elite Visionary</option>
     <option value="elite7">Elite Formal</option>
     <option value="elite8">Elite Futuristic</option>
-    <!-- Adding 8 occupation-based templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Unique Styles ──">
+    <option value="minimalLuxe">Minimal Luxe</option>
+    <option value="creativePortfolio">Creative Portfolio</option>
+    <option value="corporateTimeline">Corporate Timeline</option>
+    <option value="techGrid">Tech Grid</option>
+    <option value="boldSidebar">Bold Sidebar</option>
+    <option value="executiveProfile">Executive Profile</option>
+    <option value="globalProfessional">Global Professional</option>
+    <option value="infographicResume">Infographic Resume</option>
+    </optgroup>
+    <optgroup label="── Occupation ──">
     <option value="managementExecutive">Management Executive</option>
     <option value="officeAdmin">Office Administrative</option>
     <option value="businessFinance">Business Finance</option>
     <option value="retailSales">Retail Sales</option>
     <option value="healthcareMedical">Healthcare Medical</option>
-    <option value="foodBeverage">Food Beverage</option>
+    <option value="foodBeverage">Food &amp; Beverage</option>
     <option value="technology">Technology</option>
     <option value="education">Education</option>
-    <!-- Adding 8 new style-based templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Style ──">
     <option value="traditionalClassic">Traditional Classic</option>
     <option value="creativeBold">Creative Bold</option>
     <option value="contemporaryMinimal">Contemporary Minimal</option>
@@ -826,7 +861,8 @@ function populateForm() {
     <option value="elegantModern">Elegant Modern</option>
     <option value="twoColumnProfessional">Two-Column Professional</option>
     <option value="oneColumnFocus">One-Column Focus</option>
-    <!-- Adding 8 new design-based templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── Design ──">
     <option value="modernSidebarBlue">Modern Sidebar Blue</option>
     <option value="formalCenterline">Formal Centerline</option>
     <option value="greenAccentProfessional">Green Accent Professional</option>
@@ -835,7 +871,8 @@ function populateForm() {
     <option value="yellowIconHighlights">Yellow Icon Highlights</option>
     <option value="lightGreyMinimal">Light Grey Minimal</option>
     <option value="blueLineExecutive">Blue Line Executive</option>
-    <!-- Adding 12 new ATS-friendly templates to the dropdown -->
+    </optgroup>
+    <optgroup label="── ATS Friendly ──">
     <option value="executiveMinimal">Executive Minimal</option>
     <option value="modernATS">Modern ATS</option>
     <option value="classicSerif">Classic Serif</option>
@@ -848,7 +885,6 @@ function populateForm() {
     <option value="projectPortfolioResume">Project Portfolio</option>
     <option value="freshGraduateLayout">Fresh Graduate</option>
     <option value="seniorLeadershipResume">Senior Leadership</option>
-    <!-- Adding 12 new ATS-friendly templates to the dropdown -->
     <option value="atsPrimeClassic">ATS Prime Classic</option>
     <option value="atsModernProfessional">ATS Modern Professional</option>
     <option value="atsChronologicalFocus">ATS Chronological Focus</option>
@@ -861,7 +897,10 @@ function populateForm() {
     <option value="atsSimpleTimeline">ATS Simple Timeline</option>
     <option value="atsTechnicalLayout">ATS Technical Layout</option>
     <option value="atsLegalFinanceReady">ATS Legal Finance Ready</option>
+    </optgroup>
     `
+    // Restore current template selection
+    templateSelectElement.value = uiSettings.template
   }
 }
 
@@ -876,7 +915,9 @@ function setValue(id, value) {
 async function updatePreview() {
   collectDataFromForm()
   saveState()
+  setPreviewStatus("Updating…")
   await renderPreview()
+  setPreviewStatus("")
   updateProgress()
   updateATSScore()
 
@@ -887,6 +928,13 @@ async function updatePreview() {
       preview.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }
   }
+}
+
+function setPreviewStatus(msg) {
+  const el = document.getElementById("previewStatus")
+  if (!el) return
+  el.textContent = msg
+  el.classList.toggle("visible", msg.length > 0)
 }
 
 async function renderPreview() {
@@ -1015,14 +1063,14 @@ function populateTemplate() {
     : []
   const allSkills = [...technicalSkills, ...softSkills]
 
-  const skillsHtml = allSkills.map((skill) => `<span class="skill-tag">${skill}</span>`).join("")
+  const skillsHtml = allSkills.map((skill) => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join("")
   setHtml("previewSkills", skillsHtml)
 
   // Languages - FIXED
   const languagesHtml = skills.languages
     ? skills.languages
         .split(",")
-        .map((lang) => `<span class="skill-tag">${lang.trim()}</span>`)
+        .map((lang) => `<span class="skill-tag">${escapeHtml(lang.trim())}</span>`)
         .join("")
     : ""
   setHtml("previewLanguages", languagesHtml)
@@ -1033,7 +1081,7 @@ function populateTemplate() {
       ? text
           .split("\n")
           .filter(Boolean)
-          .map((item) => `<li>${item.trim()}</li>`)
+          .map((item) => `<li>${escapeHtml(item.trim())}</li>`)
       : ""
 
   setHtml("previewCertifications", createListHtml(additional.certifications))
@@ -1048,8 +1096,18 @@ function formatDate(dateString) {
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" })
 }
 
+function escapeHtml(str) {
+  if (!str) return ""
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
 function formatDescription(description) {
-  return description.replace(/\n/g, "<br>")
+  return escapeHtml(description).replace(/\n/g, "<br>")
 }
 
 function applyCustomizations() {
@@ -1072,7 +1130,7 @@ function updateCoverPreview() {
   collectDataFromForm()
 
   const { personal } = resumeData
-  const { jobTitle, company, manager, fit, additional } = coverLetterData
+  const { jobTitle, company, manager, fit, additional, opening, closing } = coverLetterData
 
   const currentDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -1081,42 +1139,59 @@ function updateCoverPreview() {
   })
 
   const managerName = manager || "Hiring Manager"
-  const greeting = manager ? `Dear ${manager},` : "Dear Hiring Team,"
+  const greeting = manager ? `Dear ${escapeHtml(manager)},` : "Dear Hiring Team,"
+
+  // Build body paragraphs
+  const bodyParagraphs = []
+  if (opening) {
+    bodyParagraphs.push(`<p>${escapeHtml(opening)}</p>`)
+  } else {
+    bodyParagraphs.push(
+      `<p>I am writing to express my strong interest in the ${escapeHtml(jobTitle || "position")} role at ${escapeHtml(company || "your company")}. ${escapeHtml(fit || "Please add why you're a perfect fit for this role.")}</p>`,
+    )
+  }
+  if (fit && opening) {
+    bodyParagraphs.push(`<p>${escapeHtml(fit)}</p>`)
+  }
+  if (additional) {
+    bodyParagraphs.push(`<p>${escapeHtml(additional)}</p>`)
+  }
+  if (closing) {
+    bodyParagraphs.push(`<p>${escapeHtml(closing)}</p>`)
+  } else {
+    bodyParagraphs.push(
+      `<p>I would welcome the opportunity to discuss how my background and enthusiasm can contribute to ${escapeHtml(company || "your team")}'s continued success. Thank you for considering my application.</p>`,
+    )
+  }
 
   const coverPreview = document.getElementById("coverPreview")
   if (coverPreview) {
     coverPreview.innerHTML = `
       <div class="cover-letter-content">
         <div class="cover-header">
-          <h2>${personal.fullName || "Your Name"}</h2>
+          <h2>${escapeHtml(personal.fullName || "Your Name")}</h2>
           <div class="cover-contact">
-            ${personal.email || "your.email@example.com"} |
-            ${personal.phone || "(555) 555-5555"} |
-            ${personal.location || "Your Location"}
+            ${escapeHtml(personal.email || "your.email@example.com")} |
+            ${escapeHtml(personal.phone || "(555) 555-5555")} |
+            ${escapeHtml(personal.location || "Your Location")}
           </div>
         </div>
 
         <div class="cover-date">${currentDate}</div>
 
         <div class="cover-recipient">
-          <p>${managerName}</p>
-          <p>${company || "Company Name"}</p>
+          <p>${escapeHtml(managerName)}</p>
+          <p>${escapeHtml(company || "Company Name")}</p>
         </div>
 
         <div class="cover-subject">
-          <p><strong>RE: Application for ${jobTitle || "Position Title"}</strong></p>
+          <p><strong>RE: Application for ${escapeHtml(jobTitle || "Position Title")}</strong></p>
         </div>
 
         <div class="cover-body">
           <p>${greeting}</p>
-
-          <p>I am writing to express my strong interest in the ${jobTitle || "position"} role at ${company || "your company"}. ${fit || "Please add why you're a perfect fit for this role."}</p>
-
-          ${additional ? `<p>${additional}</p>` : ""}
-
-          <p>I would welcome the opportunity to discuss how my background and enthusiasm can contribute to ${company || "your team"}'s continued success. Thank you for considering my application.</p>
-
-          <p>Sincerely,<br>${personal.fullName || "Your Name"}</p>
+          ${bodyParagraphs.join("")}
+          <p>Sincerely,<br>${escapeHtml(personal.fullName || "Your Name")}</p>
         </div>
       </div>
     `
@@ -1238,17 +1313,17 @@ function generateResumePreviewHTML(data) {
         <div class="resume-header">
           <div class="profile-section">
             <div class="profile-info">
-              <h1 class="name">${data.personal.fullName}</h1>
-              <div class="job-title">${data.personal.jobTitle}</div>
+              <h1 class="name">${escapeHtml(data.personal.fullName)}</h1>
+              <div class="job-title">${escapeHtml(data.personal.jobTitle)}</div>
               <div class="contact-info">
-                <span>${data.personal.email}</span>
-                <span>${data.personal.phone}</span>
-                <span>${data.personal.location}</span>
+                <span>${escapeHtml(data.personal.email)}</span>
+                <span>${escapeHtml(data.personal.phone)}</span>
+                <span>${escapeHtml(data.personal.location)}</span>
               </div>
             </div>
           </div>
           <div class="summary-section">
-            <p class="summary-text">${data.personal.summary}</p>
+            <p class="summary-text">${escapeHtml(data.personal.summary)}</p>
           </div>
         </div>
 
@@ -1260,11 +1335,11 @@ function generateResumePreviewHTML(data) {
                 (exp) => `
               <div class="experience-entry">
                 <div class="entry-header">
-                  <h4 class="entry-title">${exp.title}</h4>
-                  <span class="entry-company">${exp.company}</span>
+                  <h4 class="entry-title">${escapeHtml(exp.title)}</h4>
+                  <span class="entry-company">${escapeHtml(exp.company)}</span>
                   <span class="entry-dates">${formatDate(exp.startDate)} - ${exp.endDate ? formatDate(exp.endDate) : "Present"}</span>
                 </div>
-                <div class="entry-description">${exp.description.replace(/\n/g, "<br>")}</div>
+                <div class="entry-description">${escapeHtml(exp.description).replace(/\n/g, "<br>")}</div>
               </div>
             `,
               )
@@ -1278,9 +1353,9 @@ function generateResumePreviewHTML(data) {
                 (edu) => `
               <div class="education-entry">
                 <div class="entry-header">
-                  <h4 class="entry-title">${edu.degree}</h4>
-                  <span class="entry-school">${edu.school}</span>
-                  <span class="entry-dates">${edu.year}</span>
+                  <h4 class="entry-title">${escapeHtml(edu.degree)}</h4>
+                  <span class="entry-school">${escapeHtml(edu.school)}</span>
+                  <span class="entry-dates">${escapeHtml(edu.year)}</span>
                 </div>
               </div>
             `,
@@ -1293,7 +1368,7 @@ function generateResumePreviewHTML(data) {
             <div class="skills-list">
               ${data.skills.technical
                 .split(",")
-                .map((skill) => `<span class="skill-tag">${skill.trim()}</span>`)
+                .map((skill) => `<span class="skill-tag">${escapeHtml(skill.trim())}</span>`)
                 .join("")}
             </div>
           </div>
@@ -1474,7 +1549,9 @@ function updateATSScore() {
 
   if (scoreElement) {
     scoreElement.textContent = atsScore
-    scoreElement.parentElement.className = `ats-score-circle ${getScoreClass(atsScore)}`
+    const circle = scoreElement.parentElement
+    circle.className = `ats-score-circle ${getScoreClass(atsScore)}`
+    circle.style.setProperty("--score-percent", `${atsScore}%`)
   }
 
   if (tipsElement) {
@@ -1536,29 +1613,29 @@ function addExperience(data = {}) {
   item.dataset.id = id
   item.innerHTML = `
     <div class="item-header">
-      <h4 class="item-title">${data.title || "New Experience"}</h4>
-      <button type="button" class="btn-remove" onclick="removeExperience('${id}')">&times;</button>
+      <h4 class="item-title">${escapeHtml(data.title || "New Experience")}</h4>
+      <button type="button" class="btn-remove" onclick="removeExperience('${escapeHtml(id)}')">&times;</button>
     </div>
     <div class="form-grid">
       <div class="form-group">
         <label>Job Title *</label>
-        <input type="text" data-field="title" value="${data.title || ""}" required>
+        <input type="text" data-field="title" value="${escapeHtml(data.title || "")}" required>
       </div>
       <div class="form-group">
         <label>Company *</label>
-        <input type="text" data-field="company" value="${data.company || ""}" required>
+        <input type="text" data-field="company" value="${escapeHtml(data.company || "")}" required>
       </div>
       <div class="form-group">
         <label>Start Date *</label>
-        <input type="month" data-field="startDate" value="${data.startDate || ""}" required>
+        <input type="month" data-field="startDate" value="${escapeHtml(data.startDate || "")}" required>
       </div>
       <div class="form-group">
         <label>End Date (leave empty for current)</label>
-        <input type="month" data-field="endDate" value="${data.endDate || ""}">
+        <input type="month" data-field="endDate" value="${escapeHtml(data.endDate || "")}">
       </div>
       <div class="form-group full-width">
         <label>Description (use bullet points) *</label>
-        <textarea data-field="description" placeholder="• Achieved X by doing Y&#10;• Improved Z by N%&#10;• Led team of N people" required>${data.description || ""}</textarea>
+        <textarea data-field="description" placeholder="• Achieved X by doing Y&#10;• Improved Z by N%&#10;• Led team of N people" required>${escapeHtml(data.description || "")}</textarea>
       </div>
     </div>
   `
@@ -1588,21 +1665,21 @@ function addEducation(data = {}) {
   item.dataset.id = id
   item.innerHTML = `
     <div class="item-header">
-      <h4 class="item-title">${data.degree || "New Education"}</h4>
-      <button type="button" class="btn-remove" onclick="removeEducation('${id}')">&times;</button>
+      <h4 class="item-title">${escapeHtml(data.degree || "New Education")}</h4>
+      <button type="button" class="btn-remove" onclick="removeEducation('${escapeHtml(id)}')">&times;</button>
     </div>
     <div class="form-grid">
       <div class="form-group">
         <label>Degree / Certificate *</label>
-        <input type="text" data-field="degree" value="${data.degree || ""}" required>
+        <input type="text" data-field="degree" value="${escapeHtml(data.degree || "")}" required>
       </div>
       <div class="form-group">
         <label>School / Institution *</label>
-        <input type="text" data-field="school" value="${data.school || ""}" required>
+        <input type="text" data-field="school" value="${escapeHtml(data.school || "")}" required>
       </div>
       <div class="form-group">
         <label>Year of Completion *</label>
-        <input type="text" data-field="year" value="${data.year || ""}" placeholder="2023" required>
+        <input type="text" data-field="year" value="${escapeHtml(data.year || "")}" placeholder="2023" required>
       </div>
     </div>
   `
@@ -1662,7 +1739,15 @@ function exportData() {
   URL.revokeObjectURL(url)
 }
 
-function importData(event) {
+function importData() {
+  const fileInput = document.getElementById("importFileInput")
+  if (fileInput) {
+    fileInput.value = ""
+    fileInput.click()
+  }
+}
+
+function handleImportFile(event) {
   const file = event.target.files[0]
   if (!file) return
 
@@ -1684,7 +1769,7 @@ function importData(event) {
       populateForm()
       updatePreview()
       updateCoverPreview()
-      alert("Data imported successfully!")
+      showSuccessMessage("✅ Data imported successfully!")
     } catch (err) {
       alert("Error importing file. Please ensure it's a valid JSON file.")
     }
@@ -1953,13 +2038,10 @@ function initializeOfflineDetection() {
 
 // --- UTILITY FUNCTIONS ---
 function debounce(func, wait) {
+  let timer
   return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(debounceTimer)
-      func(...args)
-    }
-    clearTimeout(debounceTimer)
-    debounceTimer = setTimeout(later, wait)
+    clearTimeout(timer)
+    timer = setTimeout(() => func(...args), wait)
   }
 }
 
@@ -2053,6 +2135,45 @@ function closeAnalyzer() {
   }
 }
 
+function togglePreview() {
+  const previewPanel = document.querySelector(".preview-panel")
+  const container = document.querySelector(".builder-container")
+  if (!previewPanel) return
+
+  previewPanel.classList.toggle("collapsed")
+  const isCollapsed = previewPanel.classList.contains("collapsed")
+
+  if (container) {
+    if (isCollapsed) {
+      container.style.gridTemplateColumns = "320px 1fr 56px"
+    } else {
+      const isExpanded = previewPanel.classList.contains("expanded")
+      container.style.gridTemplateColumns = isExpanded ? "320px 1fr 600px" : "320px 1fr 400px"
+    }
+  }
+}
+
+function togglePreviewSize() {
+  const previewPanel = document.querySelector(".preview-panel")
+  const container = document.querySelector(".builder-container")
+  if (!previewPanel) return
+
+  previewPanel.classList.toggle("expanded")
+  const isExpanded = previewPanel.classList.contains("expanded")
+
+  if (container) {
+    container.style.gridTemplateColumns = isExpanded ? "320px 1fr 600px" : "320px 1fr 400px"
+  }
+}
+
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch((err) => {
+      console.warn("Service worker registration failed:", err)
+    })
+  }
+}
+
 // Make functions globally available
 window.toggleTheme = toggleTheme
 window.changeTemplate = changeTemplate
@@ -2068,6 +2189,7 @@ window.handlePhotoUpload = handlePhotoUpload
 window.downloadPDF = downloadPDF
 window.exportData = exportData
 window.importData = importData
+window.handleImportFile = handleImportFile
 window.loadSampleData = loadSampleData
 window.analyzeResume = analyzeResume
 window.closeAnalyzer = closeAnalyzer
@@ -2089,3 +2211,8 @@ window.closeQuitBot = closeQuitBot
 window.generateAICover = generateAICover
 window.downloadCoverPDF = downloadCoverLetterPDF
 window.updatePreview = updatePreview
+window.togglePreview = togglePreview
+window.togglePreviewSize = togglePreviewSize
+
+// Register service worker on load
+registerServiceWorker()
