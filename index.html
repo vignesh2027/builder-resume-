@@ -41,8 +41,9 @@
 
     <main>
         <section class="hero">
-            <div class="hero-content container">
-                <div class="hero-badge">✨ Now with AI-Assist & 8+ Professional Templates</div>
+            <canvas id="heroParticles" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+            <div class="hero-content container" style="position:relative;z-index:1;">
+                <div class="hero-badge">✨ Now with AI-Assist & 50+ Professional Templates</div>
                 <h1 class="hero-title">Build a Job-Winning Resume, <span class="gradient-text">Completely Free</span></h1>
                 <p class="hero-description">Create a professional resume and cover letter in minutes with our intuitive builder. ATS-friendly, customizable, and powered by AI to help you land your dream job.</p>
                 <div class="hero-actions">
@@ -73,7 +74,7 @@
                         <span class="stat-label">Resumes Created</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">8+</span>
+                        <span class="stat-number">50+</span>
                         <span class="stat-label">Pro Templates</span>
                     </div>
                     <div class="stat">
@@ -83,6 +84,42 @@
                 </div>
             </div>
         </section>
+
+        <!-- Trust Ticker -->
+        <div class="trust-ticker">
+            <div class="ticker-track">
+                <span>✅ 500,000+ Resumes Built</span>
+                <span class="ticker-dot">•</span>
+                <span>🤖 AI-Powered Resume Generator</span>
+                <span class="ticker-dot">•</span>
+                <span>📊 25-Point ATS Score Checker</span>
+                <span class="ticker-dot">•</span>
+                <span>🎨 50+ Professional Templates</span>
+                <span class="ticker-dot">•</span>
+                <span>📷 Photo-Ready Designs</span>
+                <span class="ticker-dot">•</span>
+                <span>🔒 100% Private — Data Stays on Your Device</span>
+                <span class="ticker-dot">•</span>
+                <span>💾 Auto-Save & PDF Export</span>
+                <span class="ticker-dot">•</span>
+                <span>✍️ Cover Letter Builder Included</span>
+                <span class="ticker-dot">•</span>
+                <span>🆓 Completely Free Forever</span>
+                <span class="ticker-dot">•</span>
+                <span>✅ 500,000+ Resumes Built</span>
+                <span class="ticker-dot">•</span>
+                <span>🤖 AI-Powered Resume Generator</span>
+                <span class="ticker-dot">•</span>
+                <span>📊 25-Point ATS Score Checker</span>
+                <span class="ticker-dot">•</span>
+                <span>🎨 50+ Professional Templates</span>
+                <span class="ticker-dot">•</span>
+                <span>📷 Photo-Ready Designs</span>
+                <span class="ticker-dot">•</span>
+                <span>🔒 100% Private — Data Stays on Your Device</span>
+                <span class="ticker-dot">•</span>
+            </div>
+        </div>
 
         <!-- Add this section after the hero section and before the templates section -->
         <section class="selected-resumes-section">
@@ -169,6 +206,9 @@
                     <button class="filter-btn" data-filter="professional">Professional</button>
                     <button class="filter-btn" data-filter="creative">Creative</button>
                     <button class="filter-btn" data-filter="modern">Modern</button>
+                    <button class="filter-btn" data-filter="glass">✨ Glassmorphism</button>
+                    <button class="filter-btn" data-filter="dark">🌙 Dark</button>
+                    <button class="filter-btn" data-filter="photo">📷 With Photo</button>
                 </div>
                 <div class="template-grid">
                     <div class="template-card" data-category="modern professional">
@@ -849,42 +889,615 @@
                     </div>
                 </div>
 
+                    <!-- Premium Templates with Photo -->
+                    <div class="template-card" data-category="modern professional photo">
+                        <div class="template-thumbnail">🖤</div>
+                        <div class="template-info"><h3>Onyx Executive</h3><p>Dark navy sidebar with circular photo — bold executive presence.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern professional photo">
+                        <div class="template-thumbnail">🌹</div>
+                        <div class="template-info"><h3>Rose Gold Luxury</h3><p>Warm rose gold header with photo — elegant and premium feel.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">❄️</div>
+                        <div class="template-info"><h3>Nordic Minimal</h3><p>Clean Scandinavian design with rounded photo and green accent.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark modern photo">
+                        <div class="template-thumbnail">⚡</div>
+                        <div class="template-info"><h3>Cyber Neon Dark</h3><p>Dark cyberpunk theme with neon green accents and terminal aesthetic.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">⚓</div>
+                        <div class="template-info"><h3>Navy Gold Executive</h3><p>Navy & gold serif layout — authoritative and executive grade.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative professional photo">
+                        <div class="template-thumbnail">📰</div>
+                        <div class="template-info"><h3>Magazine Bold</h3><p>Editorial-style black header with bold typography and photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🌸</div>
+                        <div class="template-info"><h3>Pastel Professional</h3><p>Soft purple pastel design with card-style entries and photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🍊</div>
+                        <div class="template-info"><h3>Coral Modern</h3><p>Bright coral gradient header with circular photo — energetic.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🌲</div>
+                        <div class="template-info"><h3>Forest Executive</h3><p>Rich forest green header with sidebar layout and circular photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern professional photo">
+                        <div class="template-thumbnail">⏱️</div>
+                        <div class="template-info"><h3>Timeline Pro</h3><p>Visual timeline experience/education entries with navy header and photo.</p></div>
+                    </div>
+
+                    <!-- Glassmorphism Templates -->
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">🌌</div>
+                        <div class="template-info"><h3>Glass Aurora</h3><p>Dark purple glass with neon glow & circular photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">💠</div>
+                        <div class="template-info"><h3>Glass Blue Premium</h3><p>Navy glass with cyan sidebar & profile photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">🟢</div>
+                        <div class="template-info"><h3>Glass Emerald</h3><p>Deep green glass card with emerald accents & photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">🌹</div>
+                        <div class="template-info"><h3>Glass Rose Gold</h3><p>Warm dark rose gold glass, elegant & luxurious.</p></div>
+                    </div>
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">🌑</div>
+                        <div class="template-info"><h3>Glass Midnight</h3><p>Ultra-dark premium glass with single accent color.</p></div>
+                    </div>
+                    <div class="template-card" data-category="glass modern photo">
+                        <div class="template-thumbnail">🌈</div>
+                        <div class="template-info"><h3>Glass Holographic</h3><p>Iridescent rainbow shimmer headers, hexagon photo.</p></div>
+                    </div>
+                    <!-- Dark + Photo Templates -->
+                    <div class="template-card" data-category="dark professional photo">
+                        <div class="template-thumbnail">⬛</div>
+                        <div class="template-info"><h3>Dark Charcoal Executive</h3><p>Charcoal dark with gold accents & circular photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark professional photo">
+                        <div class="template-thumbnail">🌊</div>
+                        <div class="template-info"><h3>Dark Navy Commander</h3><p>Navy sidebar, white content, gold accent & photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark modern photo">
+                        <div class="template-thumbnail">🔮</div>
+                        <div class="template-info"><h3>Dark Purple Executive</h3><p>Deep purple with violet gradient glow & photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark modern photo">
+                        <div class="template-thumbnail">⚙️</div>
+                        <div class="template-info"><h3>Dark Carbon Modern</h3><p>Carbon texture, teal accent, tech-focused layout.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark professional photo">
+                        <div class="template-thumbnail">📘</div>
+                        <div class="template-info"><h3>Dark Slate Professional</h3><p>Slate sidebar with skill bars & profile photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="dark professional photo">
+                        <div class="template-thumbnail">👑</div>
+                        <div class="template-info"><h3>Dark Luxury Gold</h3><p>Near-black luxury with gold ring & magazine feel.</p></div>
+                    </div>
+                    <!-- Gradient + Photo Templates -->
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">💜</div>
+                        <div class="template-info"><h3>Purple Wave</h3><p>Purple-violet gradient header with circular photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative photo">
+                        <div class="template-thumbnail">🌸</div>
+                        <div class="template-info"><h3>Sunset Career</h3><p>Pink-rose gradient, rounded cards, modern feel.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🌊</div>
+                        <div class="template-info"><h3>Ocean Pro</h3><p>Teal-cyan gradient, clean white body & photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🌿</div>
+                        <div class="template-info"><h3>Forest Executive</h3><p>Green gradient, emerald accents, nature-inspired.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🔥</div>
+                        <div class="template-info"><h3>Flame Leader</h3><p>Orange-amber header, bold energetic feel & photo.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🌆</div>
+                        <div class="template-info"><h3>Midnight Gradient</h3><p>Dark-to-blue gradient header, corporate & modern.</p></div>
+                    </div>
+                    <!-- Split + Photo Templates -->
+                    <div class="template-card" data-category="modern professional photo">
+                        <div class="template-thumbnail">📌</div>
+                        <div class="template-info"><h3>Indigo Split</h3><p>Indigo sidebar with photo, white content panel.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🖤</div>
+                        <div class="template-info"><h3>Charcoal Split</h3><p>Charcoal sidebar, colored skill tags, clean layout.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">📋</div>
+                        <div class="template-info"><h3>Slate Executive Split</h3><p>Slate sidebar with photo & summary, timeline body.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">☁️</div>
+                        <div class="template-info"><h3>Light Split Modern</h3><p>Light gray sidebar, primary color name, subtle design.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🔵</div>
+                        <div class="template-info"><h3>Dark Blue Split</h3><p>Navy sidebar, white text, circular photo & badges.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">🌲</div>
+                        <div class="template-info"><h3>Forest Split</h3><p>Green sidebar, white content, organic professional.</p></div>
+                    </div>
+                    <!-- Minimal + Photo Templates -->
+                    <div class="template-card" data-category="modern professional photo">
+                        <div class="template-thumbnail">⬜</div>
+                        <div class="template-info"><h3>Pure Minimal</h3><p>All-white ultra clean, small circular photo, whitespace.</p></div>
+                    </div>
+                    <div class="template-card" data-category="professional photo">
+                        <div class="template-thumbnail">📏</div>
+                        <div class="template-info"><h3>Accent Line Minimal</h3><p>White with left accent bar, photo right, clean type.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🔘</div>
+                        <div class="template-info"><h3>Centered Minimal</h3><p>Centered header & photo, left-body serif style.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">🏔️</div>
+                        <div class="template-info"><h3>Nordic Minimal</h3><p>Off-white, mono labels, small square photo, typographic.</p></div>
+                    </div>
+                    <div class="template-card" data-category="modern photo">
+                        <div class="template-thumbnail">📐</div>
+                        <div class="template-info"><h3>Swiss Grid Minimal</h3><p>Grid-based, pure black & accent only, photo top-left.</p></div>
+                    </div>
+                    <!-- Creative + Photo Templates -->
+                    <div class="template-card" data-category="creative photo">
+                        <div class="template-thumbnail">⬡</div>
+                        <div class="template-info"><h3>Hexagon Creative</h3><p>Hexagon clip-path photo, gradient header, card sections.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative photo">
+                        <div class="template-thumbnail">📰</div>
+                        <div class="template-info"><h3>Magazine Style</h3><p>Editorial layout, large photo left, name overlay.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative dark photo">
+                        <div class="template-thumbnail">⚡</div>
+                        <div class="template-info"><h3>Neon Tech</h3><p>Dark + neon glow, code aesthetic, terminal style.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative photo">
+                        <div class="template-thumbnail">🎨</div>
+                        <div class="template-info"><h3>Pastel Watercolor</h3><p>Soft pastel, watercolor feel, serif italic, artistic.</p></div>
+                    </div>
+                    <div class="template-card" data-category="creative modern photo">
+                        <div class="template-thumbnail">🔶</div>
+                        <div class="template-info"><h3>Bold Geometric</h3><p>Geometric shapes, thick photo ring, bold typography.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Get Hired in 3 Simple Steps</h2>
+                    <p class="section-description">No account needed. No credit card. Build a professional resume in under 10 minutes.</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">01</div>
+                        <div class="step-icon">✏️</div>
+                        <h3>Fill Your Details</h3>
+                        <p>Enter your work experience, education, skills, and personal info. Our smart form makes it fast.</p>
+                        <div class="step-arrow">→</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">02</div>
+                        <div class="step-icon">🎨</div>
+                        <h3>Pick a Template</h3>
+                        <p>Choose from 50+ professionally designed templates. Switch anytime — your data moves with you.</p>
+                        <div class="step-arrow">→</div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">03</div>
+                        <div class="step-icon">📥</div>
+                        <h3>Download & Apply</h3>
+                        <p>Export your pixel-perfect PDF. Check your ATS score. Apply with confidence.</p>
+                        <div class="step-arrow"></div>
+                    </div>
+                </div>
+                <div class="steps-cta">
+                    <a href="form" class="btn btn-primary btn-large">Start Building — It's Free</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
         <section id="features" class="features-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Everything You Need, Nothing You Don't</h2>
-                    <p class="section-description">Our features are designed to make resume building fast, easy, and effective.</p>
+                    <h2 class="section-title">Everything You Need to Land the Job</h2>
+                    <p class="section-description">Packed with powerful tools that give you an edge over other applicants.</p>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">🤖</div>
-                        <h3>AI-Powered Suggestions</h3>
-                        <p>Get smart suggestions for your summary and job descriptions to make your resume shine.</p>
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">🤖</div>
+                        <h3>AI Resume Generator</h3>
+                        <p>Describe yourself in plain English — our local AI fills your entire resume in seconds, including job descriptions and summaries.</p>
+                        <span class="feature-tag">Powered by Ollama</span>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🎨</div>
-                        <h3>Easy Customization</h3>
-                        <p>Change colors, fonts, and layouts with a single click to match your personal brand.</p>
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#10b981,#06b6d4)">📊</div>
+                        <h3>25-Point ATS Scorer</h3>
+                        <p>Real-time ATS scoring with 25 conditions — action verbs, keywords, quantified metrics, contact completeness and more.</p>
+                        <span class="feature-tag">Live Score</span>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">📥</div>
-                        <h3>PDF & Data Export</h3>
-                        <p>Download a pixel-perfect PDF or export your data as JSON to use anywhere.</p>
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🎨</div>
+                        <h3>50+ Templates</h3>
+                        <p>Glassmorphism, dark themes, minimal, creative, executive — 50+ designs with photo support and 20 color options.</p>
+                        <span class="feature-tag">With Photo</span>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
-                        <h3>Privacy Focused</h3>
-                        <p>Your data is saved directly in your browser. We never see or store your personal information.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">✍️</div>
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">✍️</div>
                         <h3>Cover Letter Builder</h3>
-                        <p>Create a matching cover letter for your resume to complete your job application.</p>
+                        <p>Create a perfectly matching cover letter with AI assistance. Customized for each job application.</p>
+                        <span class="feature-tag">AI Assisted</span>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🆓</div>
-                        <h3>100% Free Forever</h3>
-                        <p>No subscriptions, no watermarks, no hidden fees. Just a powerful, free tool for everyone.</p>
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">💾</div>
+                        <h3>Auto-Save & Export</h3>
+                        <p>Your data is saved instantly in your browser. Download as PDF anytime — pixel-perfect, print-ready.</p>
+                        <span class="feature-tag">No Account Needed</span>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrap" style="background:linear-gradient(135deg,#1e3a5f,#0ea5e9)">🔒</div>
+                        <h3>100% Private</h3>
+                        <p>Your resume data never leaves your device. No servers, no tracking, no data collection. Completely private.</p>
+                        <span class="feature-tag">Browser Only</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Highlight Section -->
+        <section class="ai-highlight-section">
+            <div class="container">
+                <div class="ai-highlight-grid">
+                    <div class="ai-highlight-text">
+                        <div class="ai-badge-label">🤖 AI-Powered</div>
+                        <h2>Let AI Build Your Resume in Seconds</h2>
+                        <p>Just describe your background in plain English — "I'm a 3-year Java developer who worked at TCS on banking apps" — and our local AI (Mistral via Ollama) instantly fills your name, summary, experience bullets, and skills.</p>
+                        <ul class="ai-feature-list">
+                            <li>✅ Generate complete resume from a single sentence</li>
+                            <li>✅ AI-powered cover letter writing</li>
+                            <li>✅ ATS analysis with personalized recommendations</li>
+                            <li>✅ "Improve my summary" — rewrite on command</li>
+                            <li>✅ Runs 100% locally — your data stays private</li>
+                        </ul>
+                        <a href="form" class="btn btn-primary btn-large" style="margin-top:20px;display:inline-block">Try AI Resume Builder →</a>
+                    </div>
+                    <div class="ai-highlight-demo">
+                        <div class="ai-demo-card">
+                            <div class="ai-demo-header">
+                                <span class="ai-demo-dot red"></span>
+                                <span class="ai-demo-dot yellow"></span>
+                                <span class="ai-demo-dot green"></span>
+                                <span class="ai-demo-title">CMR AI Assistant</span>
+                            </div>
+                            <div class="ai-demo-body">
+                                <div class="ai-demo-msg user">I'm a React developer with 4 years experience at startups. Can you create my resume?</div>
+                                <div class="ai-demo-msg bot">
+                                    <span class="ai-demo-typing">Generating your resume</span>
+                                    <span class="ai-typing-dots"><span>.</span><span>.</span><span>.</span></span>
+                                    <div class="ai-demo-result">✅ <strong>Resume generated!</strong><br>→ Added 2 work experiences<br>→ 8 technical skills filled<br>→ ATS score: 82/100</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Template Visual Showcase -->
+        <section class="showcase-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Resume Designs That Get Noticed</h2>
+                    <p class="section-description">Every template is ATS-tested, recruiter-approved, and fully customizable.</p>
+                </div>
+                <div class="showcase-strip">
+                    <div class="showcase-card sc-navy">
+                        <div class="sc-sidebar"></div>
+                        <div class="sc-body">
+                            <div class="sc-name-bar"></div>
+                            <div class="sc-title-bar"></div>
+                            <div class="sc-line lg"></div>
+                            <div class="sc-line md"></div>
+                            <div class="sc-line sm"></div>
+                            <div class="sc-line lg"></div>
+                            <div class="sc-line md"></div>
+                        </div>
+                        <div class="sc-label">Executive Dark</div>
+                    </div>
+                    <div class="showcase-card sc-glass">
+                        <div class="sc-glass-header">
+                            <div class="sc-photo-circle"></div>
+                            <div class="sc-glass-info">
+                                <div class="sc-name-bar light"></div>
+                                <div class="sc-title-bar light sm"></div>
+                            </div>
+                        </div>
+                        <div class="sc-glass-body">
+                            <div class="sc-line glass-line"></div>
+                            <div class="sc-line glass-line sm"></div>
+                            <div class="sc-line glass-line md"></div>
+                        </div>
+                        <div class="sc-label">Glassmorphism</div>
+                    </div>
+                    <div class="showcase-card sc-minimal">
+                        <div class="sc-min-accent"></div>
+                        <div class="sc-min-body">
+                            <div class="sc-photo-sq"></div>
+                            <div class="sc-min-info">
+                                <div class="sc-name-bar dark"></div>
+                                <div class="sc-title-bar accent sm"></div>
+                            </div>
+                        </div>
+                        <div class="sc-line dark"></div>
+                        <div class="sc-line dark sm"></div>
+                        <div class="sc-line dark md"></div>
+                        <div class="sc-label">Nordic Minimal</div>
+                    </div>
+                    <div class="showcase-card sc-gradient">
+                        <div class="sc-grad-header">
+                            <div class="sc-photo-circle sm"></div>
+                            <div>
+                                <div class="sc-name-bar light"></div>
+                                <div class="sc-title-bar light sm"></div>
+                            </div>
+                        </div>
+                        <div class="sc-grad-body">
+                            <div class="sc-line md"></div>
+                            <div class="sc-line sm"></div>
+                            <div class="sc-line lg"></div>
+                        </div>
+                        <div class="sc-label">Gradient Hero</div>
+                    </div>
+                    <div class="showcase-card sc-creative">
+                        <div class="sc-cr-top">
+                            <div class="sc-cr-stripe"></div>
+                            <div class="sc-cr-name"></div>
+                        </div>
+                        <div class="sc-cr-tags">
+                            <div class="sc-tag"></div>
+                            <div class="sc-tag"></div>
+                            <div class="sc-tag"></div>
+                        </div>
+                        <div class="sc-line sm"></div>
+                        <div class="sc-line md"></div>
+                        <div class="sc-label">Magazine Bold</div>
+                    </div>
+                </div>
+                <div class="showcase-cta">
+                    <a href="#templates" class="btn btn-secondary btn-large">Browse All 50+ Templates</a>
+                    <a href="form" class="btn btn-primary btn-large">Start Building Free</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Loved by Job Seekers</h2>
+                    <p class="section-description">Real people. Real resumes. Real results.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"I landed 3 interviews in the first week after using CMR. The ATS score feature showed me exactly what was missing. Highly recommend!"</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">R</div>
+                            <div>
+                                <div class="testimonial-name">Rahul Sharma</div>
+                                <div class="testimonial-role">Software Engineer at Infosys</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"The AI generator is mind-blowing. I typed 2 sentences and it filled my entire resume. Got a call from TCS within 4 days!"</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#10b981,#0ea5e9)">P</div>
+                            <div>
+                                <div class="testimonial-name">Priya Nair</div>
+                                <div class="testimonial-role">Data Analyst at Wipro</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"50+ templates and they all look professional. I switched between 5 before finding the perfect one. The glassmorphism design got compliments!"</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">A</div>
+                            <div>
+                                <div class="testimonial-name">Arjun Mehta</div>
+                                <div class="testimonial-role">Product Manager at Zoho</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"Finally a resume builder that's actually free — no watermarks, no hidden fees. The PDF export is pixel-perfect. This is the best free tool out there."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">S</div>
+                            <div>
+                                <div class="testimonial-name">Sneha Kapoor</div>
+                                <div class="testimonial-role">UX Designer at Razorpay</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section class="comparison-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why Choose CMR?</h2>
+                    <p class="section-description">See how we compare to other resume builders.</p>
+                </div>
+                <div class="comparison-table-wrap">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th class="cmr-col">CMR <span class="best-badge">Best</span></th>
+                                <th>Canva</th>
+                                <th>Resume.io</th>
+                                <th>Novoresume</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>100% Free (no watermark)</td>
+                                <td class="cmr-col"><span class="c-yes">✅</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                            </tr>
+                            <tr>
+                                <td>AI Resume Generator</td>
+                                <td class="cmr-col"><span class="c-yes">✅</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-partial">🔒 Paid</span></td>
+                                <td><span class="c-partial">🔒 Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>Real-time ATS Scoring</td>
+                                <td class="cmr-col"><span class="c-yes">✅ 25-point</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-partial">Basic</span></td>
+                                <td><span class="c-partial">Basic</span></td>
+                            </tr>
+                            <tr>
+                                <td>50+ Templates with Photo</td>
+                                <td class="cmr-col"><span class="c-yes">✅</span></td>
+                                <td><span class="c-yes">✅</span></td>
+                                <td><span class="c-partial">Limited</span></td>
+                                <td><span class="c-partial">Limited</span></td>
+                            </tr>
+                            <tr>
+                                <td>Cover Letter Builder</td>
+                                <td class="cmr-col"><span class="c-yes">✅ Free</span></td>
+                                <td><span class="c-yes">✅</span></td>
+                                <td><span class="c-partial">🔒 Paid</span></td>
+                                <td><span class="c-partial">🔒 Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>100% Private (no server)</td>
+                                <td class="cmr-col"><span class="c-yes">✅</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                            </tr>
+                            <tr>
+                                <td>No Account Required</td>
+                                <td class="cmr-col"><span class="c-yes">✅</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                                <td><span class="c-no">❌</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <p class="section-description">Everything you need to know about CMR.</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is CMR really free? No hidden charges?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, 100% free — forever. No subscription, no credit card, no watermarks on your PDF. We don't even require an account. Your resume is yours, completely.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            How does the AI resume generator work?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>CMR uses <strong>Ollama + Mistral AI</strong> running locally on your computer. Just install Ollama, run <code>ollama run mistral</code>, then open CMR. Click the 🤖 AI button and describe yourself — the AI fills your entire resume in seconds. Your data never leaves your device.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            What is ATS and how does the score work?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>ATS (Applicant Tracking System) is software companies use to filter resumes before a human reads them. CMR checks 25 conditions — contact completeness, keyword density, action verbs, quantified achievements, section balance and more — and gives you a live score with specific suggestions.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Can I add my photo to the resume?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes! Many of our templates (30+ designs) support a profile photo. Upload your photo in the Personal Info tab and it automatically appears in the preview. Note: Some markets like the US prefer no photo for ATS reasons — our ATS-optimized templates skip the photo.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Can I switch templates without losing my data?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely. Your data is stored separately from the template. Switch between any of the 50+ designs instantly — your name, experience, skills, and everything else stays intact.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            How do I download my resume as a PDF?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Click the <strong>"Download PDF"</strong> button in the sidebar of the resume builder. The PDF is generated directly from your browser's print engine — pixel-perfect, no external service needed. Works best in Chrome or Edge.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Your Dream Job is One Resume Away</h2>
+                    <p class="cta-desc">Join thousands of job seekers who built their winning resume with CMR — completely free, no strings attached.</p>
+                    <div class="cta-actions">
+                        <a href="form" class="btn btn-white btn-large">Build My Resume Now</a>
+                        <a href="cover" class="btn btn-outline-white btn-large">Create Cover Letter</a>
+                    </div>
+                    <div class="cta-trust">
+                        <span>✓ No account required</span>
+                        <span>✓ No watermarks</span>
+                        <span>✓ 100% free forever</span>
+                        <span>✓ Instant PDF download</span>
                     </div>
                 </div>
             </div>
@@ -893,12 +1506,219 @@
 
     <footer class="footer">
         <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">📄</div>
+                        <div class="logo-text">
+                            <h1>CMR</h1>
+                            <span>Craftez My Resume</span>
+                        </div>
+                    </div>
+                    <p>Build professional resumes and cover letters for free. AI-powered, ATS-optimized, always free.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Build</h4>
+                    <a href="form">Resume Builder</a>
+                    <a href="cover">Cover Letter</a>
+                    <a href="#templates">Templates</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Features</h4>
+                    <a href="#features">AI Assistant</a>
+                    <a href="form">ATS Checker</a>
+                    <a href="form">PDF Export</a>
+                </div>
+            </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 CMR Resume Builder. All Rights Reserved.</p>
+                <p>&copy; 2025 CMR — Craftez My Resume. Free forever.</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+    // ── Hero Particle Canvas Animation ──────────────────────────
+    (function() {
+      const canvas = document.getElementById('heroParticles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [], raf;
+
+      const COLORS = ['#6366f1','#8b5cf6','#3b82f6','#06b6d4','#10b981','#f59e0b'];
+      const N = 80;
+
+      function resize() {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+
+      function rand(a, b) { return Math.random() * (b - a) + a; }
+
+      function Particle() {
+        this.reset = function() {
+          this.x = rand(0, W);
+          this.y = rand(0, H);
+          this.r = rand(1.5, 4);
+          this.vx = rand(-0.4, 0.4);
+          this.vy = rand(-0.6, -0.1);
+          this.alpha = rand(0.15, 0.7);
+          this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.life = 0;
+          this.maxLife = rand(200, 500);
+        };
+        this.reset();
+      }
+
+      for (let i = 0; i < N; i++) { const p = new Particle(); p.life = Math.floor(Math.random() * p.maxLife); particles.push(p); }
+
+      function drawConnections() {
+        const MAX_DIST = 120;
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < MAX_DIST) {
+              const opacity = (1 - dist / MAX_DIST) * 0.15;
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(99,102,241,${opacity})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        drawConnections();
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life++;
+          // Fade in/out
+          const lifeRatio = p.life / p.maxLife;
+          const fade = lifeRatio < 0.1 ? lifeRatio * 10 : lifeRatio > 0.8 ? (1 - lifeRatio) * 5 : 1;
+          if (p.life >= p.maxLife || p.y < -10) p.reset();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha * fade;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        });
+        raf = requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      draw();
+
+      // Pause when tab hidden
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) cancelAnimationFrame(raf);
+        else draw();
+      });
+    })();
+
+    // ── Scroll Reveal ────────────────────────────────────────────
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(el => {
+          if (el.isIntersecting) {
+            el.target.classList.add('visible');
+            observer.unobserve(el.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.template-card, .feature-card, .resume-example-card, .section-header').forEach((el, i) => {
+        el.classList.add('reveal');
+        const delay = (i % 6) * 0.07;
+        el.style.transitionDelay = delay + 's';
+        observer.observe(el);
+      });
+    })();
+
+    // ── Stat Counter Animation ───────────────────────────────────
+    (function() {
+      const stats = document.querySelectorAll('.stat-number');
+      const targets = ['500k+', '144+', '100%'];
+      stats.forEach((el, i) => el.dataset.target = targets[i] || el.textContent);
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const raw = el.dataset.target || el.textContent;
+          const num = parseInt(raw.replace(/\D/g, ''));
+          if (!num) return;
+          const suffix = raw.replace(/[\d]/g, '');
+          let start = 0;
+          const duration = 1200;
+          const step = (timestamp) => {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(ease * num) + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      stats.forEach(el => observer.observe(el));
+    })();
+
+    // ── FAQ Accordion ────────────────────────────────────────────
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-icon').textContent = '+';
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.querySelector('.faq-icon').textContent = '−';
+      }
+    }
+
+    // ── Extend Scroll Reveal to new sections ─────────────────────
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.step-card, .testimonial-card, .showcase-card, .faq-item, .comparison-table-wrap').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i % 5) * 0.08 + 's';
+        observer.observe(el);
+      });
+    })();
+
+    // ── Template filter with smooth fade ────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.template-card').forEach((card, i) => {
+          const show = filter === 'all' || card.dataset.category.includes(filter);
+          card.style.transition = `opacity 0.3s ease ${i*0.02}s, transform 0.3s ease ${i*0.02}s`;
+          if (show) {
+            card.style.display = 'block';
+            requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = ''; });
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => { card.style.display = 'none'; }, 300 + i*20);
+          }
+        });
+      });
+    });
+    </script>
 </body>
 </html>

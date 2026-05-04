@@ -898,6 +898,55 @@ function populateForm() {
     <option value="atsTechnicalLayout">ATS Technical Layout</option>
     <option value="atsLegalFinanceReady">ATS Legal Finance Ready</option>
     </optgroup>
+    <optgroup label="── ✨ Glassmorphism ──">
+    <option value="glass1">Glass Aurora (Dark Purple)</option>
+    <option value="glass2">Glass Blue Premium</option>
+    <option value="glass3">Glass Emerald</option>
+    <option value="glass4">Glass Rose Gold</option>
+    <option value="glass5">Glass Midnight</option>
+    <option value="glass6">Glass Holographic</option>
+    </optgroup>
+    <optgroup label="── 🌙 Dark + Photo ──">
+    <option value="darkPhoto1">Dark Charcoal Executive</option>
+    <option value="darkPhoto2">Dark Navy Commander</option>
+    <option value="darkPhoto3">Dark Purple Executive</option>
+    <option value="darkPhoto4">Dark Carbon Modern</option>
+    <option value="darkPhoto5">Dark Slate Professional</option>
+    <option value="darkPhoto6">Dark Luxury Gold</option>
+    </optgroup>
+    <optgroup label="── 🌈 Gradient + Photo ──">
+    <option value="gradientPhoto1">Purple Wave</option>
+    <option value="gradientPhoto2">Sunset Career</option>
+    <option value="gradientPhoto3">Ocean Pro</option>
+    <option value="gradientPhoto4">Forest Executive</option>
+    <option value="gradientPhoto5">Flame Leader</option>
+    <option value="gradientPhoto6">Midnight Gradient</option>
+    </optgroup>
+    <optgroup label="── 📋 Split + Photo ──">
+    <option value="splitPhoto1">Indigo Split</option>
+    <option value="splitPhoto2">Charcoal Split</option>
+    <option value="splitPhoto3">Slate Executive Split</option>
+    <option value="splitPhoto4">Light Split Modern</option>
+    <option value="splitPhoto5">Dark Blue Split</option>
+    <option value="splitPhoto6">Forest Split</option>
+    </optgroup>
+    <optgroup label="── 🤍 Minimal + Photo ──">
+    <option value="minimalPhoto1">Pure Minimal</option>
+    <option value="minimalPhoto2">Accent Line Minimal</option>
+    <option value="minimalPhoto3">Centered Minimal</option>
+    <option value="minimalPhoto4">Nordic Minimal</option>
+    <option value="minimalPhoto5">Swiss Grid Minimal</option>
+    </optgroup>
+    <optgroup label="── 🎨 Creative + Photo ──">
+    <option value="creativePhoto1">Hexagon Creative</option>
+    <option value="creativePhoto2">Magazine Style</option>
+    <option value="creativePhoto3">Neon Tech</option>
+    <option value="creativePhoto4">Pastel Watercolor</option>
+    <option value="creativePhoto5">Bold Geometric</option>
+    </optgroup>
+    <optgroup label="── 🤖 AI Generated ──">
+    <option value="ai-custom" id="aiCustomOption" style="display:none">AI Custom Template</option>
+    </optgroup>
     `
     // Restore current template selection
     templateSelectElement.value = uiSettings.template
@@ -1221,8 +1270,11 @@ function downloadCoverLetterPDF() {
   })
 }
 
+// generateAICover is implemented in ai.js (Ollama/Mistral powered)
+// This stub is intentionally empty — ai.js overrides it after loading
 function generateAICover() {
-  alert("AI Assist feature coming soon!")
+  if (typeof checkOllamaStatus !== 'undefined') return; // ai.js loaded
+  alert('AI assist requires the page to fully load. Please wait and try again.')
 }
 
 function toggleCoverLetter() {
@@ -1488,88 +1540,166 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-// --- ATS OPTIMIZER ---
+// --- ATS OPTIMIZER — 25-CONDITION KEYWORD ENGINE ---
+
+const ATS_ACTION_VERBS = [
+  "led","managed","developed","built","created","designed","implemented","delivered",
+  "achieved","improved","increased","reduced","launched","established","coordinated",
+  "executed","streamlined","optimized","spearheaded","drove","collaborated","oversaw",
+  "mentored","negotiated","resolved","analyzed","automated","deployed","migrated",
+  "integrated","architected","scaled","secured","transformed","generated"
+]
+
+const ATS_TECH_KEYWORDS = [
+  "javascript","python","java","react","node","sql","aws","azure","gcp","docker",
+  "kubernetes","git","api","rest","graphql","typescript","angular","vue","spring",
+  "django","flask","postgresql","mongodb","redis","ci/cd","agile","scrum","devops",
+  "machine learning","deep learning","data science","cloud","microservices","linux"
+]
+
+const ATS_POWER_WORDS = [
+  "achieved","delivered","exceeded","accelerated","boosted","maximized","surpassed",
+  "outperformed","transformed","revolutionized","pioneered","championed","elevated"
+]
+
+const FIRST_PERSON_PRONOUNS = /\b(I|me|my|myself|I'm|I've|I'll|I'd)\b/i
+
 function updateATSScore() {
-  let score = 0
-  const tips = []
+  const conditions = [] // { passed, points, tip }
+  const { personal, experience, education, skills, additional } = resumeData
 
-  // Personal information scoring
-  if (resumeData.personal.fullName) score += 10
-  else tips.push("Add your full name")
+  const allText = [
+    personal.fullName, personal.jobTitle, personal.summary,
+    ...experience.map(e => e.title + " " + e.company + " " + e.description),
+    skills.technical, skills.soft, additional.certifications, additional.projects
+  ].join(" ").toLowerCase()
 
-  if (resumeData.personal.email) score += 10
-  else tips.push("Add your email address")
+  const summaryWords = personal.summary ? personal.summary.trim().split(/\s+/).length : 0
+  const techSkillsList = skills.technical ? skills.technical.split(",").map(s => s.trim()).filter(Boolean) : []
+  const softSkillsList = skills.soft ? skills.soft.split(",").map(s => s.trim()).filter(Boolean) : []
 
-  if (resumeData.personal.phone) score += 10
-  else tips.push("Add your phone number")
+  // ── CONDITION 1: Full name ────────────────── (4 pts)
+  conditions.push({ passed: !!personal.fullName?.trim(), points: 4, tip: "Add your full name" })
 
-  if (resumeData.personal.location) score += 5
-  else tips.push("Add your location")
+  // ── CONDITION 2: Professional email ──────── (4 pts)
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personal.email || "")
+  conditions.push({ passed: emailOk, points: 4, tip: "Add a valid email address" })
 
-  // Summary scoring
-  if (resumeData.personal.summary) {
-    if (resumeData.personal.summary.length > 50) score += 15
-    else tips.push("Write a longer professional summary (50+ characters)")
-  } else {
-    tips.push("Add a professional summary")
-  }
+  // ── CONDITION 3: Phone number ─────────────── (3 pts)
+  conditions.push({ passed: !!(personal.phone?.trim()), points: 3, tip: "Add your phone number" })
 
-  // Experience scoring
-  if (resumeData.experience.length > 0) {
-    score += 20
-    if (resumeData.experience.length >= 2) score += 5
-  } else {
-    tips.push("Add at least one work experience")
-  }
+  // ── CONDITION 4: Location ─────────────────── (2 pts)
+  conditions.push({ passed: !!(personal.location?.trim()), points: 2, tip: "Add your city/location" })
 
-  // Education scoring
-  if (resumeData.education.length > 0) score += 15
-  else tips.push("Add your education background")
+  // ── CONDITION 5: LinkedIn profile ────────── (3 pts)
+  conditions.push({ passed: !!(personal.linkedin?.trim()), points: 3, tip: "Add your LinkedIn profile URL" })
 
-  // Skills scoring
-  if (resumeData.skills.technical) score += 10
-  else tips.push("Add technical skills")
+  // ── CONDITION 6: Professional summary ────── (4 pts)
+  conditions.push({ passed: summaryWords >= 20, points: 4, tip: "Add a professional summary (20+ words)" })
 
-  if (resumeData.skills.soft) score += 5
-  else tips.push("Add soft skills")
+  // ── CONDITION 7: Summary optimal length ──── (2 pts)
+  conditions.push({ passed: summaryWords >= 30 && summaryWords <= 150, points: 2, tip: "Keep summary between 30–150 words for ATS" })
 
-  // Additional content scoring
-  if (resumeData.additional.certifications) score += 5
-  if (resumeData.additional.projects) score += 5
+  // ── CONDITION 8: No 1st-person in summary ── (3 pts)
+  const noFirstPerson = !FIRST_PERSON_PRONOUNS.test(personal.summary || "")
+  conditions.push({ passed: noFirstPerson, points: 3, tip: "Remove 'I', 'my', 'me' from summary — use third-person style" })
 
-  // Bonus points
-  if (resumeData.personal.linkedin) score += 5
-  if (resumeData.skills.languages) score += 5
+  // ── CONDITION 9: Job title in summary ────── (2 pts)
+  const jobWords = (personal.jobTitle || "").toLowerCase().split(/\s+/).filter(w => w.length > 3)
+  const titleInSummary = jobWords.length > 0 && jobWords.some(w => (personal.summary || "").toLowerCase().includes(w))
+  conditions.push({ passed: titleInSummary, points: 2, tip: "Include your job title keyword in the summary" })
 
-  atsScore = Math.min(score, 100)
+  // ── CONDITION 10: Has experience ─────────── (5 pts)
+  conditions.push({ passed: experience.length > 0, points: 5, tip: "Add at least one work experience" })
 
-  // Update UI
-  const scoreElement = document.getElementById("atsScore")
-  const tipsElement = document.getElementById("atsTips")
+  // ── CONDITION 11: 2+ experiences ─────────── (3 pts)
+  conditions.push({ passed: experience.length >= 2, points: 3, tip: "Add 2+ work experiences for stronger ATS match" })
 
-  if (scoreElement) {
-    scoreElement.textContent = atsScore
-    const circle = scoreElement.parentElement
+  // ── CONDITION 12: Action verbs in experience (4 pts)
+  const usesActionVerbs = experience.some(e =>
+    ATS_ACTION_VERBS.some(v => (e.description || "").toLowerCase().includes(v))
+  )
+  conditions.push({ passed: usesActionVerbs, points: 4, tip: `Start bullet points with action verbs (led, built, managed, delivered...)` })
+
+  // ── CONDITION 13: Quantified achievements ── (4 pts)
+  const hasNumbers = experience.some(e => /\d+/.test(e.description || ""))
+  conditions.push({ passed: hasNumbers, points: 4, tip: "Add numbers/metrics to experience (e.g. improved speed by 40%)" })
+
+  // ── CONDITION 14: Experience has dates ───── (2 pts)
+  const hasDates = experience.every(e => e.startDate)
+  conditions.push({ passed: experience.length > 0 && hasDates, points: 2, tip: "Add start/end dates to all experiences" })
+
+  // ── CONDITION 15: Experience descriptions ── (3 pts)
+  const hasRichDesc = experience.every(e => (e.description || "").length > 50)
+  conditions.push({ passed: experience.length > 0 && hasRichDesc, points: 3, tip: "Add detailed descriptions to all experiences (50+ chars each)" })
+
+  // ── CONDITION 16: Education ───────────────── (4 pts)
+  conditions.push({ passed: education.length > 0, points: 4, tip: "Add your education background" })
+
+  // ── CONDITION 17: Technical skills ──────── (4 pts)
+  conditions.push({ passed: techSkillsList.length >= 3, points: 4, tip: "Add at least 3 technical skills" })
+
+  // ── CONDITION 18: 6+ technical skills ───── (3 pts)
+  conditions.push({ passed: techSkillsList.length >= 6, points: 3, tip: "List 6+ technical skills for better ATS keyword matching" })
+
+  // ── CONDITION 19: Soft skills ────────────── (2 pts)
+  conditions.push({ passed: softSkillsList.length >= 2, points: 2, tip: "Add soft skills (leadership, communication, etc.)" })
+
+  // ── CONDITION 20: Industry tech keywords ─── (4 pts)
+  const keywordMatches = ATS_TECH_KEYWORDS.filter(k => allText.includes(k))
+  conditions.push({ passed: keywordMatches.length >= 3, points: 4, tip: `Add industry keywords — missing: ${ATS_TECH_KEYWORDS.filter(k => !allText.includes(k)).slice(0,3).join(", ")}` })
+
+  // ── CONDITION 21: Power/impact words ─────── (3 pts)
+  const hasPowerWords = ATS_POWER_WORDS.some(w => allText.includes(w))
+  conditions.push({ passed: hasPowerWords, points: 3, tip: "Use impact words like: achieved, delivered, exceeded, boosted..." })
+
+  // ── CONDITION 22: Languages ───────────────── (2 pts)
+  conditions.push({ passed: !!(skills.languages?.trim()), points: 2, tip: "Add languages you speak" })
+
+  // ── CONDITION 23: Certifications ─────────── (3 pts)
+  conditions.push({ passed: !!(additional.certifications?.trim()), points: 3, tip: "Add professional certifications" })
+
+  // ── CONDITION 24: Projects ─────────────────  (3 pts)
+  conditions.push({ passed: !!(additional.projects?.trim()), points: 3, tip: "Add projects to showcase hands-on work" })
+
+  // ── CONDITION 25: Overall completeness ───── (2 pts)
+  const filledSections = [personal.fullName, personal.email, personal.phone, personal.summary,
+    experience.length > 0, education.length > 0, skills.technical, skills.soft].filter(Boolean).length
+  conditions.push({ passed: filledSections >= 7, points: 2, tip: "Complete all resume sections for maximum ATS score" })
+
+  // ── Calculate score ──────────────────────────
+  const maxScore = conditions.reduce((s, c) => s + c.points, 0) // ~80 total
+  const earned = conditions.filter(c => c.passed).reduce((s, c) => s + c.points, 0)
+  atsScore = Math.round((earned / maxScore) * 100)
+
+  const failed = conditions.filter(c => !c.passed)
+
+  // ── Update sidebar score ─────────────────────
+  const scoreEl = document.getElementById("atsScore")
+  const tipsEl = document.getElementById("atsTips")
+
+  if (scoreEl) {
+    scoreEl.textContent = atsScore
+    const circle = scoreEl.parentElement
     circle.className = `ats-score-circle ${getScoreClass(atsScore)}`
     circle.style.setProperty("--score-percent", `${atsScore}%`)
   }
 
-  if (tipsElement) {
-    if (tips.length === 0) {
-      tipsElement.innerHTML = '<div class="ats-tip success">Great! Your resume is ATS optimized</div>'
+  if (tipsEl) {
+    if (failed.length === 0) {
+      tipsEl.innerHTML = '<div class="ats-tip success">🎯 Perfect! Your resume is fully ATS optimized</div>'
     } else {
-      tipsElement.innerHTML = tips
-        .slice(0, 3)
-        .map((tip) => `<div class="ats-tip">${tip}</div>`)
-        .join("")
+      tipsEl.innerHTML = failed.slice(0, 3).map(c =>
+        `<div class="ats-tip">⚠ ${c.tip}</div>`
+      ).join("") + (failed.length > 3 ? `<div class="ats-tip-more">+${failed.length-3} more issues — click Analyze</div>` : "")
     }
   }
 }
 
 function getScoreClass(score) {
-  if (score >= 80) return "excellent"
-  if (score >= 60) return "good"
-  if (score >= 40) return "fair"
+  if (score >= 85) return "excellent"
+  if (score >= 65) return "good"
+  if (score >= 45) return "fair"
   return "poor"
 }
 
@@ -2086,43 +2216,84 @@ function loadState() {
 
 // --- ANALYZER FUNCTIONS (Enhanced) ---
 function analyzeResume() {
-  updateATSScore() // Update score first
-
+  updateATSScore()
   const modal = document.getElementById("analyzerModal")
   if (!modal) return
 
-  const suggestions = []
+  const { personal, experience, education, skills, additional } = resumeData
+  const allText = [personal.fullName, personal.jobTitle, personal.summary,
+    ...experience.map(e => (e.title||"") + " " + (e.company||"") + " " + (e.description||"")),
+    skills.technical, skills.soft, additional.certifications, additional.projects
+  ].join(" ").toLowerCase()
 
-  // Detailed analysis
-  if (!resumeData.personal.fullName) suggestions.push("Add your full name")
-  if (!resumeData.personal.email) suggestions.push("Add your email address")
-  if (!resumeData.personal.phone) suggestions.push("Add your phone number")
-  if (!resumeData.personal.summary || resumeData.personal.summary.length < 50) {
-    suggestions.push("Write a compelling professional summary (50+ characters)")
+  const summaryWords = personal.summary ? personal.summary.trim().split(/\s+/).length : 0
+  const techSkillsList = skills.technical ? skills.technical.split(",").map(s => s.trim()).filter(Boolean) : []
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personal.email || "")
+
+  const checks = [
+    { cat: "Contact Info", label: "Full name present", ok: !!personal.fullName?.trim() },
+    { cat: "Contact Info", label: "Valid email address", ok: emailOk },
+    { cat: "Contact Info", label: "Phone number", ok: !!personal.phone?.trim() },
+    { cat: "Contact Info", label: "Location / city", ok: !!personal.location?.trim() },
+    { cat: "Contact Info", label: "LinkedIn profile URL", ok: !!personal.linkedin?.trim() },
+    { cat: "Summary", label: "Summary present (20+ words)", ok: summaryWords >= 20 },
+    { cat: "Summary", label: "Optimal length (30–150 words)", ok: summaryWords >= 30 && summaryWords <= 150 },
+    { cat: "Summary", label: "No first-person pronouns (I/me/my)", ok: !FIRST_PERSON_PRONOUNS.test(personal.summary || "") },
+    { cat: "Summary", label: "Job title keyword in summary", ok: (personal.jobTitle||"").toLowerCase().split(/\s+/).filter(w=>w.length>3).some(w=>(personal.summary||"").toLowerCase().includes(w)) },
+    { cat: "Experience", label: "At least 1 work experience", ok: experience.length > 0 },
+    { cat: "Experience", label: "2+ work experiences", ok: experience.length >= 2 },
+    { cat: "Experience", label: "Action verbs used (led, built, managed…)", ok: experience.some(e => ATS_ACTION_VERBS.some(v => (e.description||"").toLowerCase().includes(v))) },
+    { cat: "Experience", label: "Quantified achievements (numbers/metrics)", ok: experience.some(e => /\d+/.test(e.description||"")) },
+    { cat: "Experience", label: "All experiences have dates", ok: experience.length > 0 && experience.every(e => e.startDate) },
+    { cat: "Experience", label: "Rich descriptions (50+ chars each)", ok: experience.length > 0 && experience.every(e => (e.description||"").length > 50) },
+    { cat: "Education", label: "Education section present", ok: education.length > 0 },
+    { cat: "Skills", label: "3+ technical skills", ok: techSkillsList.length >= 3 },
+    { cat: "Skills", label: "6+ technical skills (ATS keyword matching)", ok: techSkillsList.length >= 6 },
+    { cat: "Skills", label: "2+ soft skills listed", ok: (skills.soft||"").split(",").filter(Boolean).length >= 2 },
+    { cat: "Keywords", label: "3+ industry tech keywords found", ok: ATS_TECH_KEYWORDS.filter(k => allText.includes(k)).length >= 3 },
+    { cat: "Keywords", label: "Impact/power words used", ok: ATS_POWER_WORDS.some(w => allText.includes(w)) },
+    { cat: "Additional", label: "Languages listed", ok: !!skills.languages?.trim() },
+    { cat: "Additional", label: "Certifications added", ok: !!additional.certifications?.trim() },
+    { cat: "Additional", label: "Projects added", ok: !!additional.projects?.trim() },
+    { cat: "Overall", label: "All major sections complete (7/8)", ok: [personal.fullName, personal.email, personal.phone, personal.summary, experience.length>0, education.length>0, skills.technical, skills.soft].filter(Boolean).length >= 7 },
+  ]
+
+  const cats = [...new Set(checks.map(c => c.cat))]
+  const getScore = catList => {
+    const grp = checks.filter(c => catList.includes(c.cat))
+    return grp.length ? Math.round(grp.filter(c=>c.ok).length / grp.length * 100) : 0
   }
-  if (resumeData.experience.length === 0) suggestions.push("Add at least one work experience")
-  if (resumeData.education.length === 0) suggestions.push("Add your education background")
-  if (!resumeData.skills.technical) suggestions.push("List your technical skills")
-  if (!resumeData.skills.soft) suggestions.push("Add soft skills")
-  if (!resumeData.personal.linkedin) suggestions.push("Add your LinkedIn profile")
+  const contentScore  = getScore(["Summary","Experience"])
+  const atsCompatScore = getScore(["Contact Info","Skills","Keywords"])
+  const completeness  = Math.round(checks.filter(c=>c.ok).length / checks.length * 100)
 
-  // Update modal content
   const scoreValue = document.getElementById("scoreValue")
-  const suggestionsList = document.getElementById("suggestionsList")
-
   if (scoreValue) {
     scoreValue.textContent = atsScore
     const circle = scoreValue.closest(".score-circle")
-    if (circle) {
-      circle.style.background = `conic-gradient(var(--primary-color) ${atsScore}%, #e5e7eb ${atsScore}%)`
-    }
+    if (circle) circle.style.background = `conic-gradient(var(--primary-color) ${atsScore}%, #e5e7eb ${atsScore}%)`
   }
 
+  const fills = document.querySelectorAll("#analyzerModal .breakdown-fill")
+  const scores = document.querySelectorAll("#analyzerModal .breakdown-score")
+  if (fills[0]) fills[0].style.width = contentScore + "%"
+  if (fills[1]) fills[1].style.width = atsCompatScore + "%"
+  if (fills[2]) fills[2].style.width = completeness + "%"
+  if (scores[0]) scores[0].textContent = contentScore + "%"
+  if (scores[1]) scores[1].textContent = atsCompatScore + "%"
+  if (scores[2]) scores[2].textContent = completeness + "%"
+
+  const suggestionsList = document.getElementById("suggestionsList")
   if (suggestionsList) {
-    suggestionsList.innerHTML =
-      suggestions.length > 0
-        ? suggestions.map((s) => `<li>${s}</li>`).join("")
-        : "<li>Excellent! Your resume is well-optimized.</li>"
+    suggestionsList.innerHTML = cats.map(cat => {
+      const grp = checks.filter(c => c.cat === cat)
+      const items = grp.map(c =>
+        `<li class="ats-check-item ${c.ok ? 'ats-pass' : 'ats-fail'}">
+          <span class="ats-check-icon">${c.ok ? '✅' : '❌'}</span>
+          <span>${c.label}</span>
+        </li>`).join("")
+      return `<li class="ats-cat-header">${cat} <span class="ats-cat-score">${grp.filter(c=>c.ok).length}/${grp.length}</span></li>${items}`
+    }).join("")
   }
 
   modal.style.display = "block"
