@@ -121,75 +121,35 @@
             </div>
         </div>
 
-        <!-- Add this section after the hero section and before the templates section -->
-        <section class="selected-resumes-section">
+        <!-- AI Demo Section -->
+        <section class="ai-demo-home-section">
           <div class="container">
             <div class="section-header">
-              <h2 class="section-title">Job-Winning Resume Examples</h2>
-              <p class="section-description">Get inspired by real resumes that landed jobs at top companies. Click "Use This Template" to auto-fill your resume with proven content.</p>
+              <div class="ai-home-badge">🤖 Powered by Mistral via Ollama — Runs 100% Locally</div>
+              <h2 class="section-title">Try the AI Resume Assistant</h2>
+              <p class="section-description">Describe yourself in plain English and let Mistral AI build your complete resume instantly. Your data never leaves your device.</p>
             </div>
-            <div class="selected-resumes-grid">
-              <div class="resume-example-card">
-                <div class="company-badge">
-                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004c8c' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold'%3ETCS%3C/text%3E%3C/svg%3E" alt="TCS" class="company-logo">
-                  <span class="job-title">Software Engineer</span>
-                </div>
-                <div class="resume-preview">
-                  <h4>Rajesh Kumar</h4>
-                  <p class="preview-summary">Full-stack developer with 3+ years experience in Java, React, and cloud technologies...</p>
-                  <div class="preview-skills">
-                    <span class="skill-preview">Java</span>
-                    <span class="skill-preview">React</span>
-                    <span class="skill-preview">AWS</span>
-                    <span class="skill-preview">+5 more</span>
-                  </div>
-                </div>
-                <div class="resume-actions">
-                  <button onclick="loadTCSResume()" class="btn btn-primary btn-full">Use This Template</button>
-                  <button onclick="previewResume('tcs')" class="btn btn-outline btn-full">Quick Preview</button>
+            <div class="ai-home-chat-wrapper">
+              <div class="ai-home-status-bar">
+                <span class="ai-home-dot" id="homeAiDot"></span>
+                <span id="homeAiStatus">Checking Ollama…</span>
+                <span class="ai-home-model-tag">mistral:latest</span>
+              </div>
+              <div class="ai-home-messages" id="homeAiMessages">
+                <div class="ai-home-msg bot">
+                  <span class="ai-home-icon">🤖</span>
+                  <div class="ai-home-bubble">Hi! I'm your AI resume assistant powered by Mistral running locally on your machine.<br><br>Tell me about yourself and I'll generate a complete professional resume for you. For example:<br><em>"I'm a Java developer with 4 years experience at TCS, worked on Spring Boot and React, B.Tech from VIT 2020"</em></div>
                 </div>
               </div>
-
-              <div class="resume-example-card">
-                <div class="company-badge">
-                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23007cc3' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='12' font-weight='bold'%3EInfosys%3C/text%3E%3C/svg%3E" alt="Infosys" class="company-logo">
-                  <span class="job-title">System Analyst</span>
-                </div>
-                <div class="resume-preview">
-                  <h4>Priya Sharma</h4>
-                  <p class="preview-summary">Business analyst with expertise in requirements gathering, process optimization...</p>
-                  <div class="preview-skills">
-                    <span class="skill-preview">SQL</span>
-                    <span class="skill-preview">Python</span>
-                    <span class="skill-preview">Tableau</span>
-                    <span class="skill-preview">+4 more</span>
-                  </div>
-                </div>
-                <div class="resume-actions">
-                  <button onclick="loadInfosysResume()" class="btn btn-primary btn-full">Use This Template</button>
-                  <button onclick="previewResume('infosys')" class="btn btn-outline btn-full">Quick Preview</button>
-                </div>
+              <div class="ai-home-input-row">
+                <input type="text" id="homeAiInput" class="ai-home-input" placeholder='e.g. "I'm a data analyst with 3 years at Infosys, Python, SQL, Power BI skills..."' />
+                <button class="ai-home-send-btn" id="homeAiSendBtn" onclick="homeAiSend()">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
               </div>
-
-              <div class="resume-example-card">
-                <div class="company-badge">
-                  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23ff6b35' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold'%3EZoho%3C/text%3E%3C/svg%3E" alt="Zoho" class="company-logo">
-                  <span class="job-title">Product Manager</span>
-                </div>
-                <div class="resume-preview">
-                  <h4>Arjun Patel</h4>
-                  <p class="preview-summary">Product manager with 5+ years driving user-centric solutions and cross-functional teams...</p>
-                  <div class="preview-skills">
-                    <span class="skill-preview">Product Strategy</span>
-                    <span class="skill-preview">Agile</span>
-                    <span class="skill-preview">Analytics</span>
-                    <span class="skill-preview">+6 more</span>
-                  </div>
-                </div>
-                <div class="resume-actions">
-                  <button onclick="loadZohoResume()" class="btn btn-primary btn-full">Use This Template</button>
-                  <button onclick="previewResume('zoho')" class="btn btn-outline btn-full">Quick Preview</button>
-                </div>
+              <div class="ai-home-footer">
+                <span>⚡ Needs <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a> running locally (<code>ollama serve</code> + <code>ollama pull mistral</code>)</span>
+                <a href="form" class="btn btn-primary" style="margin-left:auto;padding:8px 18px;font-size:.85rem">Open Full Builder →</a>
               </div>
             </div>
           </div>
@@ -1537,6 +1497,126 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+    // ── Home Page Ollama / Mistral AI Chat ───────────────────────
+    (function() {
+      const OLLAMA = 'http://localhost:11434';
+      const MODEL  = 'mistral:latest';
+
+      async function checkOllama() {
+        try {
+          const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(3000) });
+          return r.ok;
+        } catch { return false; }
+      }
+
+      async function updateDot() {
+        const dot    = document.getElementById('homeAiDot');
+        const label  = document.getElementById('homeAiStatus');
+        if (!dot) return;
+        dot.className = 'ai-home-dot checking';
+        if (label) label.textContent = 'Checking Ollama…';
+        const ok = await checkOllama();
+        dot.className = `ai-home-dot ${ok ? 'online' : 'offline'}`;
+        if (label) label.textContent = ok ? 'Mistral Ready ✓' : 'Ollama offline — run: ollama serve';
+      }
+
+      function addMsg(role, text) {
+        const wrap = document.getElementById('homeAiMessages');
+        if (!wrap) return null;
+        const row    = document.createElement('div');
+        row.className = `ai-home-msg ${role}`;
+        if (role === 'bot') {
+          const icon = document.createElement('span');
+          icon.className = 'ai-home-icon'; icon.textContent = '🤖';
+          row.appendChild(icon);
+        }
+        const bubble = document.createElement('div');
+        bubble.className = 'ai-home-bubble';
+        bubble.textContent = text;
+        row.appendChild(bubble);
+        wrap.appendChild(row);
+        wrap.scrollTop = wrap.scrollHeight;
+        return bubble;
+      }
+
+      async function homeAiSend() {
+        const input = document.getElementById('homeAiInput');
+        const btn   = document.getElementById('homeAiSendBtn');
+        if (!input || !input.value.trim()) return;
+
+        const text = input.value.trim();
+        input.value = '';
+        addMsg('user', text);
+
+        const bubble = addMsg('bot', '…');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="ai-home-spinner"></span>'; }
+
+        const ok = await checkOllama();
+        if (!ok) {
+          bubble.textContent = '❌ Ollama is not running on your machine.\n\n1. Install Ollama from https://ollama.com\n2. Run: ollama serve\n3. Run: ollama pull mistral\n4. Refresh this page and try again.';
+          if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>'; }
+          return;
+        }
+
+        const isResume = /\b(i'?m|i am|developer|engineer|analyst|manager|years|worked|experience|btech|degree)\b/i.test(text);
+        const prompt = isResume
+          ? `You are a professional resume assistant. The user wants to create a resume. Briefly summarize what kind of resume you would create for them based on: "${text}". Then say their full resume will be generated in the Resume Builder. Keep under 80 words, be encouraging and specific.`
+          : `You are a helpful resume writing assistant for CMR Resume Builder. Answer this concisely (under 60 words): ${text}`;
+
+        try {
+          let full = '';
+          bubble.textContent = '';
+          const res = await fetch(`${OLLAMA}/api/generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: MODEL, prompt, stream: true }),
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const reader  = res.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            for (const line of decoder.decode(value).split('\n').filter(Boolean)) {
+              try {
+                const d = JSON.parse(line);
+                if (d.response) { full += d.response; bubble.textContent = full; }
+              } catch {}
+            }
+            const wrap = document.getElementById('homeAiMessages');
+            if (wrap) wrap.scrollTop = wrap.scrollHeight;
+          }
+
+          if (isResume) {
+            bubble.textContent += '\n\n→ Open the Full Builder to generate your complete resume with 50+ templates!';
+          }
+        } catch (err) {
+          bubble.textContent = `❌ Error: ${err.message}`;
+        }
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+        }
+      }
+
+      // Expose globally
+      window.homeAiSend = homeAiSend;
+
+      // Enter key support
+      document.addEventListener('DOMContentLoaded', () => {
+        updateDot();
+        const inp = document.getElementById('homeAiInput');
+        if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') homeAiSend(); });
+      });
+
+      // Also run immediately if DOM is already ready
+      if (document.readyState !== 'loading') updateDot();
+    })();
+    </script>
     <script>
     // ── Hero Particle Canvas Animation ──────────────────────────
     (function() {

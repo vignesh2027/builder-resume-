@@ -4125,3 +4125,174 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* ── AI Home Demo Section ─────────────────────────────────────── */
+.ai-demo-home-section {
+  padding: 80px 0 60px;
+  background: var(--bg-secondary);
+}
+
+.ai-home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(139,92,246,.12));
+  border: 1px solid rgba(99,102,241,.3);
+  color: #6366f1;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: .8rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.ai-home-chat-wrapper {
+  max-width: 760px;
+  margin: 40px auto 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.ai-home-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: .8rem;
+  color: var(--text-secondary);
+}
+
+.ai-home-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #9ca3af;
+  flex-shrink: 0;
+  transition: background .3s;
+}
+.ai-home-dot.online  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.ai-home-dot.offline { background: #ef4444; }
+.ai-home-dot.checking { background: #f59e0b; animation: pulse 1s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.ai-home-model-tag {
+  margin-left: auto;
+  background: rgba(99,102,241,.1);
+  color: #6366f1;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 600;
+}
+
+.ai-home-messages {
+  padding: 20px;
+  min-height: 220px;
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ai-home-msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.ai-home-msg.user { flex-direction: row-reverse; }
+
+.ai-home-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ai-home-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: .88rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.ai-home-msg.bot .ai-home-bubble {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-top-left-radius: 4px;
+}
+
+.ai-home-msg.user .ai-home-bubble {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border-top-right-radius: 4px;
+  margin-left: auto;
+}
+
+.ai-home-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.ai-home-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  font-size: .88rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color .2s;
+}
+.ai-home-input:focus { border-color: #6366f1; }
+
+.ai-home-send-btn {
+  padding: 0 18px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .2s, transform .15s;
+  min-width: 48px;
+}
+.ai-home-send-btn:hover { opacity: .88; transform: scale(1.04); }
+.ai-home-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.ai-home-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  font-size: .78rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.ai-home-footer a { color: #6366f1; }
+.ai-home-footer code { background: rgba(99,102,241,.1); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
+
+.ai-home-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
