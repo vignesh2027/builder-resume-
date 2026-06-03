@@ -3111,8 +3111,22 @@ body {
   border-bottom-color: #1e3524;
 }
 
+/* Preview panel ALWAYS light — never inherit dark mode */
 [data-theme="dark"] .preview-content {
-  background: #0d1710;
+  background: #f0f0f0;
+  --text-primary: #1a2e20;
+  --text-secondary: #4d6b57;
+  --text-muted: #7a9e87;
+  --text-inverse: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f9f0;
+  --bg-tertiary: #e8f5e3;
+  --bg-dark: #1a2e20;
+  --border-color: #cce5d3;
+  --primary-color: #2d8653;
+  --primary-dark: #1f6b42;
+  --primary-light: #a3cfb8;
+  --accent-color: #f0a500;
 }
 
 [data-theme="dark"] .form-tabs {
@@ -4479,3 +4493,96 @@ body {
   color: var(--text-secondary);
   line-height: 1.4;
 }
+
+/* ── Sidebar 3-Tab Navigation ────────────────────────────────── */
+.sidebar-tab-bar {
+  display: flex;
+  background: var(--bg-primary);
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 4px 8px 0;
+  gap: 2px;
+}
+.stab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 8px 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.18s;
+}
+.stab:hover { color: var(--primary-color); }
+.stab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+
+/* Hide old sidebar-content wrapper, use new inner */
+.sidebar-pane { display: none; overflow-y: auto; height: calc(100vh - 120px); }
+.sidebar-pane.active { display: block; }
+.sidebar-content-inner { padding: 14px 14px 24px; }
+
+.sidebar-section-inner {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+.sidebar-section-inner:last-child { border-bottom: none; }
+
+.sb-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+/* ── ATS Score Big Display ───────────────────────────────────── */
+.ats-score-big { text-align: center; padding: 16px 0 8px; }
+.ats-score-ring {
+  position: relative;
+  width: 80px; height: 80px;
+  margin: 0 auto 12px;
+}
+.ats-ring-svg { width: 80px; height: 80px; }
+.ats-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ats-ring-label { font-size: 0.6rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+.ats-analyze-btn {
+  width: 100%;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  margin-bottom: 10px;
+}
+.ats-analyze-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+/* ── Tools Panel ─────────────────────────────────────────────── */
+.tools-divider { border-top: 1px solid var(--border-color); margin: 14px 0; }
+.tools-group { margin-bottom: 4px; }
+.tools-row { display: flex; gap: 6px; }
+.btn-half { flex: 1; font-size: 0.75rem; padding: 7px 8px; }
+
+/* Keep old sidebar hidden when tabs used */
+.sidebar > .sidebar-content { display: none; }
