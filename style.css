@@ -4680,23 +4680,24 @@ body:has(.builder-container) {
 
 /* ── Preview Panel Scaling — fit A4 resume into preview panel ── */
 .preview-content {
-  overflow: hidden;
-  padding: 8px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: 10px !important;
   background: #e8f5e3 !important;
 }
+/* zoom reflows layout (no blank space) and is supported in Chrome/Safari/Edge */
 .preview-content .resume-template,
-.preview-content > div {
-  transform-origin: top center !important;
-  transform: scale(0.48) !important;
+.preview-content > div:not(.error-message) {
+  zoom: 0.46;
   width: 794px !important;     /* A4 width */
   margin: 0 auto !important;
-  margin-bottom: calc((794px * 0.48 - 794px) * 0.48) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12) !important;
 }
 
 /* When preview is expanded (full size button clicked) */
 .preview-panel.expanded .preview-content .resume-template,
-.preview-panel.expanded .preview-content > div {
-  transform: scale(0.85) !important;
+.preview-panel.expanded .preview-content > div:not(.error-message) {
+  zoom: 0.72;
 }
 
 /* Edit preview button active state */
