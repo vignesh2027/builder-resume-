@@ -33,6 +33,42 @@
         </div>
     </header>
 
+    <!-- Welcome Guide — shown on first visit -->
+    <div id="welcomeGuide" class="welcome-guide" style="display:none">
+      <div class="welcome-guide-content">
+        <h2>Welcome to CMR Builder! 👋</h2>
+        <p>Build your professional resume in 5 simple steps — your preview updates live as you type.</p>
+        <div class="welcome-steps">
+          <div class="welcome-step">
+            <div class="ws-num">1</div>
+            <div class="ws-info"><strong>Personal Info</strong><span>Name, email, phone, summary & photo</span></div>
+          </div>
+          <div class="welcome-step">
+            <div class="ws-num">2</div>
+            <div class="ws-info"><strong>Work Experience</strong><span>Your jobs, roles and achievements</span></div>
+          </div>
+          <div class="welcome-step">
+            <div class="ws-num">3</div>
+            <div class="ws-info"><strong>Education</strong><span>Degrees, colleges and qualifications</span></div>
+          </div>
+          <div class="welcome-step">
+            <div class="ws-num">4</div>
+            <div class="ws-info"><strong>Skills</strong><span>Technical skills, soft skills, languages</span></div>
+          </div>
+          <div class="welcome-step">
+            <div class="ws-num">5</div>
+            <div class="ws-info"><strong>Download PDF</strong><span>Pick a template from the left and export</span></div>
+          </div>
+        </div>
+        <div class="welcome-tips">
+          <p>🎨 Change template anytime — your data stays safe</p>
+          <p>🤖 Tap the AI button to auto-fill your resume instantly</p>
+          <p>📊 ATS Score shows how recruiter-friendly your resume is</p>
+        </div>
+        <button class="btn btn-primary btn-large" onclick="closeWelcomeGuide()" style="width:100%">Start Building My Resume →</button>
+      </div>
+    </div>
+
     <div id="offlineIndicator" class="offline-indicator hidden">
       <span class="offline-icon">📡</span>
       <span>You are offline - Your work is saved locally</span>
@@ -310,6 +346,10 @@
                         <h3>Personal Information</h3>
                         <p>Add your contact details and professional summary</p>
                     </div>
+                    <div class="tab-hint">
+                      <span class="tab-hint-icon">💡</span>
+                      <span>Start here — fill in your full name, email, phone and write a 2–3 sentence professional summary. Your resume preview updates live on the right as you type!</span>
+                    </div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="input-label">Full Name *</label>
@@ -363,8 +403,16 @@
                         <h3>Work Experience</h3>
                         <p>Add your professional work history</p>
                     </div>
+                    <div class="tab-hint">
+                      <span class="tab-hint-icon">💡</span>
+                      <span>Add each job separately. Include your job title, company name, start/end dates and 2–3 bullet points about what you achieved. Use numbers where possible — e.g. "Increased sales by 30%".</span>
+                    </div>
                     <div id="experienceList">
-                        <!-- Experience items will be added here -->
+                      <div class="empty-state" id="experienceEmpty">
+                        <span class="empty-state-icon">💼</span>
+                        <h4>No work experience added yet</h4>
+                        <p>Click "Add Work Experience" below to add your first job. Include company name, role and key achievements.</p>
+                      </div>
                     </div>
                     <button onclick="addExperience()" class="btn btn-outline btn-add">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -382,8 +430,16 @@
                         <h3>Education</h3>
                         <p>Add your educational background</p>
                     </div>
+                    <div class="tab-hint">
+                      <span class="tab-hint-icon">💡</span>
+                      <span>Add your college or university degree first. Include institution name, degree/course, year of graduation and any notable grades or achievements like GPA or honors.</span>
+                    </div>
                     <div id="educationList">
-                        <!-- Education items will be added here -->
+                      <div class="empty-state" id="educationEmpty">
+                        <span class="empty-state-icon">🎓</span>
+                        <h4>No education added yet</h4>
+                        <p>Click "Add Education" below to add your degree, college name and graduation year.</p>
+                      </div>
                     </div>
                     <button onclick="addEducation()" class="btn btn-outline btn-add">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -400,6 +456,10 @@
                     <div class="tab-header">
                         <h3>Skills & Competencies</h3>
                         <p>Highlight your key skills and abilities</p>
+                    </div>
+                    <div class="tab-hint">
+                      <span class="tab-hint-icon">💡</span>
+                      <span>List skills separated by commas. For Technical Skills add tools, languages, frameworks (e.g. Python, React, SQL). For Soft Skills add traits like Leadership, Communication. More skills = higher ATS score!</span>
                     </div>
                     <div class="skills-grid">
                         <div class="form-group full-width">
@@ -425,6 +485,10 @@
                     <div class="tab-header">
                         <h3>Additional Information</h3>
                         <p>Add certifications, projects, and other relevant information</p>
+                    </div>
+                    <div class="tab-hint">
+                      <span class="tab-hint-icon">💡</span>
+                      <span>This section boosts your resume significantly. Add any certifications (with year), personal/college projects with tech stack, awards you've won and any volunteer work. All of these improve your ATS score.</span>
                     </div>
                     <div class="additional-sections">
                         <div class="form-group full-width">
@@ -735,6 +799,39 @@
 
     // Initial run after page load
     setTimeout(updateFormProgress, 800);
+
+    // ── Welcome Guide ─────────────────────────────────────────────
+    (function() {
+      if (!localStorage.getItem('cmr_welcomed')) {
+        document.getElementById('welcomeGuide').style.display = 'flex';
+      }
+    })();
+    function closeWelcomeGuide() {
+      document.getElementById('welcomeGuide').style.display = 'none';
+      localStorage.setItem('cmr_welcomed', '1');
+    }
+
+    // ── Empty State Hide on Add ───────────────────────────────────
+    (function() {
+      function watchList(listId, emptyId) {
+        const list = document.getElementById(listId);
+        const empty = document.getElementById(emptyId);
+        if (!list || !empty) return;
+        const obs = new MutationObserver(() => {
+          const hasItems = list.querySelectorAll('.experience-item, .education-item').length > 0;
+          empty.style.display = hasItems ? 'none' : 'block';
+        });
+        obs.observe(list, { childList: true, subtree: true });
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        watchList('experienceList', 'experienceEmpty');
+        watchList('educationList', 'educationEmpty');
+      });
+      if (document.readyState !== 'loading') {
+        watchList('experienceList', 'experienceEmpty');
+        watchList('educationList', 'educationEmpty');
+      }
+    })();
     </script>
 </body>
 </html>
