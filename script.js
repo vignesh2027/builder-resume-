@@ -1729,9 +1729,16 @@ function updateATSScore() {
 
   if (scoreEl) {
     scoreEl.textContent = atsScore
-    const circle = scoreEl.parentElement
-    circle.className = `ats-score-circle ${getScoreClass(atsScore)}`
-    circle.style.setProperty("--score-percent", `${atsScore}%`)
+    // Update the SVG ring fill (new structure) — do NOT overwrite .ats-ring-inner class
+    const ring = document.getElementById("atsRingFill")
+    if (ring) {
+      const circumference = 213.6
+      const offset = circumference - (atsScore / 100) * circumference
+      ring.style.strokeDashoffset = offset
+      ring.style.stroke = atsScore >= 80 ? "#22a06b" : atsScore >= 60 ? "#f0a500" : "#ef4444"
+    }
+    // Color the score number to match
+    scoreEl.style.color = atsScore >= 80 ? "#22a06b" : atsScore >= 60 ? "#f0a500" : "#ef4444"
   }
 
   if (tipsEl) {
@@ -2389,10 +2396,7 @@ function togglePreviewSize() {
   const isExpanded = previewPanel.classList.contains("expanded")
   previewPanel.style.width = isExpanded ? "600px" : "380px"
   previewPanel.style.minWidth = isExpanded ? "600px" : "380px"
-  // Also update scale
-  const tpl = document.querySelector("#previewContent .resume-template") ||
-              document.querySelector("#previewContent > div")
-  if (tpl) tpl.style.transform = isExpanded ? "scale(0.72)" : "scale(0.48)"
+  // zoom is handled by the .expanded class in CSS
 }
 
 function registerServiceWorker() {
