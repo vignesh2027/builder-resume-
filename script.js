@@ -2394,8 +2394,9 @@ function togglePreviewSize() {
   if (!previewPanel) return
   previewPanel.classList.toggle("expanded")
   const isExpanded = previewPanel.classList.contains("expanded")
-  previewPanel.style.width = isExpanded ? "600px" : "380px"
-  previewPanel.style.minWidth = isExpanded ? "600px" : "380px"
+  // Expanded = half the screen for comfortable editing; normal = 380px
+  previewPanel.style.width = isExpanded ? "50vw" : "380px"
+  previewPanel.style.minWidth = isExpanded ? "50vw" : "380px"
   // zoom is handled by the .expanded class in CSS
 }
 
