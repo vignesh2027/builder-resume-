@@ -2355,35 +2355,44 @@ function closeAnalyzer() {
   }
 }
 
+function toggleEditablePreview() {
+  const content = document.getElementById("previewContent")
+  const btn = document.getElementById("editPreviewBtn")
+  if (!content) return
+
+  const isEditable = content.getAttribute("contenteditable") === "true"
+  if (isEditable) {
+    content.removeAttribute("contenteditable")
+    content.style.outline = ""
+    if (btn) { btn.classList.remove("active"); btn.title = "Edit preview directly"; btn.textContent = "✏️"; }
+  } else {
+    content.setAttribute("contenteditable", "true")
+    content.focus()
+    if (btn) { btn.classList.add("active"); btn.title = "Stop editing"; btn.textContent = "✅"; }
+  }
+}
+
 function togglePreview() {
   const previewPanel = document.querySelector(".preview-panel")
-  const container = document.querySelector(".builder-container")
   if (!previewPanel) return
-
   previewPanel.classList.toggle("collapsed")
   const isCollapsed = previewPanel.classList.contains("collapsed")
-
-  if (container) {
-    if (isCollapsed) {
-      container.style.gridTemplateColumns = "320px 1fr 56px"
-    } else {
-      const isExpanded = previewPanel.classList.contains("expanded")
-      container.style.gridTemplateColumns = isExpanded ? "320px 1fr 600px" : "320px 1fr 400px"
-    }
-  }
+  previewPanel.style.width = isCollapsed ? "0" : ""
+  previewPanel.style.minWidth = isCollapsed ? "0" : ""
+  previewPanel.style.overflow = isCollapsed ? "hidden" : ""
 }
 
 function togglePreviewSize() {
   const previewPanel = document.querySelector(".preview-panel")
-  const container = document.querySelector(".builder-container")
   if (!previewPanel) return
-
   previewPanel.classList.toggle("expanded")
   const isExpanded = previewPanel.classList.contains("expanded")
-
-  if (container) {
-    container.style.gridTemplateColumns = isExpanded ? "320px 1fr 600px" : "320px 1fr 400px"
-  }
+  previewPanel.style.width = isExpanded ? "600px" : "380px"
+  previewPanel.style.minWidth = isExpanded ? "600px" : "380px"
+  // Also update scale
+  const tpl = document.querySelector("#previewContent .resume-template") ||
+              document.querySelector("#previewContent > div")
+  if (tpl) tpl.style.transform = isExpanded ? "scale(0.72)" : "scale(0.48)"
 }
 
 function registerServiceWorker() {
