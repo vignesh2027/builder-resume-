@@ -582,18 +582,19 @@ body {
 /* Builder Layout */
 .builder-container {
   display: grid;
-  grid-template-columns: 320px 1fr 400px;
-  height: calc(100vh - 80px);
+  grid-template-columns: 280px 1fr 400px;
+  height: calc(100vh - 72px);
+  overflow: hidden;
   background: var(--bg-secondary);
 }
 
-/* Sidebar */
+/* Sidebar — uses absolute positioning so panes NEVER escape */
 .sidebar {
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
-  overflow: hidden; /* pane handles its own scroll */
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -753,6 +754,8 @@ body {
 .builder-main {
   background: var(--bg-primary);
   overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
   scrollbar-width: thin;
   scrollbar-color: var(--border-color) transparent;
 }
@@ -2040,24 +2043,16 @@ body {
 }
 
 @media (max-width: 1024px) {
-  /* Keep builder as 3 col but compress columns on small screens */
   .builder-container {
-    grid-template-columns: 260px 1fr 0px;
-    height: calc(100vh - 80px);
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 1fr;
+    height: calc(100vh - 72px);
+    overflow: hidden;
   }
 
-  /* Hide preview on small screens, user can toggle it */
-  .preview-panel {
-    display: none;
-  }
+  .preview-panel { display: none; }
 
-  .sidebar {
-    border-right: 1px solid var(--border-color);
-  }
-
-  .sidebar-content {
-    padding: var(--spacing-sm);
-  }
+  .sidebar { border-right: 1px solid var(--border-color); }
 
   .hero-title {
     font-size: 3rem;
@@ -4484,11 +4479,12 @@ body {
   display: flex;
   background: var(--bg-primary);
   border-bottom: 2px solid var(--border-color);
-  position: sticky;
-  top: 0;
+  position: absolute;
+  top: 0; left: 0; right: 0;
   z-index: 10;
   padding: 4px 8px 0;
   gap: 2px;
+  height: 52px;
 }
 .stab {
   flex: 1;
@@ -4510,11 +4506,21 @@ body {
 .stab:hover { color: var(--primary-color); }
 .stab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 
-/* Hide old sidebar-content wrapper, use new inner */
-.sidebar-tab-bar { flex-shrink: 0; } /* never gets pushed away */
-.sidebar-pane { display: none; flex: 1; overflow-y: auto; min-height: 0; }
-.sidebar-pane.active { display: flex; flex-direction: column; }
-.sidebar-content-inner { padding: 14px 14px 24px; }
+/* Panes are absolutely positioned below the tab bar — NEVER escape sidebar */
+.sidebar-pane {
+  display: none;
+  position: absolute;
+  top: 52px; /* exactly the tab bar height */
+  left: 0; right: 0; bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-light) transparent;
+}
+.sidebar-pane::-webkit-scrollbar { width: 4px; }
+.sidebar-pane::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
+.sidebar-pane.active { display: block; }
+.sidebar-content-inner { padding: 12px 12px 24px; }
 
 .sidebar-section-inner {
   margin-bottom: 16px;
