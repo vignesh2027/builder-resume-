@@ -7,6 +7,81 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- BUILDER LAYOUT — inline CSS always wins over external rules -->
+    <style>
+      html, body { height: 100%; overflow: hidden !important; margin: 0; }
+
+      .builder-container {
+        position: fixed !important;
+        top: 65px !important;
+        left: 0 !important; right: 0 !important; bottom: 0 !important;
+        width: 100% !important; height: auto !important;
+        display: flex !important; flex-direction: row !important;
+        overflow: hidden !important;
+        z-index: 10 !important;
+        background: #f3f9f0 !important;
+      }
+
+      .builder-container > aside.sidebar {
+        width: 260px !important; min-width: 260px !important; max-width: 260px !important;
+        height: 100% !important; flex-shrink: 0 !important;
+        display: flex !important; flex-direction: column !important;
+        overflow: hidden !important;
+        background: #fefdf8 !important;
+        border-right: 1px solid #cce5d3 !important;
+        position: static !important;
+      }
+
+      .builder-container .sidebar-tab-bar {
+        height: 52px !important; min-height: 52px !important;
+        flex-shrink: 0 !important; flex-grow: 0 !important;
+        display: flex !important; align-items: stretch !important;
+        background: #fefdf8 !important;
+        border-bottom: 2px solid #cce5d3 !important;
+        padding: 4px 8px 0 !important; gap: 2px !important;
+        position: static !important; top: auto !important;
+        width: auto !important;
+      }
+
+      .builder-container .sidebar-pane {
+        display: none !important;
+        overflow-y: auto !important; overflow-x: hidden !important;
+        position: static !important;
+        top: auto !important; left: auto !important;
+        right: auto !important; bottom: auto !important;
+        height: 0 !important; flex: 0 !important;
+      }
+      .builder-container .sidebar-pane.active {
+        display: block !important;
+        height: calc(100% - 52px) !important;
+        flex: none !important;
+        overflow-y: auto !important;
+      }
+
+      .builder-container > main.builder-main {
+        flex: 1 1 0 !important; min-width: 0 !important;
+        height: 100% !important;
+        overflow-y: auto !important; overflow-x: hidden !important;
+        background: #fefdf8 !important; display: block !important;
+      }
+
+      .builder-container > aside.preview-panel {
+        width: 380px !important; min-width: 380px !important;
+        height: 100% !important; flex-shrink: 0 !important;
+        overflow-y: auto !important;
+        background: #fefdf8 !important;
+        border-left: 1px solid #cce5d3 !important;
+        display: block !important;
+      }
+
+      @media (max-width: 1100px) {
+        .builder-container > aside.preview-panel { display: none !important; }
+      }
+      @media (max-width: 700px) {
+        .builder-container > aside.sidebar { display: none !important; }
+        .builder-container { top: 56px !important; }
+      }
+    </style>
 </head>
 <body>
     <header class="header">
