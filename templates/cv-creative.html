@@ -1,0 +1,60 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; background: #fff; }
+.cv-wrap { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }
+.cv-left { background: linear-gradient(180deg, #f0a500, #d4890a); padding: 32px 20px; color: #fff; }
+.cv-photo { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.3); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; overflow: hidden; border: 3px solid rgba(255,255,255,0.6); }
+.cv-photo img { width: 100%; height: 100%; object-fit: cover; }
+.cv-name { font-size: 14pt; font-weight: 800; text-align: center; color: #fff; line-height: 1.2; }
+.cv-title { font-size: 8.5pt; text-align: center; color: rgba(255,255,255,0.85); margin: 6px 0 20px; }
+.cv-left-sec { margin-bottom: 18px; }
+.cv-left-title { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; }
+.cv-contact-item { font-size: 8.5pt; color: rgba(255,255,255,0.9); margin-bottom: 5px; }
+.cv-skill-bar { margin-bottom: 7px; }
+.cv-skill-name { font-size: 8.5pt; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+.cv-skill-track { background: rgba(255,255,255,0.2); border-radius: 4px; height: 5px; }
+.cv-skill-fill { background: #fff; border-radius: 4px; height: 5px; }
+.cv-right { padding: 32px 28px; }
+.cv-section { margin-bottom: 20px; }
+.cv-section-title { font-size: 9.5pt; font-weight: 700; color: #f0a500; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #f0a500; }
+.cv-summary { font-size: 10pt; color: #444; line-height: 1.7; }
+.cv-item { margin-bottom: 14px; }
+.cv-item-title { font-weight: 700; font-size: 10.5pt; color: #1a1a1a; }
+.cv-item-sub { font-size: 9pt; color: #f0a500; font-weight: 600; margin: 2px 0; }
+.cv-item-date { font-size: 8.5pt; color: #888; }
+.cv-item-desc { font-size: 9pt; color: #555; line-height: 1.6; margin-top: 4px; }
+</style></head><body>
+<div class="cv-wrap">
+  <div class="cv-left">
+    {{#photo}}<div class="cv-photo"><img src="{{photo}}" alt="Photo"></div>{{/photo}}
+    {{^photo}}<div class="cv-photo">👤</div>{{/photo}}
+    <div class="cv-name">{{fullName}}</div>
+    <div class="cv-title">{{jobTitle}}</div>
+    <div class="cv-left-sec"><div class="cv-left-title">Contact</div>
+      <div class="cv-contact-item">{{email}}</div>
+      <div class="cv-contact-item">{{phone}}</div>
+      <div class="cv-contact-item">{{location}}</div>
+    </div>
+    {{#skills.technical}}<div class="cv-left-sec"><div class="cv-left-title">Skills</div>
+      {{#each technicalSkills}}<div class="cv-skill-bar"><div class="cv-skill-name">{{this}}</div><div class="cv-skill-track"><div class="cv-skill-fill" style="width:{{skillPct this}}%"></div></div></div>{{/each}}
+    </div>{{/skills.technical}}
+    {{#skills.languages}}<div class="cv-left-sec"><div class="cv-left-title">Languages</div><div style="font-size:8.5pt;color:rgba(255,255,255,0.9)">{{skills.languages}}</div></div>{{/skills.languages}}
+  </div>
+  <div class="cv-right">
+    {{#summary}}<div class="cv-section"><div class="cv-section-title">Profile</div><p class="cv-summary">{{summary}}</p></div>{{/summary}}
+    {{#experience}}<div class="cv-section"><div class="cv-section-title">Experience</div>
+    {{#each experience}}<div class="cv-item">
+      <div class="cv-item-title">{{title}}</div>
+      <div class="cv-item-sub">{{company}}</div>
+      <div class="cv-item-date">{{startDate}} — {{endDate}}</div>
+      <div class="cv-item-desc">{{description}}</div>
+    </div>{{/each}}</div>{{/experience}}
+    {{#education}}<div class="cv-section"><div class="cv-section-title">Education</div>
+    {{#each education}}<div class="cv-item">
+      <div class="cv-item-title">{{degree}}</div><div class="cv-item-sub">{{school}}</div>
+      <div class="cv-item-date">{{graduationYear}}</div>
+    </div>{{/each}}</div>{{/education}}
+    {{#additional.projects}}<div class="cv-section"><div class="cv-section-title">Portfolio &amp; Projects</div><div class="cv-item-desc">{{additional.projects}}</div></div>{{/additional.projects}}
+    {{#additional.certifications}}<div class="cv-section"><div class="cv-section-title">Certifications</div><div class="cv-item-desc">{{additional.certifications}}</div></div>{{/additional.certifications}}
+  </div>
+</div></body></html>
