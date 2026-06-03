@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Georgia', serif; font-size: 10.5pt; color: #e8f5e3; background: #1a2e20; }
+.cv-wrap { max-width: 800px; margin: 0 auto; padding: 0; }
+.cv-top { background: #0d1710; padding: 36px 48px 28px; }
+.cv-name { font-size: 28pt; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+.cv-title { font-size: 11pt; color: #a3cfb8; margin: 6px 0 10px; letter-spacing: 1px; text-transform: uppercase; }
+.cv-contact { display: flex; flex-wrap: wrap; gap: 18px; font-size: 9pt; color: #7aab8c; }
+.cv-body { padding: 32px 48px; }
+.cv-section { margin-bottom: 24px; }
+.cv-section-title { font-size: 9.5pt; font-weight: 700; color: #52c27a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; border-bottom: 1px solid #1e3524; padding-bottom: 5px; }
+.cv-summary { font-size: 10pt; color: #a3cfb8; line-height: 1.7; }
+.cv-item { margin-bottom: 16px; }
+.cv-item-header { display: flex; justify-content: space-between; }
+.cv-item-title { font-weight: 700; color: #fff; font-size: 10.5pt; }
+.cv-item-date { color: #52c27a; font-size: 9.5pt; }
+.cv-item-sub { color: #a3cfb8; font-size: 9.5pt; font-style: italic; margin: 3px 0; }
+.cv-item-desc { color: #7aab8c; font-size: 9.5pt; line-height: 1.6; margin-top: 4px; }
+.cv-skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.cv-skill { background: #1e3524; color: #52c27a; padding: 4px 14px; border-radius: 4px; font-size: 9pt; border: 1px solid #2d4a30; }
+</style></head><body>
+<div class="cv-wrap">
+  <div class="cv-top">
+    <div class="cv-name">{{fullName}}</div>
+    <div class="cv-title">{{jobTitle}}</div>
+    <div class="cv-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span></div>
+  </div>
+  <div class="cv-body">
+    {{#summary}}<div class="cv-section"><div class="cv-section-title">Executive Summary</div><p class="cv-summary">{{summary}}</p></div>{{/summary}}
+    {{#experience}}<div class="cv-section"><div class="cv-section-title">Career History</div>
+    {{#each experience}}<div class="cv-item">
+      <div class="cv-item-header"><span class="cv-item-title">{{title}}</span><span class="cv-item-date">{{startDate}} — {{endDate}}</span></div>
+      <div class="cv-item-sub">{{company}}</div><div class="cv-item-desc">{{description}}</div>
+    </div>{{/each}}</div>{{/experience}}
+    {{#education}}<div class="cv-section"><div class="cv-section-title">Education</div>
+    {{#each education}}<div class="cv-item">
+      <div class="cv-item-header"><span class="cv-item-title">{{degree}}</span><span class="cv-item-date">{{graduationYear}}</span></div>
+      <div class="cv-item-sub">{{school}}</div>
+    </div>{{/each}}</div>{{/education}}
+    {{#skills.technical}}<div class="cv-section"><div class="cv-section-title">Core Competencies</div>
+    <div class="cv-skills-wrap">{{#each technicalSkills}}<span class="cv-skill">{{this}}</span>{{/each}}</div></div>{{/skills.technical}}
+    {{#additional.certifications}}<div class="cv-section"><div class="cv-section-title">Certifications &amp; Awards</div><div class="cv-item-desc" style="color:#a3cfb8">{{additional.certifications}}</div></div>{{/additional.certifications}}
+  </div>
+</div></body></html>
