@@ -78,88 +78,256 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-content">
-                <div class="sidebar-section">
-                    <h3 class="sidebar-title">Template</h3>
-                    <div class="template-selector">
-                        <select id="templateSelect" onchange="changeTemplate()" class="select-input">
-                            <optgroup label="── Classic">
-                              <option value="modern">Modern Professional</option>
-                              <option value="classic">Classic Traditional</option>
-                              <option value="elegant">Elegant Minimal</option>
-                              <option value="creative">Creative Bold</option>
-                              <option value="ats-friendly">ATS Optimized</option>
-                              <option value="executive">Executive Premium</option>
-                              <option value="tech">Tech Specialist</option>
-                              <option value="academic">Academic Scholar</option>
-                            </optgroup>
-                            <optgroup label="── Premium with Photo">
-                              <option value="premium1">Onyx Executive</option>
-                              <option value="premium2">Rose Gold Luxury</option>
-                              <option value="premium3">Nordic Minimal</option>
-                              <option value="premium4">Cyber Neon Dark</option>
-                              <option value="premium5">Navy Gold Executive</option>
-                              <option value="premium6">Magazine Bold</option>
-                              <option value="premium7">Pastel Professional</option>
-                              <option value="premium8">Coral Modern</option>
-                              <option value="premium9">Forest Executive</option>
-                              <option value="premium10">Timeline Pro</option>
-                            </optgroup>
-                            <optgroup label="── Glassmorphism">
-                              <option value="glass1">Glass Aurora</option>
-                              <option value="glass2">Glass Ocean</option>
-                              <option value="glass3">Glass Emerald</option>
-                              <option value="glass4">Glass Rose</option>
-                              <option value="glass5">Glass Midnight</option>
-                              <option value="glass6">Glass Holographic</option>
-                            </optgroup>
-                            <optgroup label="── Dark + Photo">
-                              <option value="darkPhoto1">Dark Crimson</option>
-                              <option value="darkPhoto2">Dark Indigo</option>
-                              <option value="darkPhoto3">Dark Emerald</option>
-                              <option value="darkPhoto4">Dark Gold</option>
-                              <option value="darkPhoto5">Dark Rose</option>
-                              <option value="darkPhoto6">Dark Violet</option>
-                            </optgroup>
-                            <optgroup label="── Gradient + Photo">
-                              <option value="gradientPhoto1">Gradient Sunrise</option>
-                              <option value="gradientPhoto2">Gradient Ocean</option>
-                              <option value="gradientPhoto3">Gradient Forest</option>
-                              <option value="gradientPhoto4">Gradient Sunset</option>
-                              <option value="gradientPhoto5">Gradient Aurora</option>
-                              <option value="gradientPhoto6">Gradient Lavender</option>
-                            </optgroup>
-                            <optgroup label="── Split + Photo">
-                              <option value="splitPhoto1">Split Minimal</option>
-                              <option value="splitPhoto2">Split Bold</option>
-                              <option value="splitPhoto3">Split Classic</option>
-                              <option value="splitPhoto4">Split Dark</option>
-                              <option value="splitPhoto5">Split Warm</option>
-                              <option value="splitPhoto6">Split Cool</option>
-                            </optgroup>
-                            <optgroup label="── Minimal + Photo">
-                              <option value="minimalPhoto1">Minimal Clean</option>
-                              <option value="minimalPhoto2">Minimal Line</option>
-                              <option value="minimalPhoto3">Minimal Dot</option>
-                              <option value="minimalPhoto4">Minimal Square</option>
-                              <option value="minimalPhoto5">Minimal Arc</option>
-                            </optgroup>
-                            <optgroup label="── Creative + Photo">
-                              <option value="creativePhoto1">Creative Vivid</option>
-                              <option value="creativePhoto2">Creative Retro</option>
-                              <option value="creativePhoto3">Creative Dark</option>
-                              <option value="creativePhoto4">Creative Warm</option>
-                              <option value="creativePhoto5">Creative Minimal</option>
-                            </optgroup>
-                            <optgroup label="── Creative Shapes">
-                              <option value="creative13">Creative Hexagon</option>
-                              <option value="creative14">Creative Arrow</option>
-                              <option value="creative15">Creative Spiral</option>
-                              <option value="creative16">Creative Lightning</option>
-                              <option value="creative17">Creative Crystal</option>
-                              <option value="creative18">Creative Flame</option>
-                            </optgroup>
-                        </select>
+                <div class="sidebar-section tpl-section">
+                    <!-- Resume / CV mode toggle -->
+                    <div class="builder-mode-switch">
+                        <button class="bmode-btn active" id="resumeModeBtn" onclick="switchBuilderMode('resume')">📄 Resume</button>
+                        <button class="bmode-btn" id="cvModeBtn" onclick="switchBuilderMode('cv')">🎓 CV</button>
                     </div>
+
+                    <!-- Hidden select kept for script.js compatibility -->
+                    <select id="templateSelect" onchange="changeTemplate()" style="display:none">
+                        <optgroup label="Classic">
+                          <option value="modern">Modern Professional</option>
+                          <option value="classic">Classic Traditional</option>
+                          <option value="elegant">Elegant Minimal</option>
+                          <option value="creative">Creative Bold</option>
+                          <option value="ats-friendly">ATS Optimized</option>
+                          <option value="executive">Executive Premium</option>
+                          <option value="tech">Tech Specialist</option>
+                          <option value="academic">Academic Scholar</option>
+                        </optgroup>
+                        <optgroup label="Premium with Photo">
+                          <option value="premium1">Onyx Executive</option>
+                          <option value="premium2">Rose Gold Luxury</option>
+                          <option value="premium3">Nordic Minimal</option>
+                          <option value="premium4">Cyber Neon Dark</option>
+                          <option value="premium5">Navy Gold Executive</option>
+                          <option value="premium6">Magazine Bold</option>
+                          <option value="premium7">Pastel Professional</option>
+                          <option value="premium8">Coral Modern</option>
+                          <option value="premium9">Forest Executive</option>
+                          <option value="premium10">Timeline Pro</option>
+                        </optgroup>
+                        <optgroup label="Glassmorphism">
+                          <option value="glass1">Glass Aurora</option>
+                          <option value="glass2">Glass Ocean</option>
+                          <option value="glass3">Glass Emerald</option>
+                          <option value="glass4">Glass Rose</option>
+                          <option value="glass5">Glass Midnight</option>
+                          <option value="glass6">Glass Holographic</option>
+                        </optgroup>
+                        <optgroup label="Dark + Photo">
+                          <option value="darkPhoto1">Dark Crimson</option>
+                          <option value="darkPhoto2">Dark Indigo</option>
+                          <option value="darkPhoto3">Dark Emerald</option>
+                          <option value="darkPhoto4">Dark Gold</option>
+                          <option value="darkPhoto5">Dark Rose</option>
+                          <option value="darkPhoto6">Dark Violet</option>
+                        </optgroup>
+                        <optgroup label="Gradient + Photo">
+                          <option value="gradientPhoto1">Gradient Sunrise</option>
+                          <option value="gradientPhoto2">Gradient Ocean</option>
+                          <option value="gradientPhoto3">Gradient Forest</option>
+                          <option value="gradientPhoto4">Gradient Sunset</option>
+                          <option value="gradientPhoto5">Gradient Aurora</option>
+                          <option value="gradientPhoto6">Gradient Lavender</option>
+                        </optgroup>
+                        <optgroup label="Split + Photo">
+                          <option value="splitPhoto1">Split Minimal</option>
+                          <option value="splitPhoto2">Split Bold</option>
+                          <option value="splitPhoto3">Split Classic</option>
+                          <option value="splitPhoto4">Split Dark</option>
+                          <option value="splitPhoto5">Split Warm</option>
+                          <option value="splitPhoto6">Split Cool</option>
+                        </optgroup>
+                        <optgroup label="Minimal + Photo">
+                          <option value="minimalPhoto1">Minimal Clean</option>
+                          <option value="minimalPhoto2">Minimal Line</option>
+                          <option value="minimalPhoto3">Minimal Dot</option>
+                          <option value="minimalPhoto4">Minimal Square</option>
+                          <option value="minimalPhoto5">Minimal Arc</option>
+                        </optgroup>
+                        <optgroup label="Creative + Photo">
+                          <option value="creativePhoto1">Creative Vivid</option>
+                          <option value="creativePhoto2">Creative Retro</option>
+                          <option value="creativePhoto3">Creative Dark</option>
+                          <option value="creativePhoto4">Creative Warm</option>
+                          <option value="creativePhoto5">Creative Minimal</option>
+                        </optgroup>
+                        <optgroup label="Creative Shapes">
+                          <option value="creative13">Hexagon</option>
+                          <option value="creative14">Arrow</option>
+                          <option value="creative15">Spiral</option>
+                          <option value="creative16">Lightning</option>
+                          <option value="creative17">Crystal</option>
+                          <option value="creative18">Flame</option>
+                        </optgroup>
+                        <optgroup label="CV Formats">
+                          <option value="cv-academic">Academic CV</option>
+                          <option value="cv-professional">Professional CV</option>
+                          <option value="cv-executive">Executive CV</option>
+                          <option value="cv-creative">Creative CV</option>
+                          <option value="cv-technical">Technical CV</option>
+                        </optgroup>
+                    </select>
+
+                    <!-- Visual Card Picker — Resume Mode -->
+                    <div class="tpl-picker-wrap" id="resumePickerWrap">
+                        <div class="tpl-cat-row">
+                            <span class="tpl-cat-lbl">Classic</span>
+                        </div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card active" data-value="modern" onclick="pickTemplate('modern')"><div class="tpl-thumb" style="background:#fff;border-bottom:3px solid #2d8653"><div class="tpl-bar" style="background:#2d8653;width:4px;height:100%;position:absolute;left:0;top:0"></div><div class="tpl-lines"></div></div><span>Modern Pro</span></div>
+                            <div class="tpl-card" data-value="classic" onclick="pickTemplate('classic')"><div class="tpl-thumb" style="background:#fff;border-top:4px solid #1a2e20"><div class="tpl-lines"></div></div><span>Classic</span></div>
+                            <div class="tpl-card" data-value="elegant" onclick="pickTemplate('elegant')"><div class="tpl-thumb" style="background:#fffdf5;border-bottom:2px solid #c8a85a"><div class="tpl-lines"></div></div><span>Elegant</span></div>
+                            <div class="tpl-card" data-value="creative" onclick="pickTemplate('creative')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#2d8653 40%,#fff 40%)"><div class="tpl-lines" style="margin-left:40%"></div></div><span>Creative</span></div>
+                            <div class="tpl-card" data-value="ats-friendly" onclick="pickTemplate('ats-friendly')"><div class="tpl-thumb" style="background:#fff"><div class="tpl-lines"></div></div><span>ATS Clean</span></div>
+                            <div class="tpl-card" data-value="executive" onclick="pickTemplate('executive')"><div class="tpl-thumb" style="background:#1a2e20"><div class="tpl-lines" style="opacity:0.6"></div></div><span>Executive</span></div>
+                            <div class="tpl-card" data-value="tech" onclick="pickTemplate('tech')"><div class="tpl-thumb" style="background:#0d1710"><div class="tpl-lines" style="opacity:0.5;border-color:#52c27a"></div></div><span>Tech</span></div>
+                            <div class="tpl-card" data-value="academic" onclick="pickTemplate('academic')"><div class="tpl-thumb" style="background:#fff;border-left:5px double #1a2e20"><div class="tpl-lines"></div></div><span>Academic</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Premium + Photo</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="premium1" onclick="pickTemplate('premium1')"><div class="tpl-thumb tp-premium" style="background:#1a1a1a"><div class="tpl-photo-dot"></div></div><span>Onyx</span></div>
+                            <div class="tpl-card" data-value="premium2" onclick="pickTemplate('premium2')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#f9c6d0,#e8a0b0)"><div class="tpl-photo-dot"></div></div><span>Rose Gold</span></div>
+                            <div class="tpl-card" data-value="premium3" onclick="pickTemplate('premium3')"><div class="tpl-thumb tp-premium" style="background:#f8fafc"><div class="tpl-photo-dot" style="border-color:#334155"></div></div><span>Nordic</span></div>
+                            <div class="tpl-card" data-value="premium4" onclick="pickTemplate('premium4')"><div class="tpl-thumb tp-premium" style="background:#0a0a1a"><div class="tpl-photo-dot" style="border-color:#00ffcc"></div></div><span>Cyber</span></div>
+                            <div class="tpl-card" data-value="premium5" onclick="pickTemplate('premium5')"><div class="tpl-thumb tp-premium" style="background:#1e3a5f"><div class="tpl-photo-dot" style="border-color:#c8a85a"></div></div><span>Navy Gold</span></div>
+                            <div class="tpl-card" data-value="premium6" onclick="pickTemplate('premium6')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(to right,#2d8653 50%,#fff 50%)"><div class="tpl-photo-dot" style="left:25%;transform:translateX(-50%)"></div></div><span>Magazine</span></div>
+                            <div class="tpl-card" data-value="premium7" onclick="pickTemplate('premium7')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)"><div class="tpl-photo-dot" style="border-color:#e91e63"></div></div><span>Pastel</span></div>
+                            <div class="tpl-card" data-value="premium8" onclick="pickTemplate('premium8')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#ff7043,#ff8a65)"><div class="tpl-photo-dot"></div></div><span>Coral</span></div>
+                            <div class="tpl-card" data-value="premium9" onclick="pickTemplate('premium9')"><div class="tpl-thumb tp-premium" style="background:#1b4332"><div class="tpl-photo-dot" style="border-color:#52b788"></div></div><span>Forest</span></div>
+                            <div class="tpl-card" data-value="premium10" onclick="pickTemplate('premium10')"><div class="tpl-thumb" style="background:#fff;border-left:3px solid #2d8653"><div class="tpl-timeline-dot"></div><div class="tpl-lines"></div></div><span>Timeline</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Glassmorphism</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="glass1" onclick="pickTemplate('glass1')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)"><div class="tpl-glass-overlay"></div></div><span>Aurora</span></div>
+                            <div class="tpl-card" data-value="glass2" onclick="pickTemplate('glass2')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)"><div class="tpl-glass-overlay"></div></div><span>Ocean</span></div>
+                            <div class="tpl-card" data-value="glass3" onclick="pickTemplate('glass3')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#10b981,#2d8653)"><div class="tpl-glass-overlay"></div></div><span>Emerald</span></div>
+                            <div class="tpl-card" data-value="glass4" onclick="pickTemplate('glass4')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#ec4899,#f43f5e)"><div class="tpl-glass-overlay"></div></div><span>Rose</span></div>
+                            <div class="tpl-card" data-value="glass5" onclick="pickTemplate('glass5')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#1e293b,#334155)"><div class="tpl-glass-overlay"></div></div><span>Midnight</span></div>
+                            <div class="tpl-card" data-value="glass6" onclick="pickTemplate('glass6')"><div class="tpl-thumb" style="background:linear-gradient(135deg,#f59e0b,#ec4899,#8b5cf6)"><div class="tpl-glass-overlay"></div></div><span>Holo</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Dark + Photo</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="darkPhoto1" onclick="pickTemplate('darkPhoto1')"><div class="tpl-thumb tp-premium" style="background:#1a0505"><div class="tpl-photo-dot" style="border-color:#dc2626"></div></div><span>Crimson</span></div>
+                            <div class="tpl-card" data-value="darkPhoto2" onclick="pickTemplate('darkPhoto2')"><div class="tpl-thumb tp-premium" style="background:#050d1a"><div class="tpl-photo-dot" style="border-color:#3b82f6"></div></div><span>Indigo</span></div>
+                            <div class="tpl-card" data-value="darkPhoto3" onclick="pickTemplate('darkPhoto3')"><div class="tpl-thumb tp-premium" style="background:#051a0a"><div class="tpl-photo-dot" style="border-color:#22c55e"></div></div><span>Emerald</span></div>
+                            <div class="tpl-card" data-value="darkPhoto4" onclick="pickTemplate('darkPhoto4')"><div class="tpl-thumb tp-premium" style="background:#1a1200"><div class="tpl-photo-dot" style="border-color:#f59e0b"></div></div><span>Gold</span></div>
+                            <div class="tpl-card" data-value="darkPhoto5" onclick="pickTemplate('darkPhoto5')"><div class="tpl-thumb tp-premium" style="background:#1a0510"><div class="tpl-photo-dot" style="border-color:#ec4899"></div></div><span>Rose</span></div>
+                            <div class="tpl-card" data-value="darkPhoto6" onclick="pickTemplate('darkPhoto6')"><div class="tpl-thumb tp-premium" style="background:#0d0518"><div class="tpl-photo-dot" style="border-color:#a855f7"></div></div><span>Violet</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Gradient + Photo</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="gradientPhoto1" onclick="pickTemplate('gradientPhoto1')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><div class="tpl-photo-dot"></div></div><span>Sunrise</span></div>
+                            <div class="tpl-card" data-value="gradientPhoto2" onclick="pickTemplate('gradientPhoto2')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#0ea5e9,#2d8653)"><div class="tpl-photo-dot"></div></div><span>Ocean</span></div>
+                            <div class="tpl-card" data-value="gradientPhoto3" onclick="pickTemplate('gradientPhoto3')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#2d8653,#1f6b42)"><div class="tpl-photo-dot"></div></div><span>Forest</span></div>
+                            <div class="tpl-card" data-value="gradientPhoto4" onclick="pickTemplate('gradientPhoto4')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#ef4444,#f59e0b)"><div class="tpl-photo-dot"></div></div><span>Sunset</span></div>
+                            <div class="tpl-card" data-value="gradientPhoto5" onclick="pickTemplate('gradientPhoto5')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4)"><div class="tpl-photo-dot"></div></div><span>Aurora</span></div>
+                            <div class="tpl-card" data-value="gradientPhoto6" onclick="pickTemplate('gradientPhoto6')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#a855f7,#ec4899)"><div class="tpl-photo-dot"></div></div><span>Lavender</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Split + Photo</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="splitPhoto1" onclick="pickTemplate('splitPhoto1')"><div class="tpl-thumb" style="background:linear-gradient(to right,#e8f5e3 40%,#fff 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;border-color:#2d8653;transform:none"></div></div><span>Minimal</span></div>
+                            <div class="tpl-card" data-value="splitPhoto2" onclick="pickTemplate('splitPhoto2')"><div class="tpl-thumb" style="background:linear-gradient(to right,#1a2e20 40%,#fff 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;transform:none"></div></div><span>Bold</span></div>
+                            <div class="tpl-card" data-value="splitPhoto3" onclick="pickTemplate('splitPhoto3')"><div class="tpl-thumb" style="background:linear-gradient(to right,#1e3a5f 40%,#fff 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;border-color:#c8a85a;transform:none"></div></div><span>Classic</span></div>
+                            <div class="tpl-card" data-value="splitPhoto4" onclick="pickTemplate('splitPhoto4')"><div class="tpl-thumb" style="background:linear-gradient(to right,#0d1710 40%,#1a2b1e 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;border-color:#52c27a;transform:none"></div></div><span>Dark</span></div>
+                            <div class="tpl-card" data-value="splitPhoto5" onclick="pickTemplate('splitPhoto5')"><div class="tpl-thumb" style="background:linear-gradient(to right,#ff8a65 40%,#fff 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;transform:none"></div></div><span>Warm</span></div>
+                            <div class="tpl-card" data-value="splitPhoto6" onclick="pickTemplate('splitPhoto6')"><div class="tpl-thumb" style="background:linear-gradient(to right,#0ea5e9 40%,#fff 40%)"><div class="tpl-photo-dot" style="left:20%;top:30%;transform:none"></div></div><span>Cool</span></div>
+                        </div>
+
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Minimal + Creative</span></div>
+                        <div class="tpl-grid">
+                            <div class="tpl-card" data-value="minimalPhoto1" onclick="pickTemplate('minimalPhoto1')"><div class="tpl-thumb tp-premium" style="background:#fafafa"><div class="tpl-photo-dot" style="border-color:#94a3b8"></div></div><span>Min Clean</span></div>
+                            <div class="tpl-card" data-value="minimalPhoto2" onclick="pickTemplate('minimalPhoto2')"><div class="tpl-thumb tp-premium" style="background:#fff;border-top:2px solid #1a2e20"><div class="tpl-photo-dot" style="border-color:#1a2e20"></div></div><span>Min Line</span></div>
+                            <div class="tpl-card" data-value="minimalPhoto3" onclick="pickTemplate('minimalPhoto3')"><div class="tpl-thumb tp-premium" style="background:#fff"><div class="tpl-photo-dot" style="border-radius:0;border-color:#2d8653"></div></div><span>Min Dot</span></div>
+                            <div class="tpl-card" data-value="creativePhoto1" onclick="pickTemplate('creativePhoto1')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#ff6b6b,#feca57)"><div class="tpl-photo-dot"></div></div><span>Vivid</span></div>
+                            <div class="tpl-card" data-value="creativePhoto2" onclick="pickTemplate('creativePhoto2')"><div class="tpl-thumb tp-premium" style="background:linear-gradient(135deg,#f39c12,#e74c3c)"><div class="tpl-photo-dot"></div></div><span>Retro</span></div>
+                            <div class="tpl-card" data-value="creative13" onclick="pickTemplate('creative13')"><div class="tpl-thumb" style="background:#1a2e20"><div class="tpl-hex"></div></div><span>Hexagon</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Card Picker — CV Mode -->
+                    <div class="tpl-picker-wrap" id="cvPickerWrap" style="display:none">
+                        <div class="tpl-cat-row"><span class="tpl-cat-lbl">Professional CV Formats</span></div>
+                        <div class="tpl-cv-grid">
+                            <div class="tpl-cv-card" data-value="cv-academic" onclick="pickTemplate('cv-academic')">
+                                <div class="tpl-cv-thumb" style="background:#fff;border-top:4px solid #1a2e20">
+                                    <div class="tpl-cv-header">
+                                        <div class="tpl-cv-name"></div>
+                                        <div class="tpl-cv-title"></div>
+                                    </div>
+                                    <div class="tpl-cv-body"><div class="tpl-cv-line"></div><div class="tpl-cv-line sm"></div><div class="tpl-cv-line"></div></div>
+                                </div>
+                                <div class="tpl-cv-info">
+                                    <strong>Academic CV</strong>
+                                    <span>Research · Publications · Education history</span>
+                                </div>
+                            </div>
+                            <div class="tpl-cv-card" data-value="cv-professional" onclick="pickTemplate('cv-professional')">
+                                <div class="tpl-cv-thumb" style="background:#fff;border-left:5px solid #2d8653">
+                                    <div class="tpl-cv-header">
+                                        <div class="tpl-cv-name"></div>
+                                        <div class="tpl-cv-title" style="background:#a3cfb8"></div>
+                                    </div>
+                                    <div class="tpl-cv-body"><div class="tpl-cv-line"></div><div class="tpl-cv-line sm"></div><div class="tpl-cv-line"></div></div>
+                                </div>
+                                <div class="tpl-cv-info">
+                                    <strong>Professional CV</strong>
+                                    <span>Full career history · Detailed experience</span>
+                                </div>
+                            </div>
+                            <div class="tpl-cv-card" data-value="cv-executive" onclick="pickTemplate('cv-executive')">
+                                <div class="tpl-cv-thumb" style="background:#1a2e20">
+                                    <div class="tpl-cv-header">
+                                        <div class="tpl-cv-name" style="background:rgba(255,255,255,0.8)"></div>
+                                        <div class="tpl-cv-title" style="background:rgba(163,207,184,0.6)"></div>
+                                    </div>
+                                    <div class="tpl-cv-body"><div class="tpl-cv-line" style="background:rgba(255,255,255,0.2)"></div><div class="tpl-cv-line sm" style="background:rgba(255,255,255,0.15)"></div></div>
+                                </div>
+                                <div class="tpl-cv-info">
+                                    <strong>Executive CV</strong>
+                                    <span>Senior leadership · Board positions · Achievements</span>
+                                </div>
+                            </div>
+                            <div class="tpl-cv-card" data-value="cv-creative" onclick="pickTemplate('cv-creative')">
+                                <div class="tpl-cv-thumb" style="background:linear-gradient(135deg,#f59e0b 35%,#fff 35%)">
+                                    <div class="tpl-cv-header">
+                                        <div class="tpl-cv-name"></div>
+                                        <div class="tpl-cv-title" style="background:#f59e0b;opacity:0.5"></div>
+                                    </div>
+                                    <div class="tpl-cv-body"><div class="tpl-cv-line"></div><div class="tpl-cv-line sm"></div></div>
+                                </div>
+                                <div class="tpl-cv-info">
+                                    <strong>Creative CV</strong>
+                                    <span>Designers · Artists · Creative professionals</span>
+                                </div>
+                            </div>
+                            <div class="tpl-cv-card" data-value="cv-technical" onclick="pickTemplate('cv-technical')">
+                                <div class="tpl-cv-thumb" style="background:#0d1710">
+                                    <div class="tpl-cv-header">
+                                        <div class="tpl-cv-name" style="background:rgba(82,194,122,0.7)"></div>
+                                        <div class="tpl-cv-title" style="background:rgba(82,194,122,0.4)"></div>
+                                    </div>
+                                    <div class="tpl-cv-body"><div class="tpl-cv-line" style="background:rgba(82,194,122,0.25)"></div><div class="tpl-cv-line sm" style="background:rgba(82,194,122,0.15)"></div></div>
+                                </div>
+                                <div class="tpl-cv-info">
+                                    <strong>Technical CV</strong>
+                                    <span>Engineers · Developers · IT professionals</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px;padding:10px 12px;background:var(--bg-tertiary);border-radius:8px;font-size:0.78rem;color:var(--text-secondary)">
+                            💡 CV format is longer than a resume — ideal for academic, research, medical or senior roles.
+                        </div>
+                    </div>
+
                     <button onclick="toggleATSMode()" class="ats-toggle-btn" id="atsToggle">
                         <span class="ats-icon">🤖</span>
                         <span>ATS Optimize</span>
@@ -799,6 +967,37 @@
 
     // Initial run after page load
     setTimeout(updateFormProgress, 800);
+
+    // ── Template Visual Card Picker ───────────────────────────────
+    function pickTemplate(val) {
+      document.querySelectorAll('.tpl-card, .tpl-cv-card').forEach(c => c.classList.remove('active'));
+      const picked = document.querySelector(`[data-value="${val}"]`);
+      if (picked) {
+        picked.classList.add('active');
+        picked.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      const sel = document.getElementById('templateSelect');
+      if (sel) { sel.value = val; changeTemplate(); }
+    }
+
+    function switchBuilderMode(mode) {
+      const resumeBtn = document.getElementById('resumeModeBtn');
+      const cvBtn = document.getElementById('cvModeBtn');
+      const resumeWrap = document.getElementById('resumePickerWrap');
+      const cvWrap = document.getElementById('cvPickerWrap');
+      if (mode === 'cv') {
+        cvBtn.classList.add('active'); resumeBtn.classList.remove('active');
+        cvWrap.style.display = 'block'; resumeWrap.style.display = 'none';
+        // Auto-select first CV template if none selected
+        const activeCv = document.querySelector('.tpl-cv-card.active');
+        if (!activeCv) pickTemplate('cv-professional');
+      } else {
+        resumeBtn.classList.add('active'); cvBtn.classList.remove('active');
+        resumeWrap.style.display = 'block'; cvWrap.style.display = 'none';
+        const activeResume = document.querySelector('.tpl-card.active');
+        if (!activeResume) pickTemplate('modern');
+      }
+    }
 
     // ── Welcome Guide ─────────────────────────────────────────────
     (function() {
