@@ -588,13 +588,14 @@ body {
   background: var(--bg-secondary);
 }
 
-/* Sidebar — uses absolute positioning so panes NEVER escape */
+/* Sidebar — flex column, overflow hidden keeps panes inside */
 .sidebar {
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
-  position: relative;
   overflow: hidden;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -4479,12 +4480,13 @@ body {
   display: flex;
   background: var(--bg-primary);
   border-bottom: 2px solid var(--border-color);
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 10;
   padding: 4px 8px 0;
   gap: 2px;
   height: 52px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 .stab {
   flex: 1;
@@ -4506,12 +4508,10 @@ body {
 .stab:hover { color: var(--primary-color); }
 .stab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 
-/* Panes are absolutely positioned below the tab bar — NEVER escape sidebar */
+/* Panes: take remaining height after tab bar, scroll inside */
 .sidebar-pane {
   display: none;
-  position: absolute;
-  top: 52px; /* exactly the tab bar height */
-  left: 0; right: 0; bottom: 0;
+  height: calc(100% - 52px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
