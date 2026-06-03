@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Times New Roman', serif; font-size: 11pt; color: #1a1a1a; background: #fff; }
+.cv-wrap { max-width: 800px; margin: 0 auto; padding: 40px 48px; }
+.cv-name { font-size: 22pt; font-weight: 700; text-align: center; letter-spacing: 1px; color: #1a2e20; text-transform: uppercase; }
+.cv-title { font-size: 11pt; text-align: center; color: #4d6b57; font-style: italic; margin: 6px 0; }
+.cv-contact { text-align: center; font-size: 9pt; color: #555; margin: 8px 0 16px; }
+.cv-divider { border: none; border-top: 2px solid #1a2e20; margin: 10px 0; }
+.cv-divider.thin { border-top: 1px solid #cce5d3; }
+.cv-section { margin: 18px 0; }
+.cv-section-title { font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1a2e20; margin-bottom: 10px; }
+.cv-item { margin-bottom: 12px; }
+.cv-item-header { display: flex; justify-content: space-between; }
+.cv-item-title { font-weight: 700; font-size: 10.5pt; }
+.cv-item-date { font-size: 9.5pt; color: #555; }
+.cv-item-sub { font-style: italic; color: #2d8653; font-size: 9.5pt; margin: 2px 0; }
+.cv-item-desc { font-size: 9.5pt; color: #444; line-height: 1.6; margin-top: 3px; }
+.cv-pub { font-size: 9.5pt; color: #333; line-height: 1.5; margin-bottom: 8px; }
+.cv-pub em { color: #2d8653; }
+</style></head><body>
+<div class="cv-wrap">
+  <div class="cv-name">{{fullName}}</div>
+  <div class="cv-title">{{jobTitle}}</div>
+  <div class="cv-contact">{{email}} | {{phone}} | {{location}}</div>
+  <hr class="cv-divider"><hr class="cv-divider thin" style="margin-top:3px">
+  {{#summary}}<div class="cv-section"><div class="cv-section-title">Research Interests &amp; Profile</div><p style="font-size:10pt;line-height:1.7;color:#333">{{summary}}</p></div><hr class="cv-divider thin">{{/summary}}
+  {{#education}}<div class="cv-section"><div class="cv-section-title">Academic Qualifications</div>
+  {{#each education}}<div class="cv-item">
+    <div class="cv-item-header"><span class="cv-item-title">{{degree}}</span><span class="cv-item-date">{{graduationYear}}</span></div>
+    <div class="cv-item-sub">{{school}}</div>
+  </div>{{/each}}</div><hr class="cv-divider thin">{{/education}}
+  {{#experience}}<div class="cv-section"><div class="cv-section-title">Academic &amp; Professional Experience</div>
+  {{#each experience}}<div class="cv-item">
+    <div class="cv-item-header"><span class="cv-item-title">{{title}}</span><span class="cv-item-date">{{startDate}} — {{endDate}}</span></div>
+    <div class="cv-item-sub">{{company}}</div><div class="cv-item-desc">{{description}}</div>
+  </div>{{/each}}</div><hr class="cv-divider thin">{{/experience}}
+  {{#additional.projects}}<div class="cv-section"><div class="cv-section-title">Research Projects &amp; Publications</div><div class="cv-pub">{{additional.projects}}</div></div><hr class="cv-divider thin">{{/additional.projects}}
+  {{#skills.technical}}<div class="cv-section"><div class="cv-section-title">Skills &amp; Technical Competencies</div><p style="font-size:9.5pt;color:#444">{{skills.technical}}</p></div>{{/skills.technical}}
+  {{#additional.certifications}}<div class="cv-section"><div class="cv-section-title">Awards, Grants &amp; Certifications</div><p style="font-size:9.5pt;color:#444">{{additional.certifications}}</p></div>{{/additional.certifications}}
+</div></body></html>
