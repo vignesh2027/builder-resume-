@@ -1715,10 +1715,11 @@ function updateATSScore() {
   // ── Calculate score (score = earned/max * 100, baseline boosted so complete = 85+) ──
   const maxScore = conditions.reduce((s, c) => s + c.points, 0)
   const earned = conditions.filter(c => c.passed).reduce((s, c) => s + c.points, 0)
-  // Apply a baseline boost: a fully complete resume should score 85+
-  // Raw score is scaled: min 0, passing 18/25 core = ~85
+  // Scale so well-filled resumes score 85-95 (matching industry-standard ATS tools)
+  // Formula: floor of 30 for any resume, then scale the rest to 70 points
+  // 100% → 99, 80% → 86, 60% → 72, 40% → 58, 0% → 30
   const rawPct = earned / maxScore
-  atsScore = Math.min(99, Math.round(rawPct * 100))
+  atsScore = Math.min(99, Math.round(30 + (rawPct * 69)))
 
   const failed = conditions.filter(c => !c.passed)
 
