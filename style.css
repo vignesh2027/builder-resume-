@@ -688,28 +688,47 @@ body {
 
 .color-options {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 6px;
 }
 
 .color-btn {
-  width: 32px;
-  height: 32px;
-  border: 2px solid transparent;
-  border-radius: var(--radius-md);
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 26px;
+  border: 2px solid rgba(0,0,0,0.08);
+  border-radius: 7px;
   cursor: pointer;
   transition: all var(--transition-fast);
   position: relative;
 }
 
+.color-btn.color-white {
+  border: 2px solid #cbd5e1;
+}
+
 .color-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  z-index: 2;
 }
 
 .color-btn.active {
   border-color: var(--text-primary);
   box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--primary-color);
 }
+.color-btn.active::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.color-btn.color-white.active::after { color: #1a1a1a; text-shadow: none; }
 
 .action-buttons {
   display: grid;
@@ -4697,7 +4716,15 @@ body:has(.builder-container) {
 /* When preview is expanded (full size button clicked) */
 .preview-panel.expanded .preview-content .resume-template,
 .preview-panel.expanded .preview-content > div:not(.error-message) {
-  zoom: 0.72;
+  zoom: 0.95;
+}
+/* Expanded preview gets a comfortable backdrop */
+.preview-panel.expanded {
+  box-shadow: -8px 0 32px rgba(0,0,0,0.12) !important;
+  z-index: 20 !important;
+}
+.preview-panel.expanded .preview-content {
+  padding: 20px !important;
 }
 
 /* Edit preview button active state */
