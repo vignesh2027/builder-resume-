@@ -591,9 +591,9 @@ body {
 .sidebar {
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
+  overflow: hidden; /* pane handles its own scroll */
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -2040,26 +2040,23 @@ body {
 }
 
 @media (max-width: 1024px) {
+  /* Keep builder as 3 col but compress columns on small screens */
   .builder-container {
-    grid-template-columns: 1fr;
-    height: auto;
+    grid-template-columns: 260px 1fr 0px;
+    height: calc(100vh - 80px);
+  }
+
+  /* Hide preview on small screens, user can toggle it */
+  .preview-panel {
+    display: none;
   }
 
   .sidebar {
-    order: -1;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
   }
 
   .sidebar-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-  }
-
-  .preview-panel {
-    border-left: none;
-    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-sm);
   }
 
   .hero-title {
@@ -4018,16 +4015,9 @@ body {
   color: #e9d5ff;
 }
 
-/* Sidebar glass effect */
-.sidebar {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-[data-theme="dark"] .sidebar {
-  background: rgba(22,15,46,0.85);
-  backdrop-filter: blur(20px);
-}
+/* Sidebar subtle glass */
+.sidebar { background: var(--bg-primary); }
+[data-theme="dark"] .sidebar { background: rgba(13,23,16,0.95); }
 
 /* Edit preview button */
 .btn-edit-preview {
@@ -4521,9 +4511,9 @@ body {
 .stab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 
 /* Hide old sidebar-content wrapper, use new inner */
-.sidebar-pane { display: none; overflow-y: auto; height: calc(100vh - 130px); }
-.sidebar-pane.active { display: block; }
-/* Also keep the old sidebar-content visible if pane approach fails */
+.sidebar-tab-bar { flex-shrink: 0; } /* never gets pushed away */
+.sidebar-pane { display: none; flex: 1; overflow-y: auto; min-height: 0; }
+.sidebar-pane.active { display: flex; flex-direction: column; }
 .sidebar-content-inner { padding: 14px 14px 24px; }
 
 .sidebar-section-inner {
