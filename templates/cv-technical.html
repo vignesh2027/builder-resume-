@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Courier New', monospace; font-size: 10pt; color: #e6f5ec; background: #0d1710; }
+.cv-wrap { max-width: 800px; margin: 0 auto; padding: 36px 44px; }
+.cv-header { border: 1px solid #1e3524; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px; background: #132016; position: relative; }
+.cv-header::before { content: '> '; color: #52c27a; font-size: 10pt; position: absolute; top: 20px; left: 12px; }
+.cv-name { font-size: 20pt; font-weight: 700; color: #52c27a; padding-left: 16px; letter-spacing: 2px; }
+.cv-title { font-size: 9.5pt; color: #a3cfb8; padding-left: 16px; margin: 4px 0 10px; }
+.cv-contact { display: flex; flex-wrap: wrap; gap: 18px; font-size: 8.5pt; color: #7aab8c; padding-left: 16px; }
+.cv-contact span::before { content: '[ '; color: #52c27a; }
+.cv-contact span::after { content: ' ]'; color: #52c27a; }
+.cv-section { margin-bottom: 20px; }
+.cv-section-title { font-size: 9pt; font-weight: 700; color: #52c27a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.cv-section-title::before { content: '// '; color: #7aab8c; }
+.cv-summary { font-size: 9.5pt; color: #a3cfb8; line-height: 1.6; border-left: 2px solid #1e3524; padding-left: 14px; }
+.cv-item { margin-bottom: 14px; border-left: 2px solid #1e3524; padding-left: 14px; }
+.cv-item-title { font-weight: 700; color: #e6f5ec; font-size: 10pt; }
+.cv-item-sub { font-size: 9pt; color: #52c27a; margin: 2px 0; }
+.cv-item-date { font-size: 8.5pt; color: #7aab8c; }
+.cv-item-desc { font-size: 9pt; color: #a3cfb8; line-height: 1.6; margin-top: 5px; }
+.cv-skills-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+.cv-skill { background: #1e3524; color: #52c27a; padding: 3px 12px; border-radius: 4px; font-size: 8.5pt; border: 1px solid #2d4a30; font-family: monospace; }
+</style></head><body>
+<div class="cv-wrap">
+  <div class="cv-header">
+    <div class="cv-name">{{fullName}}</div>
+    <div class="cv-title">{{jobTitle}}</div>
+    <div class="cv-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span></div>
+  </div>
+  {{#summary}}<div class="cv-section"><div class="cv-section-title">profile</div><p class="cv-summary">{{summary}}</p></div>{{/summary}}
+  {{#skills.technical}}<div class="cv-section"><div class="cv-section-title">tech_stack</div>
+  <div class="cv-skills-wrap">{{#each technicalSkills}}<span class="cv-skill">{{this}}</span>{{/each}}</div></div>{{/skills.technical}}
+  {{#experience}}<div class="cv-section"><div class="cv-section-title">experience</div>
+  {{#each experience}}<div class="cv-item">
+    <div class="cv-item-title">{{title}}</div><div class="cv-item-sub">@ {{company}}</div>
+    <div class="cv-item-date">{{startDate}} → {{endDate}}</div>
+    <div class="cv-item-desc">{{description}}</div>
+  </div>{{/each}}</div>{{/experience}}
+  {{#additional.projects}}<div class="cv-section"><div class="cv-section-title">projects</div><div class="cv-item-desc" style="border-left:2px solid #1e3524;padding-left:14px">{{additional.projects}}</div></div>{{/additional.projects}}
+  {{#education}}<div class="cv-section"><div class="cv-section-title">education</div>
+  {{#each education}}<div class="cv-item">
+    <div class="cv-item-title">{{degree}}</div><div class="cv-item-sub">{{school}}</div>
+    <div class="cv-item-date">{{graduationYear}}</div>
+  </div>{{/each}}</div>{{/education}}
+  {{#additional.certifications}}<div class="cv-section"><div class="cv-section-title">certifications</div><div class="cv-item-desc" style="border-left:2px solid #1e3524;padding-left:14px">{{additional.certifications}}</div></div>{{/additional.certifications}}
+</div></body></html>
