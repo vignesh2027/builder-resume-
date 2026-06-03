@@ -77,9 +77,25 @@
     <div class="builder-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-content">
-                <div class="sidebar-section tpl-section">
-                    <!-- Resume / CV mode toggle -->
+            <!-- 3-Tab bar — fixed at top -->
+            <div class="sidebar-tab-bar">
+                <button class="stab active" id="stab-btn-templates" onclick="showSidebarTab('templates')" title="Choose Template">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Templates
+                </button>
+                <button class="stab" id="stab-btn-design" onclick="showSidebarTab('design')" title="Colours & Fonts">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20"/><path d="M12 12l6-6"/></svg>
+                    Design
+                </button>
+                <button class="stab" id="stab-btn-tools" onclick="showSidebarTab('tools')" title="Download & ATS">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Tools
+                </button>
+            </div>
+
+            <!-- TAB 1: Templates -->
+            <div class="sidebar-pane active" id="stab-templates">
+                <div class="sidebar-content-inner">
                     <div class="builder-mode-switch">
                         <button class="bmode-btn active" id="resumeModeBtn" onclick="switchBuilderMode('resume')">📄 Resume</button>
                         <button class="bmode-btn" id="cvModeBtn" onclick="switchBuilderMode('cv')">🎓 CV</button>
@@ -333,132 +349,129 @@
                         <span>ATS Optimize</span>
                     </button>
                 </div>
-
-                <div class="sidebar-section">
-                    <h3 class="sidebar-title">Customize</h3>
-                    <div class="customization-grid">
-                        <div class="color-picker">
-                            <label class="input-label">Accent Color</label>
-                            <div class="color-options">
-                                <button class="color-btn active" data-color="#6366f1" style="background: #6366f1" title="Indigo"></button>
-                                <button class="color-btn" data-color="#3b82f6" style="background: #3b82f6" title="Blue"></button>
-                                <button class="color-btn" data-color="#0ea5e9" style="background: #0ea5e9" title="Sky Blue"></button>
-                                <button class="color-btn" data-color="#06b6d4" style="background: #06b6d4" title="Cyan"></button>
-                                <button class="color-btn" data-color="#14b8a6" style="background: #14b8a6" title="Teal"></button>
-                                <button class="color-btn" data-color="#10b981" style="background: #10b981" title="Emerald"></button>
-                                <button class="color-btn" data-color="#22c55e" style="background: #22c55e" title="Green"></button>
-                                <button class="color-btn" data-color="#84cc16" style="background: #84cc16" title="Lime"></button>
-                                <button class="color-btn" data-color="#f59e0b" style="background: #f59e0b" title="Amber"></button>
-                                <button class="color-btn" data-color="#f97316" style="background: #f97316" title="Orange"></button>
-                                <button class="color-btn" data-color="#ef4444" style="background: #ef4444" title="Red"></button>
-                                <button class="color-btn" data-color="#e11d48" style="background: #e11d48" title="Rose"></button>
-                                <button class="color-btn" data-color="#ec4899" style="background: #ec4899" title="Pink"></button>
-                                <button class="color-btn" data-color="#8b5cf6" style="background: #8b5cf6" title="Violet"></button>
-                                <button class="color-btn" data-color="#7c3aed" style="background: #7c3aed" title="Purple"></button>
-                                <button class="color-btn" data-color="#1e3a5f" style="background: #1e3a5f" title="Navy"></button>
-                                <button class="color-btn" data-color="#b45309" style="background: #b45309" title="Burgundy"></button>
-                                <button class="color-btn" data-color="#b8860b" style="background: #b8860b" title="Gold"></button>
-                                <button class="color-btn" data-color="#475569" style="background: #475569" title="Slate"></button>
-                                <button class="color-btn" data-color="#1f2937" style="background: #1f2937" title="Charcoal"></button>
-                            </div>
-                        </div>
-                        
-                        <div class="font-picker">
-                            <label class="input-label">Font Style</label>
-                            <select id="fontSelect" onchange="changeFont()" class="select-input">
-                                <option value="inter">Inter (Modern)</option>
-                                <option value="playfair">Playfair (Elegant)</option>
-                                <option value="system">System (Clean)</option>
-                                <option value="serif">Times (Classic)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3 class="sidebar-title">Actions</h3>
-                    <div class="action-buttons">
-                        <button onclick="downloadPDF()" class="btn btn-primary btn-full">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7,10 12,15 17,10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            Download PDF
-                        </button>
-                        <button onclick="exportData()" class="btn btn-secondary btn-full">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14,2 14,8 20,8"/>
-                                <line x1="12" y1="18" x2="8" y2="18"/>
-                                <line x1="12" y1="17" x2="8" y2="17"/>
-                                <polyline points="10,9 9,9 8,9"/>
-                            </svg>
-                            Export Data
-                        </button>
-                        <button onclick="importData()" class="btn btn-outline btn-full">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14,2 14,8 20,8"/>
-                                <line x1="12" y1="13" x2="8" y2="13"/>
-                                <line x1="12" y1="17" x2="8" y2="17"/>
-                                <polyline points="9,15 8,12 9,9"/>
-                            </svg>
-                            Import Data
-                        </button>
-                        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="handleImportFile(event)">
-                        <button onclick="analyzeResume()" class="btn btn-accent btn-full">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m6-6h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4m-6 0a2 2 0 0 0-2-2v-3a2 2 0 0 0 2-2m6 0a2 2 0 0 1 2-2v-3a2 2 0 0 1-2-2"/>
-                            </svg>
-                            Analyze Resume
-                        </button>
-                        <button onclick="loadSampleData()" class="btn btn-outline btn-full">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                            </svg>
-                            Load Sample
-                        </button>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="progress-indicator">
-                        <h4>Completion Progress</h4>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <span class="progress-text" id="progressText">0% Complete</span>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                  <h3 class="sidebar-title">ATS Score</h3>
-                  <div class="ats-score-panel">
-                    <div class="ats-score-circle">
-                      <div class="ats-score-value" id="atsScore">0</div>
-                      <div class="ats-score-label">ATS Score</div>
-                    </div>
-                    <div class="ats-tips" id="atsTips">
-                      <div class="ats-tip">Add more content to improve score</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sidebar-section">
-                  <h3 class="sidebar-title">Cover Letter</h3>
-                  <button onclick="toggleCoverLetter()" class="btn btn-outline btn-full" id="coverLetterToggle">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                      <polyline points="14,2 14,8 20,8"/>
-                    </svg>
-                    Generate Cover Letter
-                  </button>
                 </div>
             </div>
-        </aside>
 
-        <!-- Main Content -->
+            <!-- TAB 2: Design -->
+            <div class="sidebar-pane" id="stab-design">
+                <div class="sidebar-content-inner">
+                    <div class="sidebar-section-inner">
+                        <div class="sb-label">Accent Color</div>
+                        <div class="color-options">
+                            <button class="color-btn active" data-color="#2d8653" style="background:#2d8653" title="Forest Green"></button>
+                            <button class="color-btn" data-color="#1f6b42" style="background:#1f6b42" title="Deep Green"></button>
+                            <button class="color-btn" data-color="#52c27a" style="background:#52c27a" title="Emerald"></button>
+                            <button class="color-btn" data-color="#3b82f6" style="background:#3b82f6" title="Blue"></button>
+                            <button class="color-btn" data-color="#0ea5e9" style="background:#0ea5e9" title="Sky Blue"></button>
+                            <button class="color-btn" data-color="#06b6d4" style="background:#06b6d4" title="Cyan"></button>
+                            <button class="color-btn" data-color="#14b8a6" style="background:#14b8a6" title="Teal"></button>
+                            <button class="color-btn" data-color="#f59e0b" style="background:#f59e0b" title="Amber"></button>
+                            <button class="color-btn" data-color="#f97316" style="background:#f97316" title="Orange"></button>
+                            <button class="color-btn" data-color="#ef4444" style="background:#ef4444" title="Red"></button>
+                            <button class="color-btn" data-color="#e11d48" style="background:#e11d48" title="Rose"></button>
+                            <button class="color-btn" data-color="#ec4899" style="background:#ec4899" title="Pink"></button>
+                            <button class="color-btn" data-color="#8b5cf6" style="background:#8b5cf6" title="Violet"></button>
+                            <button class="color-btn" data-color="#7c3aed" style="background:#7c3aed" title="Purple"></button>
+                            <button class="color-btn" data-color="#1e3a5f" style="background:#1e3a5f" title="Navy"></button>
+                            <button class="color-btn" data-color="#b45309" style="background:#b45309" title="Burgundy"></button>
+                            <button class="color-btn" data-color="#b8860b" style="background:#b8860b" title="Gold"></button>
+                            <button class="color-btn" data-color="#475569" style="background:#475569" title="Slate"></button>
+                            <button class="color-btn" data-color="#1f2937" style="background:#1f2937" title="Charcoal"></button>
+                            <button class="color-btn" data-color="#6366f1" style="background:#6366f1" title="Indigo"></button>
+                        </div>
+                    </div>
+                    <div class="sidebar-section-inner">
+                        <div class="sb-label">Font Style</div>
+                        <select id="fontSelect" onchange="changeFont()" class="select-input">
+                            <option value="inter">Inter (Modern)</option>
+                            <option value="playfair">Playfair (Elegant)</option>
+                            <option value="system">System (Clean)</option>
+                            <option value="serif">Times (Classic)</option>
+                        </select>
+                    </div>
+                    <div class="sidebar-section-inner">
+                        <div class="sb-label">Resume Completeness</div>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <span class="progress-text" id="progressText">0% Complete</span>
+                    </div>
+                    <div class="sidebar-section-inner">
+                        <button onclick="toggleATSMode()" class="ats-toggle-btn" id="atsToggle">
+                            <span class="ats-icon">🤖</span>
+                            <span>Toggle ATS Mode</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: Tools -->
+            <div class="sidebar-pane" id="stab-tools">
+                <div class="sidebar-content-inner">
+                    <!-- ATS Score — BIG and visible -->
+                    <div class="ats-score-big">
+                        <div class="ats-score-ring">
+                            <svg class="ats-ring-svg" viewBox="0 0 80 80">
+                                <circle cx="40" cy="40" r="34" fill="none" stroke="var(--border-color)" stroke-width="7"/>
+                                <circle cx="40" cy="40" r="34" fill="none" stroke="var(--primary-color)" stroke-width="7"
+                                    stroke-dasharray="213.6" stroke-dashoffset="213.6"
+                                    id="atsRingFill" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+                            </svg>
+                            <div class="ats-ring-inner">
+                                <div class="ats-score-value" id="atsScore">0</div>
+                                <div class="ats-ring-label">ATS</div>
+                            </div>
+                        </div>
+                        <button onclick="analyzeResume()" class="ats-analyze-btn">
+                            📊 Full ATS Report
+                        </button>
+                        <div class="ats-tips" id="atsTips">
+                            <div class="ats-tip">Fill your resume to see your ATS score</div>
+                        </div>
+                    </div>
+
+                    <div class="tools-divider"></div>
+
+                    <!-- Download actions -->
+                    <div class="tools-group">
+                        <div class="sb-label">Download</div>
+                        <button onclick="downloadPDF()" class="btn btn-primary btn-full">
+                            📥 Download PDF
+                        </button>
+                        <button onclick="exportToWord()" class="btn btn-secondary btn-full" style="margin-top:6px">
+                            📝 Export as Word (.doc)
+                        </button>
+                    </div>
+
+                    <div class="tools-divider"></div>
+
+                    <!-- Data actions -->
+                    <div class="tools-group">
+                        <div class="sb-label">Data</div>
+                        <div class="tools-row">
+                            <button onclick="exportData()" class="btn btn-outline btn-half">
+                                💾 Export JSON
+                            </button>
+                            <button onclick="importData()" class="btn btn-outline btn-half">
+                                📂 Import
+                            </button>
+                        </div>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="handleImportFile(event)">
+                        <button onclick="loadSampleData()" class="btn btn-outline btn-full" style="margin-top:6px">
+                            ⚡ Load Sample Resume
+                        </button>
+                    </div>
+
+                    <div class="tools-divider"></div>
+
+                    <!-- Cover Letter -->
+                    <div class="tools-group">
+                        <div class="sb-label">Cover Letter</div>
+                        <button onclick="toggleCoverLetter()" class="btn btn-outline btn-full" id="coverLetterToggle">
+                            ✍️ Generate Cover Letter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>ain Content -->
         <main class="builder-main">
             <div class="form-container">
                 <!-- Progress Bar -->
@@ -967,6 +980,72 @@
 
     // Initial run after page load
     setTimeout(updateFormProgress, 800);
+
+
+    // ── Sidebar 3-Tab Navigation ──────────────────────────────────
+    function showSidebarTab(tab) {
+      document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sidebar-pane').forEach(p => p.classList.remove('active'));
+      const btn = document.getElementById('stab-btn-' + tab);
+      const pane = document.getElementById('stab-' + tab);
+      if (btn) btn.classList.add('active');
+      if (pane) pane.classList.add('active');
+    }
+
+    // ── Word Export ───────────────────────────────────────────────
+    function exportToWord() {
+      const previewEl = document.getElementById('previewContent');
+      if (!previewEl || !previewEl.innerHTML.trim()) {
+        alert('Fill in your resume first, then export to Word.');
+        return;
+      }
+      const html = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>Resume</title>
+  <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+  <style>
+    body { font-family: Calibri, sans-serif; font-size: 11pt; margin: 1in; }
+    h1 { font-size: 18pt; } h2 { font-size: 13pt; } h3 { font-size: 11pt; }
+    p, li { line-height: 1.4; }
+  </style>
+</head>
+<body>${previewEl.innerHTML}</body>
+</html>`;
+      const blob = new Blob([html], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.doc';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── ATS Ring Animation ────────────────────────────────────────
+    function updateATSRing(score) {
+      const ring = document.getElementById('atsRingFill');
+      if (!ring) return;
+      const circumference = 213.6;
+      const offset = circumference - (score / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+      ring.style.stroke = score >= 80 ? '#22a06b' : score >= 60 ? '#f0a500' : '#ef4444';
+    }
+    // Hook into ATS score updates
+    const _origGetScoreClass = typeof getScoreClass === 'function' ? getScoreClass : null;
+    const _atsRingInterval = setInterval(() => {
+      if (typeof updateATSScore === 'function') {
+        clearInterval(_atsRingInterval);
+        const orig = updateATSScore;
+        window.updateATSScore = function() {
+          orig.apply(this, arguments);
+          const scoreEl = document.getElementById('atsScore');
+          if (scoreEl) updateATSRing(parseInt(scoreEl.textContent) || 0);
+        };
+      }
+    }, 300);
 
     // ── Template Visual Card Picker ───────────────────────────────
     function pickTemplate(val) {
