@@ -73,25 +73,25 @@
         border-left: 1px solid #cce5d3 !important;
         display: block !important;
       }
-      /* EXPANDED = fixed overlay on right, big readable view */
-      .builder-container > aside.preview-panel.expanded {
-        position: fixed !important;
-        top: 65px !important; right: 0 !important; bottom: 0 !important; left: auto !important;
-        width: 62vw !important; min-width: 62vw !important; max-width: 1000px !important;
-        height: auto !important;
-        z-index: 60 !important;
-        box-shadow: -10px 0 50px rgba(0,0,0,0.25) !important;
+      /* EXPANDED (half-page): hide the form, preview fills the space — scrollable + editable */
+      .builder-container.preview-big > main.builder-main { display: none !important; }
+      .builder-container.preview-big > aside.preview-panel {
+        flex: 1 1 auto !important;
+        width: auto !important; min-width: 0 !important; max-width: none !important;
+        height: 100% !important;
+        overflow-y: auto !important;
       }
-      .builder-container > aside.preview-panel.expanded .preview-content > div:not(.error-message) {
-        zoom: 1 !important;
+      .builder-container.preview-big > aside.preview-panel .preview-content > div:not(.error-message) {
+        zoom: 0.9 !important;
       }
-      /* dim backdrop when expanded */
-      #previewBackdrop { display:none; position:fixed; inset:65px 0 0 0; background:rgba(26,46,32,0.4); z-index:55; }
-      #previewBackdrop.show { display:block; }
+      .builder-container.preview-big > aside.preview-panel .preview-content {
+        padding: 24px 30px !important;
+      }
 
       @media (max-width: 1100px) {
-        .builder-container > aside.preview-panel:not(.expanded) { display: none !important; }
-        .builder-container > aside.preview-panel.expanded { width: 100vw !important; min-width: 100vw !important; }
+        .builder-container > aside.preview-panel { display: none !important; }
+        .builder-container.preview-big > aside.preview-panel { display: block !important; }
+        .builder-container.preview-big > aside.sidebar { display: none !important; }
       }
       @media (max-width: 700px) {
         .builder-container > aside.sidebar { display: none !important; }
@@ -1260,6 +1260,7 @@
           window.updatePreview = function() {
             original.apply(this, arguments);
             updateFormProgress();
+            hideEmptySections();
           };
           updateFormProgress();
         }
@@ -1380,22 +1381,37 @@
       }
     }
 
-    // ── Preview Expand Overlay (override script.js version) ───────
-    (function(){
-      const bd = document.createElement('div');
-      bd.id = 'previewBackdrop';
-      bd.onclick = () => { if (window.togglePreviewSize) window.togglePreviewSize(); };
-      document.body.appendChild(bd);
-    })();
+    // ── Auto-hide empty sections in any template ──────────────────
+    function hideEmptySections() {
+      const ids = ['previewSummary','previewExperience','previewEducation','previewSkills',
+                   'previewLanguages','previewCertifications','previewProjects',
+                   'previewAwards','previewVolunteer'];
+      const pc = document.getElementById('previewContent');
+      if (!pc) return;
+      // section wrapper class names used across templates
+      const wrapSel = '.r-block, .ps-block, .pb-block, .pb-side-block, .pt-block, .pm-block, .section, .c-main > div, .c-side > div, .cv-section, .x-body > .r-block';
+      ids.forEach(id => {
+        const el = pc.querySelector('#' + id);
+        if (!el) return;
+        const empty = el.textContent.trim() === '' && el.children.length === 0;
+        // find nearest section wrapper that contains this element
+        let wrap = el.closest(wrapSel);
+        if (wrap) wrap.style.display = empty ? 'none' : '';
+      });
+    }
+
+    // ── Preview Expand to half-page (override script.js version) ──
     window.togglePreviewSize = function() {
+      const container = document.querySelector('.builder-container');
       const panel = document.querySelector('.preview-panel');
-      const bd = document.getElementById('previewBackdrop');
-      if (!panel) return;
-      panel.classList.toggle('expanded');
-      const on = panel.classList.contains('expanded');
-      if (bd) bd.classList.toggle('show', on);
-      // clear any inline width the old fn may have set
-      panel.style.width = ''; panel.style.minWidth = '';
+      if (!container) return;
+      container.classList.toggle('preview-big');
+      // clear any inline width a previous version may have set
+      if (panel) { panel.style.width = ''; panel.style.minWidth = ''; }
+      // update the button icon hint
+      const isBig = container.classList.contains('preview-big');
+      const btn = document.querySelector('.preview-actions button[title="Toggle size"]');
+      if (btn) btn.style.background = isBig ? 'var(--primary-color)' : '';
     };
 
     // ── Welcome Guide ─────────────────────────────────────────────
