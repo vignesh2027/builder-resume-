@@ -4305,16 +4305,11 @@ body {
 
 /* ── Template Visual Picker ─────────────────────────────────── */
 .tpl-picker-wrap {
-  max-height: 340px;
-  overflow-y: auto;
+  /* No height cap — sidebar-pane handles all scrolling */
   overflow-x: hidden;
   padding-right: 2px;
   margin-bottom: 10px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-light) transparent;
 }
-.tpl-picker-wrap::-webkit-scrollbar { width: 4px; }
-.tpl-picker-wrap::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
 
 .tpl-cat-row {
   padding: 8px 0 4px;
@@ -4526,8 +4521,9 @@ body {
 .stab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 
 /* Hide old sidebar-content wrapper, use new inner */
-.sidebar-pane { display: none; overflow-y: auto; height: calc(100vh - 120px); }
+.sidebar-pane { display: none; overflow-y: auto; height: calc(100vh - 130px); }
 .sidebar-pane.active { display: block; }
+/* Also keep the old sidebar-content visible if pane approach fails */
 .sidebar-content-inner { padding: 14px 14px 24px; }
 
 .sidebar-section-inner {
