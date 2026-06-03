@@ -4677,3 +4677,34 @@ body:has(.builder-container) {
   .builder-container > .sidebar { display: none !important; }
   .builder-container { top: 60px !important; }
 }
+
+/* ── Preview Panel Scaling — fit A4 resume into preview panel ── */
+.preview-content {
+  overflow: hidden;
+  padding: 8px !important;
+  background: #e8f5e3 !important;
+}
+.preview-content .resume-template,
+.preview-content > div {
+  transform-origin: top center !important;
+  transform: scale(0.48) !important;
+  width: 794px !important;     /* A4 width */
+  margin: 0 auto !important;
+  margin-bottom: calc((794px * 0.48 - 794px) * 0.48) !important;
+}
+
+/* When preview is expanded (full size button clicked) */
+.preview-panel.expanded .preview-content .resume-template,
+.preview-panel.expanded .preview-content > div {
+  transform: scale(0.85) !important;
+}
+
+/* Edit preview button active state */
+.preview-content[contenteditable="true"] {
+  outline: 2px dashed var(--primary-color) !important;
+  outline-offset: -2px !important;
+}
+.btn-edit-preview.active {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+}
