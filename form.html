@@ -111,7 +111,7 @@
         <div class="container">
             <nav class="nav">
                 <div class="logo">
-                    <div class="logo-icon">📄</div>
+                    <img src="logo.png" alt="CMR" class="logo-icon" style="width:36px;height:36px;object-fit:contain;border-radius:6px;">
                     <div class="logo-text">
                         <h1>CMR</h1>
                         <span>Resume Builder</span>
@@ -720,7 +720,27 @@
                         <button id="toggleReorderBtn" onclick="togglePreviewReorder()" class="btn btn-secondary btn-full" style="display:flex;align-items:center;justify-content:center;gap:8px;">
                             <span>⠿</span> <span id="reorderBtnLabel">Enable Section Drag</span>
                         </button>
-                        <p style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 0;line-height:1.5;" id="reorderHint">Click to turn on drag mode — then drag sections directly in the preview</p>
+                        <p style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 0;line-height:1.5;" id="reorderHint">Click above, then drag the green ⠿ handles in the live preview to reorder sections</p>
+                    </div>
+
+                    <div class="tools-divider"></div>
+
+                    <!-- ATS File Check -->
+                    <div class="tools-group">
+                        <div class="sb-label">Check Existing Resume</div>
+                        <label id="atsUploadLabel" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;background:var(--bg-secondary);border:2px dashed var(--border-color);border-radius:10px;cursor:pointer;font-size:0.8rem;color:var(--text-muted);transition:all .2s;" onmouseover="this.style.borderColor='var(--primary-color)'" onmouseout="this.style.borderColor='var(--border-color)'">
+                            <span style="font-size:1.6rem;">📎</span>
+                            <span style="font-weight:600;color:var(--text-primary);">Upload PDF or DOCX</span>
+                            <span>Click to select your resume file</span>
+                            <input type="file" id="atsFileInput" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="runFileATS(this)">
+                        </label>
+                        <div id="atsFileProgress" style="display:none;margin-top:10px;">
+                            <div style="background:var(--bg-secondary);border-radius:8px;overflow:hidden;height:6px;margin-bottom:8px;">
+                                <div id="atsFileBar" style="background:var(--primary-color);height:6px;width:0%;border-radius:8px;transition:width .3s;"></div>
+                            </div>
+                            <p id="atsFileStatus" style="font-size:0.78rem;color:var(--text-muted);text-align:center;">Reading file...</p>
+                        </div>
+                        <div id="atsFileResult" style="display:none;margin-top:10px;"></div>
                     </div>
 
                     <div class="tools-divider"></div>
@@ -1220,6 +1240,7 @@
     </button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="script.js"></script>
     <script src="ai.js"></script>
     <script>
@@ -1467,59 +1488,63 @@
       });
     })();
 
-    // ── Preview direct drag-to-reorder ───────────────────────────
+    // ── Preview direct drag-to-reorder (fixed) ───────────────────
     (function() {
       let reorderActive = false;
       let dragSrc = null;
-      const DRAG_HANDLE_CLASS = 'pvw-drag-handle';
 
-      // Inject drag-handle styles once
       const st = document.createElement('style');
       st.textContent = `
-        .pvw-section-wrap { position:relative; }
-        .pvw-section-wrap.reorder-on { outline:2px dashed #cce5d3; border-radius:6px; margin:2px 0; cursor:grab; transition:outline .15s; }
-        .pvw-section-wrap.reorder-on:hover { outline:2px solid #2d8653; }
-        .pvw-section-wrap.drag-over-top { border-top:3px solid #2d8653 !important; }
-        .pvw-section-wrap.drag-over-bot { border-bottom:3px solid #2d8653 !important; }
-        .pvw-section-wrap.dragging-now { opacity:.35; }
+        .pvw-section-wrap { position:relative; transition:opacity .15s; }
+        .pvw-section-wrap.reorder-on { outline:2px dashed #b7e4c7; border-radius:6px; margin-bottom:4px; }
+        .pvw-section-wrap.reorder-on:hover { outline:2px solid #2d8653; background:rgba(45,134,83,.03); }
+        .pvw-section-wrap.drag-indicator-top { border-top:3px solid #2d8653 !important; }
+        .pvw-section-wrap.drag-indicator-bot { border-bottom:3px solid #2d8653 !important; }
+        .pvw-section-wrap.dragging-now { opacity:.3; }
         .pvw-drag-handle {
-          display:none; position:absolute; top:4px; right:4px;
-          background:#2d8653; color:#fff; border-radius:5px;
-          padding:3px 7px; font-size:11px; cursor:grab; user-select:none;
-          z-index:99; font-weight:700; letter-spacing:.5px; line-height:1.4;
-          box-shadow:0 2px 8px rgba(0,0,0,.18);
+          display:none; position:absolute; top:50%; right:-2px;
+          transform:translateY(-50%);
+          background:#2d8653; color:#fff; border-radius:6px;
+          padding:5px 8px; font-size:11px; cursor:grab; user-select:none;
+          z-index:999; font-weight:700; line-height:1; white-space:nowrap;
+          box-shadow:0 2px 10px rgba(0,0,0,.25); letter-spacing:.3px;
         }
-        .reorder-on .pvw-drag-handle { display:block; }
-        body.reorder-mode .preview-content { outline:2px dashed #cce5d3; border-radius:8px; }
+        .pvw-drag-handle:active { cursor:grabbing; }
+        .reorder-on .pvw-drag-handle { display:flex; align-items:center; gap:4px; }
+        body.reorder-mode .preview-panel { background:#e8f5e3 !important; }
+        body.reorder-mode .preview-content > * { transform:scale(0.88); transform-origin:top center; }
       `;
       document.head.appendChild(st);
 
       function getSectionBlocks(preview) {
         const secIds = ['previewSummary','previewExperience','previewEducation','previewSkills','previewProjects','previewCertifications','previewAwards','previewLanguages'];
+        const seen = new WeakSet();
         const blocks = [];
+
+        // Block-class patterns to stop at
+        const BLOCK_RE = /\br-block\b|\bpb-block\b|\br-block-wrap\b|\br-sec-wrap\b|\bsection\b/;
+
         secIds.forEach(id => {
           const el = preview.querySelector('#' + id);
           if (!el) return;
-          // walk up to find a block-level parent inside preview
+
           let node = el;
-          for (let i = 0; i < 6; i++) {
-            if (!node.parentElement) break;
-            const p = node.parentElement;
-            if (p === preview) { blocks.push({ node, id }); return; }
-            // stop at known layout containers
-            if (p.classList.contains('r-main') || p.classList.contains('pb-main') ||
-                p.classList.contains('r-body') || p.classList.contains('r-columns') ||
-                p.classList.contains('r-side') || p.classList.contains('r-aside')) {
-              blocks.push({ node, id }); return;
-            }
-            // if node has class r-block, stop here
-            if (node.classList.contains('r-block') || node.classList.contains('pb-block') ||
-                node.classList.contains('section') || node.classList.contains('r-block-wrap')) {
-              blocks.push({ node, id }); return;
-            }
-            node = p;
+          let found = null;
+
+          for (let i = 0; i < 10; i++) {
+            if (!node || node === preview) break;
+            const cls = node.getAttribute('class') || '';
+            if (BLOCK_RE.test(cls)) { found = node; break; }
+            node = node.parentElement;
           }
-          blocks.push({ node, id });
+
+          // Fallback: use immediate parent of the preview element
+          if (!found) found = el.parentElement === preview ? el : (el.parentElement || el);
+
+          if (found && !seen.has(found)) {
+            seen.add(found);
+            blocks.push({ node: found, id });
+          }
         });
         return blocks;
       }
@@ -1552,33 +1577,43 @@
         preview.querySelectorAll('.pvw-section-wrap').forEach(wrap => {
           wrap.classList.add('reorder-on');
           wrap.setAttribute('draggable', 'true');
+
           wrap.ondragstart = e => {
             dragSrc = wrap;
-            wrap.classList.add('dragging-now');
+            setTimeout(() => wrap.classList.add('dragging-now'), 0);
             e.dataTransfer.effectAllowed = 'move';
+            // Custom drag image — shows section label, not full resume
+            const ghost = document.createElement('div');
+            const label = (wrap.querySelector('[id^="preview"]')?.id || '').replace('preview','') || 'Section';
+            ghost.textContent = '⠿  Moving ' + label;
+            ghost.style.cssText = 'position:fixed;top:-200px;left:-200px;background:#2d8653;color:#fff;padding:10px 18px;border-radius:8px;font-family:Inter,sans-serif;font-size:13px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.3);white-space:nowrap;';
+            document.body.appendChild(ghost);
+            e.dataTransfer.setDragImage(ghost, 60, 20);
+            setTimeout(() => ghost.remove(), 200);
           };
+
           wrap.ondragend = () => {
             dragSrc = null;
             preview.querySelectorAll('.pvw-section-wrap').forEach(w => {
-              w.classList.remove('dragging-now','drag-over-top','drag-over-bot');
+              w.classList.remove('dragging-now','drag-indicator-top','drag-indicator-bot');
             });
           };
+
           wrap.ondragover = e => {
             e.preventDefault();
             if (!dragSrc || dragSrc === wrap) return;
-            preview.querySelectorAll('.pvw-section-wrap').forEach(w => w.classList.remove('drag-over-top','drag-over-bot'));
+            preview.querySelectorAll('.pvw-section-wrap').forEach(w => w.classList.remove('drag-indicator-top','drag-indicator-bot'));
             const rect = wrap.getBoundingClientRect();
-            const mid = rect.top + rect.height / 2;
-            if (e.clientY < mid) wrap.classList.add('drag-over-top');
-            else wrap.classList.add('drag-over-bot');
+            if (e.clientY < rect.top + rect.height / 2) wrap.classList.add('drag-indicator-top');
+            else wrap.classList.add('drag-indicator-bot');
           };
+
           wrap.ondrop = e => {
             e.preventDefault();
             if (!dragSrc || dragSrc === wrap) return;
-            wrap.classList.remove('drag-over-top','drag-over-bot');
+            wrap.classList.remove('drag-indicator-top','drag-indicator-bot');
             const rect = wrap.getBoundingClientRect();
-            const mid = rect.top + rect.height / 2;
-            if (e.clientY < mid) wrap.parentNode.insertBefore(dragSrc, wrap);
+            if (e.clientY < rect.top + rect.height / 2) wrap.parentNode.insertBefore(dragSrc, wrap);
             else wrap.parentNode.insertBefore(dragSrc, wrap.nextSibling);
           };
         });
@@ -1626,6 +1661,139 @@
         }
       });
     })();
+    // ── ATS File Checker ─────────────────────────────────────────
+    window.runFileATS = async function(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const prog = document.getElementById('atsFileProgress');
+      const bar = document.getElementById('atsFileBar');
+      const status = document.getElementById('atsFileStatus');
+      const result = document.getElementById('atsFileResult');
+      const label = document.getElementById('atsUploadLabel');
+
+      prog.style.display = 'block';
+      result.style.display = 'none';
+      label.style.display = 'none';
+      bar.style.width = '0%';
+      status.textContent = 'Reading file...';
+
+      function setProgress(pct, msg) { bar.style.width = pct + '%'; status.textContent = msg; }
+
+      try {
+        let text = '';
+
+        if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+          setProgress(20, 'Parsing PDF...');
+          const arrayBuf = await file.arrayBuffer();
+          if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+            for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
+              const page = await pdf.getPage(i);
+              const tc = await page.getTextContent();
+              text += tc.items.map(t => t.str).join(' ') + '\n';
+            }
+          } else {
+            text = await file.text().catch(() => '');
+          }
+        } else if (file.name.match(/\.docx?$/i)) {
+          setProgress(20, 'Parsing document...');
+          text = await file.text().catch(() => '');
+          text = text.replace(/<[^>]+>/g, ' ').replace(/[^\x20-\x7E\n]/g, ' ');
+        } else {
+          text = await file.text();
+        }
+
+        if (!text || text.trim().length < 50) throw new Error('Could not extract text. Try a text-based PDF.');
+
+        setProgress(45, 'Running ATS analysis...');
+        await new Promise(r => setTimeout(r, 800));
+        setProgress(65, 'AI scoring your resume...');
+
+        // Groq ATS analysis
+        const _k2 = (p=>atob(p.join('')))(['Z3NrX','3BuOFh','tVVl5VF','M2VldrW','EF1QUpx','V0dkeWI','zRllKOT','B3MXc2M','2lFd3BY','d3J5cmV','Yb3dtblA=']);
+        const prompt = `You are a senior ATS expert. Analyze this resume and provide a detailed ATS report.
+
+Resume text:
+${text.slice(0, 3500)}
+
+Provide your analysis in EXACTLY this JSON format (no extra text):
+{
+  "overall": 78,
+  "grade": "B+",
+  "categories": {
+    "contact": {"score": 18, "max": 20, "issues": ["Missing LinkedIn URL"]},
+    "format": {"score": 17, "max": 20, "issues": ["Good clean structure"]},
+    "content": {"score": 19, "max": 25, "issues": ["Add more quantifiable achievements"]},
+    "keywords": {"score": 14, "max": 20, "issues": ["Add more industry keywords"]},
+    "structure": {"score": 10, "max": 15, "issues": ["All standard sections present"]}
+  },
+  "strengths": ["Strong action verbs used", "Clear contact information"],
+  "critical_fixes": ["Add LinkedIn URL", "Quantify at least 3 more achievements", "Add skills section keywords"],
+  "missing_sections": ["Certifications", "LinkedIn"],
+  "keyword_suggestions": ["Python", "SQL", "Project Management", "Agile", "Data Analysis"],
+  "verdict": "Good resume with minor improvements needed. ATS will likely pass it."
+}`;
+
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_k2}` },
+          body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }], max_tokens: 1200, temperature: 0.3 })
+        });
+
+        setProgress(90, 'Building report...');
+        const data = await res.json();
+        const raw = data.choices?.[0]?.message?.content || '';
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Could not parse AI response');
+        const r = JSON.parse(jsonMatch[0]);
+
+        setProgress(100, 'Done!');
+        await new Promise(x => setTimeout(x, 400));
+        prog.style.display = 'none';
+
+        const scoreColor = r.overall >= 80 ? '#22a06b' : r.overall >= 60 ? '#f0a500' : '#ef4444';
+        const catIcons = { contact:'📞', format:'📄', content:'✍️', keywords:'🔍', structure:'🏗️' };
+
+        result.innerHTML = `
+          <div style="background:#f8fafb;border:1px solid #e5e7eb;border-radius:12px;padding:16px;font-size:0.8rem;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:56px;height:56px;border-radius:50%;background:${scoreColor}15;border:3px solid ${scoreColor};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+                <span style="font-size:1.1rem;font-weight:800;color:${scoreColor};line-height:1">${r.overall}</span>
+                <span style="font-size:0.55rem;color:${scoreColor};font-weight:700">${r.grade||''}</span>
+              </div>
+              <div>
+                <div style="font-weight:700;color:#111;font-size:0.85rem;">ATS Score: ${r.overall}/100</div>
+                <div style="color:#555;line-height:1.4;margin-top:2px;">${r.verdict||''}</div>
+              </div>
+            </div>
+            ${Object.entries(r.categories||{}).map(([k,v])=>`
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+                <span>${catIcons[k]||'•'}</span>
+                <span style="min-width:70px;color:#444;">${k.charAt(0).toUpperCase()+k.slice(1)}</span>
+                <div style="flex:1;background:#e5e7eb;border-radius:4px;height:6px;">
+                  <div style="background:${v.score/v.max>=.8?'#22a06b':v.score/v.max>=.6?'#f0a500':'#ef4444'};width:${Math.round(v.score/v.max*100)}%;height:6px;border-radius:4px;"></div>
+                </div>
+                <span style="min-width:32px;text-align:right;font-weight:700;color:#333">${v.score}/${v.max}</span>
+              </div>`).join('')}
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e5e7eb;">
+              <div style="font-weight:700;color:#ef4444;margin-bottom:4px;">🔧 Fix These First:</div>
+              ${(r.critical_fixes||[]).slice(0,3).map(f=>`<div style="color:#555;margin-bottom:3px;">• ${f}</div>`).join('')}
+            </div>
+            ${(r.keyword_suggestions||[]).length?`<div style="margin-top:8px;"><span style="font-weight:600;color:#2d8653;">Add keywords: </span>${r.keyword_suggestions.slice(0,5).map(k=>`<span style="background:#e8f5e3;color:#166534;padding:1px 7px;border-radius:20px;margin:2px;display:inline-block;">${k}</span>`).join('')}</div>`:''}
+            <button onclick="document.getElementById('atsFileResult').style.display='none';document.getElementById('atsUploadLabel').style.display='flex';document.getElementById('atsFileInput').value='';" style="margin-top:10px;width:100%;padding:7px;background:none;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.78rem;color:#555;">↑ Check another resume</button>
+          </div>`;
+        result.style.display = 'block';
+        label.style.display = 'none';
+
+      } catch(err) {
+        prog.style.display = 'none';
+        label.style.display = 'flex';
+        result.innerHTML = `<div style="color:#ef4444;font-size:0.78rem;padding:8px;background:#fef2f2;border-radius:6px;">❌ ${err.message}</div>`;
+        result.style.display = 'block';
+      }
+      input.value = '';
+    };
     </script>
 </body>
 </html>
