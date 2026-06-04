@@ -135,46 +135,64 @@
       .hero-trust-dot { width: 7px; height: 7px; border-radius: 50%; background: #b7e4c7; flex-shrink: 0; }
 
       /* Hero right — mock resume card */
-      .hero-right { position: relative; }
-      .mock-resume {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.25);
-        overflow: hidden;
-        transform: rotate(2deg);
-        transition: transform 0.3s;
+      /* ── Hero right — cycling resume card carousel ──────────── */
+      .hero-right { position: relative; display: flex; align-items: center; justify-content: center; }
+      .hrc-wrap { position: relative; width: 290px; height: 390px; }
+      .hrc-card {
+        position: absolute; inset: 0;
+        background: #fff; border-radius: 14px;
+        box-shadow: 0 20px 56px rgba(0,0,0,0.28);
+        overflow: hidden; opacity: 0;
+        animation: hrc-show 30s ease-in-out infinite;
       }
-      .mock-resume:hover { transform: rotate(0deg); }
-      .mock-header { background: linear-gradient(135deg, #1f6b42, #2d8653); padding: 20px 22px; }
-      .mock-name { background: rgba(255,255,255,0.9); height: 14px; border-radius: 4px; width: 55%; margin-bottom: 8px; }
-      .mock-title { background: rgba(255,255,255,0.5); height: 9px; border-radius: 4px; width: 38%; }
-      .mock-body { padding: 18px 22px; }
-      .mock-section-label { background: #e8f5e3; height: 8px; border-radius: 3px; width: 30%; margin-bottom: 10px; }
-      .mock-line { background: #f0f0f0; height: 7px; border-radius: 3px; margin-bottom: 7px; }
-      .mock-line.w90 { width: 90%; }
-      .mock-line.w75 { width: 75%; }
-      .mock-line.w60 { width: 60%; }
-      .mock-line.w85 { width: 85%; }
-      .mock-skill-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-      .mock-skill { background: #e8f5e3; border-radius: 20px; height: 20px; width: 50px; }
-      .mock-skill.lg { width: 70px; }
+      @keyframes hrc-show {
+        0%   { opacity:0; transform:translateY(16px) scale(.96); }
+        4%   { opacity:1; transform:translateY(0) scale(1); }
+        16%  { opacity:1; transform:translateY(0) scale(1); }
+        20%  { opacity:0; transform:translateY(-10px) scale(.97); }
+        100% { opacity:0; }
+      }
+      .hrc-card:nth-child(1){animation-delay:0s;}
+      .hrc-card:nth-child(2){animation-delay:5s;}
+      .hrc-card:nth-child(3){animation-delay:10s;}
+      .hrc-card:nth-child(4){animation-delay:15s;}
+      .hrc-card:nth-child(5){animation-delay:20s;}
+      .hrc-card:nth-child(6){animation-delay:25s;}
+      .hrc-tpl-name {
+        position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+        background:rgba(0,0,0,.6); color:#fff;
+        font-size:.67rem; font-weight:700; letter-spacing:.5px;
+        padding:4px 12px; border-radius:20px; white-space:nowrap;
+      }
+      /* Card layout helpers */
+      .hrc-top { padding: 16px 16px 12px; }
+      .hrc-body { padding: 0 16px 10px; }
+      .hrc-sidebar-wrap { display:flex; height:calc(100% - 0px); }
+      .hrc-sidebar { padding:14px 10px; flex-shrink:0; }
+      .hrc-main { flex:1; padding:14px 12px; }
+      .hrc-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.35); margin-bottom:8px; }
+      .hrc-b { border-radius:3px; margin-bottom:6px; }
+      .hrc-b.nm  { height:11px; width:68%; background:rgba(255,255,255,.95); }
+      .hrc-b.tt  { height:7px;  width:48%; background:rgba(255,255,255,.65); }
+      .hrc-b.s90 { height:6px;  width:90%; background:#ebebeb; }
+      .hrc-b.s75 { height:6px;  width:75%; background:#ebebeb; }
+      .hrc-b.s60 { height:6px;  width:60%; background:#ebebeb; }
+      .hrc-b.s80 { height:6px;  width:80%; background:#ebebeb; }
+      .hrc-b.s50 { height:6px;  width:50%; background:#ebebeb; }
+      .hrc-sec { height:7px; border-radius:3px; width:32%; margin-bottom:7px; }
+      .hrc-sk { display:flex; gap:4px; flex-wrap:wrap; margin:6px 0; }
+      .hrc-sk span { height:13px; border-radius:20px; background:#e0f0e8; display:inline-block; }
+      .hrc-div { border:none; border-top:1px solid rgba(255,255,255,.25); margin:8px 0; }
+      /* ATS badge */
       .mock-badge {
-        position: absolute;
-        bottom: -12px;
-        right: -12px;
-        background: #fff;
-        border-radius: 12px;
-        padding: 12px 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: #1a2e20;
-        transform: rotate(-2deg);
+        position:absolute; bottom:-14px; right:-14px;
+        background:#fff; border-radius:12px;
+        padding:10px 14px; box-shadow:0 8px 24px rgba(0,0,0,.15);
+        display:flex; align-items:center; gap:10px;
+        font-size:.82rem; font-weight:600; color:#1a2e20;
+        transform:rotate(-2deg);
       }
-      .mock-score { font-size: 1.4rem; font-weight: 800; color: #2d8653; }
+      .mock-score { font-size:1.4rem; font-weight:800; color:#2d8653; }
 
       /* ── Stats Bar ─────────────────────────────────────────── */
       .stats-bar {
@@ -321,20 +339,45 @@
       .testi-role { font-size: 0.78rem; color: var(--text-secondary); }
       .testi-stars { color: #f0a500; font-size: 0.9rem; margin-bottom: 14px; }
 
-      /* ── Comparison ────────────────────────────────────────── */
-      .comparison-section-new { padding: 80px 0; background: var(--bg-primary); }
-      .compare-table-wrap { overflow-x: auto; margin-top: 48px; border-radius: 16px; box-shadow: var(--shadow-md); }
-      .compare-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); }
-      .compare-table th { padding: 16px 20px; text-align: left; font-size: 0.85rem; font-weight: 700; border-bottom: 2px solid var(--border-color); }
-      .compare-table td { padding: 14px 20px; font-size: 0.875rem; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
-      .compare-table tr:last-child td { border-bottom: none; }
-      .compare-table tr:hover td { background: var(--bg-secondary); }
-      .cmr-col-h { color: var(--primary-color); font-weight: 800; font-size: 0.95rem; }
-      .cmr-col-d { background: rgba(45,134,83,0.06); font-weight: 600; color: var(--text-primary); }
-      .badge-best { background: var(--primary-color); color: #fff; font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; font-weight: 700; vertical-align: middle; margin-left: 6px; }
-      .c-yes { color: #22a06b; font-weight: 700; }
-      .c-no { color: #ef4444; }
-      .c-partial { color: #f0a500; font-weight: 500; font-size: 0.8rem; }
+      /* ── Template Showcase ─────────────────────────────────── */
+      .tpl-showcase-section { padding: 80px 0; background: var(--bg-primary); overflow: hidden; }
+      .tpl-track-outer { overflow: hidden; margin-top: 48px; position: relative; }
+      .tpl-track-outer::before,
+      .tpl-track-outer::after {
+        content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+      }
+      .tpl-track-outer::before { left: 0; background: linear-gradient(to right, var(--bg-primary), transparent); }
+      .tpl-track-outer::after  { right: 0; background: linear-gradient(to left, var(--bg-primary), transparent); }
+      .tpl-track { display: flex; gap: 16px; width: max-content; margin-bottom: 16px; }
+      .tpl-track.row1 { animation: tpl-scroll-l 28s linear infinite; }
+      .tpl-track.row2 { animation: tpl-scroll-r 32s linear infinite; }
+      @keyframes tpl-scroll-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      @keyframes tpl-scroll-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+      .tpl-mini {
+        flex-shrink: 0; width: 140px; height: 185px;
+        border-radius: 10px; overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,.1);
+        border: 1px solid var(--border-color);
+        background: #fff; position: relative; cursor: pointer;
+        transition: transform .2s, box-shadow .2s;
+      }
+      .tpl-mini:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,.15); }
+      .tpl-mini-hdr { height: 42px; display: flex; align-items: center; padding: 0 10px; gap: 7px; }
+      .tpl-mini-av { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.4); flex-shrink: 0; }
+      .tpl-mini-nm { flex: 1; }
+      .tpl-mini-nm .b1 { height: 7px; border-radius: 3px; background: rgba(255,255,255,.9); margin-bottom: 4px; width: 70%; }
+      .tpl-mini-nm .b2 { height: 5px; border-radius: 3px; background: rgba(255,255,255,.55); width: 52%; }
+      .tpl-mini-body { padding: 8px 10px; }
+      .tpl-mini-body .sec { height: 5px; border-radius: 2px; width: 30%; margin-bottom: 5px; }
+      .tpl-mini-body .ln  { height: 4px; border-radius: 2px; background: #e8eaed; margin-bottom: 4px; }
+      .tpl-mini-body .ln.a { width: 92%; } .tpl-mini-body .ln.b { width: 78%; } .tpl-mini-body .ln.c { width: 65%; }
+      .tpl-mini-name {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: rgba(0,0,0,.62); color: #fff;
+        font-size: .62rem; font-weight: 700;
+        text-align: center; padding: 5px 4px;
+        letter-spacing: .3px;
+      }
 
       /* ── FAQ ───────────────────────────────────────────────── */
       .faq-section-new { padding: 80px 0; background: var(--bg-secondary); }
@@ -478,34 +521,131 @@
                         </div>
                     </div>
                     <div class="hero-right">
-                        <div class="mock-resume" id="animResume">
-                            <div class="mock-header">
-                                <div class="mock-name anim-fill" style="animation-delay:0.2s"></div>
-                                <div class="mock-title anim-fill" style="animation-delay:0.5s"></div>
-                            </div>
-                            <div class="mock-body">
-                                <div class="mock-section-label anim-fill" style="animation-delay:0.8s"></div>
-                                <div class="mock-line w90 anim-fill" style="animation-delay:1s"></div>
-                                <div class="mock-line w75 anim-fill" style="animation-delay:1.2s"></div>
-                                <div class="mock-line w85 anim-fill" style="animation-delay:1.4s"></div>
-                                <br>
-                                <div class="mock-section-label anim-fill" style="animation-delay:1.6s"></div>
-                                <div class="mock-line w90 anim-fill" style="animation-delay:1.8s"></div>
-                                <div class="mock-line w60 anim-fill" style="animation-delay:2s"></div>
-                                <br>
-                                <div class="mock-section-label anim-fill" style="animation-delay:2.2s"></div>
-                                <div class="mock-skill-row">
-                                    <div class="mock-skill lg anim-fill" style="animation-delay:2.4s"></div>
-                                    <div class="mock-skill anim-fill" style="animation-delay:2.5s"></div>
-                                    <div class="mock-skill lg anim-fill" style="animation-delay:2.6s"></div>
-                                    <div class="mock-skill anim-fill" style="animation-delay:2.7s"></div>
-                                    <div class="mock-skill lg anim-fill" style="animation-delay:2.8s"></div>
+                        <div class="hrc-wrap">
+                            <!-- Card 1: Modern Pro — green header, avatar, clean body -->
+                            <div class="hrc-card">
+                                <div class="hrc-top" style="background:linear-gradient(135deg,#1f6b42,#2d8653);">
+                                    <div class="hrc-avatar"></div>
+                                    <div class="hrc-b nm"></div>
+                                    <div class="hrc-b tt"></div>
                                 </div>
+                                <div class="hrc-body" style="padding-top:12px;">
+                                    <div class="hrc-sec" style="background:#d1f0de;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                    <div class="hrc-sec" style="background:#d1f0de;margin-top:10px;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s60"></div>
+                                    <div class="hrc-sec" style="background:#d1f0de;margin-top:10px;"></div>
+                                    <div class="hrc-sk"><span style="width:44px;"></span><span style="width:36px;"></span><span style="width:52px;"></span><span style="width:38px;"></span></div>
+                                </div>
+                                <div class="hrc-tpl-name">Modern Pro</div>
+                            </div>
+                            <!-- Card 2: Harvard ATS — white/black, centered header, thin rule lines -->
+                            <div class="hrc-card">
+                                <div class="hrc-top" style="background:#fff;border-bottom:2px solid #111;text-align:center;padding:20px 16px 12px;">
+                                    <div class="hrc-b nm" style="background:#222;margin:0 auto 6px;width:55%;"></div>
+                                    <div class="hrc-b tt" style="background:#555;margin:0 auto;width:40%;"></div>
+                                    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+                                        <div class="hrc-b" style="width:50px;height:5px;background:#888;"></div>
+                                        <div class="hrc-b" style="width:50px;height:5px;background:#888;"></div>
+                                    </div>
+                                </div>
+                                <div class="hrc-body" style="padding-top:12px;">
+                                    <div class="hrc-sec" style="background:#ddd;width:28%;"></div>
+                                    <div style="border-top:1px solid #ccc;margin:4px 0 8px;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                    <div class="hrc-sec" style="background:#ddd;width:28%;margin-top:10px;"></div>
+                                    <div style="border-top:1px solid #ccc;margin:4px 0 8px;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s60"></div>
+                                </div>
+                                <div class="hrc-tpl-name">Harvard ATS</div>
+                            </div>
+                            <!-- Card 3: Navy Executive — dark navy sidebar, gold accent -->
+                            <div class="hrc-card">
+                                <div class="hrc-sidebar-wrap" style="height:100%;">
+                                    <div class="hrc-sidebar" style="background:#0d1b3e;width:90px;">
+                                        <div class="hrc-avatar" style="background:rgba(255,255,255,.2);"></div>
+                                        <div class="hrc-b nm" style="background:rgba(255,255,255,.85);width:80%;"></div>
+                                        <div class="hrc-b tt" style="background:rgba(255,255,255,.45);width:70%;"></div>
+                                        <div class="hrc-div"></div>
+                                        <div class="hrc-b s90" style="background:rgba(255,255,255,.3);width:80%;"></div>
+                                        <div class="hrc-b s75" style="background:rgba(255,255,255,.3);width:70%;"></div>
+                                        <div class="hrc-b s60" style="background:rgba(255,255,255,.3);width:60%;"></div>
+                                    </div>
+                                    <div class="hrc-main">
+                                        <div class="hrc-sec" style="background:#c9a84c;"></div>
+                                        <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                        <div class="hrc-sec" style="background:#c9a84c;margin-top:10px;"></div>
+                                        <div class="hrc-b s90"></div><div class="hrc-b s60"></div>
+                                        <div class="hrc-sec" style="background:#c9a84c;margin-top:10px;"></div>
+                                        <div class="hrc-sk"><span style="width:36px;background:#e8eaed;"></span><span style="width:44px;background:#e8eaed;"></span><span style="width:30px;background:#e8eaed;"></span></div>
+                                    </div>
+                                </div>
+                                <div class="hrc-tpl-name">Navy Executive</div>
+                            </div>
+                            <!-- Card 4: Tech Minimal — dark header band, monospace feel -->
+                            <div class="hrc-card">
+                                <div style="background:#1a1a2e;padding:16px;display:flex;align-items:center;gap:10px;">
+                                    <div style="width:36px;height:36px;border-radius:6px;background:#4ade80;flex-shrink:0;"></div>
+                                    <div>
+                                        <div class="hrc-b nm" style="background:rgba(255,255,255,.9);"></div>
+                                        <div class="hrc-b tt" style="background:#4ade80;"></div>
+                                    </div>
+                                </div>
+                                <div class="hrc-body" style="padding-top:12px;">
+                                    <div class="hrc-sec" style="background:#4ade80;opacity:.6;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                    <div class="hrc-sec" style="background:#4ade80;opacity:.6;margin-top:10px;"></div>
+                                    <div class="hrc-b s90"></div><div class="hrc-b s60"></div>
+                                    <div class="hrc-sec" style="background:#4ade80;opacity:.6;margin-top:10px;"></div>
+                                    <div class="hrc-sk"><span style="width:48px;background:#e0f0e8;"></span><span style="width:36px;background:#e0f0e8;"></span><span style="width:52px;background:#e0f0e8;"></span></div>
+                                </div>
+                                <div class="hrc-tpl-name">Tech Minimal</div>
+                            </div>
+                            <!-- Card 5: Classic Serif — traditional left-aligned, serif feel -->
+                            <div class="hrc-card" style="padding:20px 18px;">
+                                <div style="border-bottom:3px double #333;padding-bottom:10px;margin-bottom:12px;">
+                                    <div class="hrc-b nm" style="background:#222;width:60%;height:13px;"></div>
+                                    <div class="hrc-b tt" style="background:#555;width:45%;"></div>
+                                    <div style="display:flex;gap:6px;margin-top:6px;">
+                                        <div class="hrc-b" style="width:55px;height:5px;background:#999;"></div>
+                                        <div class="hrc-b" style="width:55px;height:5px;background:#999;"></div>
+                                        <div class="hrc-b" style="width:55px;height:5px;background:#999;"></div>
+                                    </div>
+                                </div>
+                                <div class="hrc-sec" style="background:#ccc;"></div>
+                                <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                <div class="hrc-sec" style="background:#ccc;margin-top:10px;"></div>
+                                <div class="hrc-b s90"></div><div class="hrc-b s60"></div><div class="hrc-b s75"></div>
+                                <div class="hrc-sec" style="background:#ccc;margin-top:10px;"></div>
+                                <div class="hrc-b s90"></div><div class="hrc-b s50"></div>
+                                <div class="hrc-tpl-name">Classic Serif</div>
+                            </div>
+                            <!-- Card 6: Bold Creative — teal accent, bold left bar -->
+                            <div class="hrc-card">
+                                <div class="hrc-sidebar-wrap" style="height:100%;">
+                                    <div class="hrc-sidebar" style="background:#0ea5e9;width:8px;flex-shrink:0;padding:0;"></div>
+                                    <div style="flex:1;padding:18px 16px;">
+                                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                                            <div style="width:40px;height:40px;border-radius:50%;background:#e0f7fa;flex-shrink:0;border:3px solid #0ea5e9;"></div>
+                                            <div>
+                                                <div class="hrc-b nm" style="background:#0c4a6e;width:100px;"></div>
+                                                <div class="hrc-b tt" style="background:#0ea5e9;width:75px;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="hrc-sec" style="background:#bae6fd;"></div>
+                                        <div class="hrc-b s90"></div><div class="hrc-b s75"></div><div class="hrc-b s80"></div>
+                                        <div class="hrc-sec" style="background:#bae6fd;margin-top:10px;"></div>
+                                        <div class="hrc-b s90"></div><div class="hrc-b s60"></div>
+                                        <div class="hrc-sec" style="background:#bae6fd;margin-top:10px;"></div>
+                                        <div class="hrc-sk"><span style="width:44px;background:#e0f7fa;"></span><span style="width:36px;background:#e0f7fa;"></span><span style="width:50px;background:#e0f7fa;"></span></div>
+                                    </div>
+                                </div>
+                                <div class="hrc-tpl-name">Bold Creative</div>
                             </div>
                         </div>
-                        <div class="mock-badge anim-badge">
+                        <div class="mock-badge" style="animation:badgeSlide .5s ease 1s forwards;opacity:0;">
                             <div>
-                                <div class="mock-score" id="heroScore">0</div>
+                                <div class="mock-score" id="heroScore">98</div>
                                 <div style="font-size:0.7rem;color:#4d6b57">ATS Score</div>
                             </div>
                             <div>
@@ -802,36 +942,61 @@
             </div>
         </section>
 
-        <!-- COMPARISON -->
-        <section class="comparison-section-new">
+        <!-- TEMPLATE SHOWCASE -->
+        <section class="tpl-showcase-section">
             <div class="container">
                 <div class="sec-header">
-                    <span class="sec-label">Why CMR?</span>
-                    <h2 class="sec-title">Better Than the Rest — And Free</h2>
-                    <p class="sec-desc">See how Craftez My Resume stacks up against the biggest names.</p>
+                    <span class="sec-label">170+ Designs</span>
+                    <h2 class="sec-title">Every Style. Every Industry.</h2>
+                    <p class="sec-desc">From ATS-friendly classics to creative portfolios — pick any design and your data fills in instantly.</p>
                 </div>
-                <div class="compare-table-wrap">
-                    <table class="compare-table">
-                        <thead>
-                            <tr>
-                                <th>Feature</th>
-                                <th class="cmr-col-h">CMR <span class="badge-best">Best</span></th>
-                                <th>Canva</th>
-                                <th>Resume.io</th>
-                                <th>Novoresume</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>100% Free (no watermark)</td><td class="cmr-col-d"><span class="c-yes">✅ Yes</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td></tr>
-                            <tr><td>AI Resume Generator</td><td class="cmr-col-d"><span class="c-yes">✅ Local AI</span></td><td><span class="c-no">❌</span></td><td><span class="c-partial">🔒 Paid</span></td><td><span class="c-partial">🔒 Paid</span></td></tr>
-                            <tr><td>Real-time ATS Scoring</td><td class="cmr-col-d"><span class="c-yes">✅ 30-point</span></td><td><span class="c-no">❌</span></td><td><span class="c-partial">Basic</span></td><td><span class="c-partial">Basic</span></td></tr>
-                            <tr><td>170+ Templates</td><td class="cmr-col-d"><span class="c-yes">✅</span></td><td><span class="c-partial">Some</span></td><td><span class="c-partial">Limited</span></td><td><span class="c-partial">Limited</span></td></tr>
-                            <tr><td>CV Formats</td><td class="cmr-col-d"><span class="c-yes">✅ 5 CV Types</span></td><td><span class="c-no">❌</span></td><td><span class="c-partial">Basic</span></td><td><span class="c-no">❌</span></td></tr>
-                            <tr><td>Cover Letter + Signature</td><td class="cmr-col-d"><span class="c-yes">✅ Free</span></td><td><span class="c-partial">No sig</span></td><td><span class="c-partial">🔒 Paid</span></td><td><span class="c-partial">🔒 Paid</span></td></tr>
-                            <tr><td>100% Private (no server)</td><td class="cmr-col-d"><span class="c-yes">✅</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td></tr>
-                            <tr><td>No Account Required</td><td class="cmr-col-d"><span class="c-yes">✅</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td><td><span class="c-no">❌</span></td></tr>
-                        </tbody>
-                    </table>
+            </div>
+            <div class="tpl-track-outer" style="margin-top:48px;">
+                <!-- Row 1 scrolls left -->
+                <div class="tpl-track row1">
+                    <!-- set 1 -->
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1f6b42;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#d1f0de;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Modern Pro</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#fff;border-bottom:2px solid #111;justify-content:center;"><div class="tpl-mini-nm" style="text-align:center;"><div class="b1" style="background:#222;margin:0 auto;"></div><div class="b2" style="background:#555;margin:0 auto;"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#ccc;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#ccc;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Harvard ATS</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#0d1b3e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#c9a84c;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#c9a84c;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Navy Executive</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#7c3aed;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#e9d5ff;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e9d5ff;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Executive Purple</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1a1a2e;"><div class="tpl-mini-av" style="border-radius:6px;background:#4ade80;"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2" style="background:#4ade80;opacity:.7;"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bbf7d0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bbf7d0;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Tech Minimal</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="width:8px;background:#0ea5e9;flex-shrink:0;"></div><div style="flex:1;padding:10px 8px;"><div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;"><div style="width:20px;height:20px;border-radius:50%;background:#e0f7fa;border:2px solid #0ea5e9;flex-shrink:0;"></div><div style="flex:1;"><div class="b1" style="background:#0c4a6e;"></div><div class="b2" style="background:#0ea5e9;"></div></div></div><div class="sec" style="background:#bae6fd;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bae6fd;margin-top:5px;"></div><div class="ln a"></div></div></div><div class="tpl-mini-name">Bold Creative</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#dc2626;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fecaca;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fecaca;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Classic Red</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#0f766e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#ccfbf1;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#ccfbf1;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Teal Pro</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#b45309;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fef3c7;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fef3c7;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Warm Business</div></div>
+                    <!-- duplicate set 1 for seamless loop -->
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1f6b42;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#d1f0de;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Modern Pro</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#fff;border-bottom:2px solid #111;justify-content:center;"><div class="tpl-mini-nm" style="text-align:center;"><div class="b1" style="background:#222;margin:0 auto;"></div><div class="b2" style="background:#555;margin:0 auto;"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#ccc;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#ccc;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Harvard ATS</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#0d1b3e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#c9a84c;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#c9a84c;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Navy Executive</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#7c3aed;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#e9d5ff;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e9d5ff;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Executive Purple</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1a1a2e;"><div class="tpl-mini-av" style="border-radius:6px;background:#4ade80;"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2" style="background:#4ade80;opacity:.7;"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bbf7d0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bbf7d0;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Tech Minimal</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="width:8px;background:#0ea5e9;flex-shrink:0;"></div><div style="flex:1;padding:10px 8px;"><div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;"><div style="width:20px;height:20px;border-radius:50%;background:#e0f7fa;border:2px solid #0ea5e9;flex-shrink:0;"></div><div style="flex:1;"><div class="b1" style="background:#0c4a6e;"></div><div class="b2" style="background:#0ea5e9;"></div></div></div><div class="sec" style="background:#bae6fd;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bae6fd;margin-top:5px;"></div><div class="ln a"></div></div></div><div class="tpl-mini-name">Bold Creative</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#dc2626;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fecaca;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fecaca;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Classic Red</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#0f766e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#ccfbf1;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#ccfbf1;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Teal Pro</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#b45309;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fef3c7;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fef3c7;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Warm Business</div></div>
+                </div>
+                <!-- Row 2 scrolls right -->
+                <div class="tpl-track row2">
+                    <!-- set 2 -->
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1e3a5f;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bfdbfe;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bfdbfe;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Blue Accent ATS</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="width:45px;background:#2d3748;flex-shrink:0;padding:10px 6px;"><div class="tpl-mini-av"></div><div style="height:5px;border-radius:2px;background:rgba(255,255,255,.6);margin-bottom:4px;width:80%;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.3);width:70%;"></div></div><div style="flex:1;padding:10px 8px;"><div class="sec" style="background:#e2e8f0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e2e8f0;margin-top:5px;"></div><div class="ln a"></div><div class="ln b"></div></div></div><div class="tpl-mini-name">Left Bar ATS</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="flex:1;padding:10px 8px;"><div class="sec" style="background:#dbeafe;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#dbeafe;margin-top:5px;"></div><div class="ln a"></div><div class="ln b"></div></div><div style="width:45px;background:#eff6ff;flex-shrink:0;padding:10px 6px;"><div style="height:5px;border-radius:2px;background:#93c5fd;margin-bottom:4px;width:80%;"></div><div style="height:4px;border-radius:2px;background:#bfdbfe;width:70%;margin-bottom:4px;"></div><div style="height:4px;border-radius:2px;background:#bfdbfe;width:60%;"></div></div></div><div class="tpl-mini-name">Two Column</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#111827;"><div style="height:9px;border-radius:3px;background:rgba(255,255,255,.95);width:65%;"></div></div><div class="tpl-mini-body" style="padding-top:8px;"><div style="height:5px;border-radius:2px;background:#9ca3af;width:40%;margin-bottom:6px;"></div><div class="sec" style="background:#e5e7eb;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e5e7eb;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Bold Name</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#374151;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#d1d5db;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1d5db;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Modern Gray</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#166534;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bbf7d0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bbf7d0;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Compact ATS</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#fff;border-bottom:3px solid #1f6b42;"><div class="tpl-mini-nm" style="text-align:left;"><div class="b1" style="background:#111;width:60%;"></div><div class="b2" style="background:#444;width:45%;"></div></div></div><div class="tpl-mini-body"><div style="border-bottom:1px solid #1f6b42;padding-bottom:4px;margin-bottom:5px;"><div class="sec" style="background:#d1f0de;"></div></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Underline Pro</div></div>
+                    <div class="tpl-mini"><div style="background:linear-gradient(135deg,#1f6b42,#15803d);padding:14px 10px 10px;"><div style="height:9px;border-radius:3px;background:rgba(255,255,255,.95);width:65%;margin-bottom:5px;"></div><div style="height:6px;border-radius:2px;background:rgba(255,255,255,.6);width:48%;margin-bottom:8px;"></div><div style="display:flex;gap:4px;"><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div></div></div><div class="tpl-mini-body" style="padding-top:8px;"><div class="sec" style="background:#d1f0de;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div></div><div class="tpl-mini-name">Header Band</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#92400e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fde68a;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fde68a;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Elegant Serif</div></div>
+                    <!-- duplicate set 2 for seamless loop -->
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#1e3a5f;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bfdbfe;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bfdbfe;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Blue Accent ATS</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="width:45px;background:#2d3748;flex-shrink:0;padding:10px 6px;"><div class="tpl-mini-av"></div><div style="height:5px;border-radius:2px;background:rgba(255,255,255,.6);margin-bottom:4px;width:80%;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.3);width:70%;"></div></div><div style="flex:1;padding:10px 8px;"><div class="sec" style="background:#e2e8f0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e2e8f0;margin-top:5px;"></div><div class="ln a"></div><div class="ln b"></div></div></div><div class="tpl-mini-name">Left Bar ATS</div></div>
+                    <div class="tpl-mini"><div style="display:flex;height:100%;"><div style="flex:1;padding:10px 8px;"><div class="sec" style="background:#dbeafe;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#dbeafe;margin-top:5px;"></div><div class="ln a"></div><div class="ln b"></div></div><div style="width:45px;background:#eff6ff;flex-shrink:0;padding:10px 6px;"><div style="height:5px;border-radius:2px;background:#93c5fd;margin-bottom:4px;width:80%;"></div><div style="height:4px;border-radius:2px;background:#bfdbfe;width:70%;margin-bottom:4px;"></div><div style="height:4px;border-radius:2px;background:#bfdbfe;width:60%;"></div></div></div><div class="tpl-mini-name">Two Column</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#111827;"><div style="height:9px;border-radius:3px;background:rgba(255,255,255,.95);width:65%;"></div></div><div class="tpl-mini-body" style="padding-top:8px;"><div style="height:5px;border-radius:2px;background:#9ca3af;width:40%;margin-bottom:6px;"></div><div class="sec" style="background:#e5e7eb;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#e5e7eb;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Bold Name</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#374151;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#d1d5db;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1d5db;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Modern Gray</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#166534;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#bbf7d0;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#bbf7d0;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Compact ATS</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#fff;border-bottom:3px solid #1f6b42;"><div class="tpl-mini-nm" style="text-align:left;"><div class="b1" style="background:#111;width:60%;"></div><div class="b2" style="background:#444;width:45%;"></div></div></div><div class="tpl-mini-body"><div style="border-bottom:1px solid #1f6b42;padding-bottom:4px;margin-bottom:5px;"><div class="sec" style="background:#d1f0de;"></div></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Underline Pro</div></div>
+                    <div class="tpl-mini"><div style="background:linear-gradient(135deg,#1f6b42,#15803d);padding:14px 10px 10px;"><div style="height:9px;border-radius:3px;background:rgba(255,255,255,.95);width:65%;margin-bottom:5px;"></div><div style="height:6px;border-radius:2px;background:rgba(255,255,255,.6);width:48%;margin-bottom:8px;"></div><div style="display:flex;gap:4px;"><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div><div style="height:4px;border-radius:2px;background:rgba(255,255,255,.4);width:35px;"></div></div></div><div class="tpl-mini-body" style="padding-top:8px;"><div class="sec" style="background:#d1f0de;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#d1f0de;margin-top:6px;"></div><div class="ln a"></div></div><div class="tpl-mini-name">Header Band</div></div>
+                    <div class="tpl-mini"><div class="tpl-mini-hdr" style="background:#92400e;"><div class="tpl-mini-av"></div><div class="tpl-mini-nm"><div class="b1"></div><div class="b2"></div></div></div><div class="tpl-mini-body"><div class="sec" style="background:#fde68a;"></div><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div><div class="sec" style="background:#fde68a;margin-top:6px;"></div><div class="ln a"></div><div class="ln b"></div></div><div class="tpl-mini-name">Elegant Serif</div></div>
                 </div>
             </div>
         </section>
