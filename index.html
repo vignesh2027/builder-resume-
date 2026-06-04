@@ -312,32 +312,39 @@
       .templates-cta-center { text-align: center; }
 
       /* ── Testimonials ──────────────────────────────────────── */
-      .testimonials-section-new { padding: 80px 0; background: var(--bg-secondary); }
-      .testi-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-        margin-top: 48px;
+      .testimonials-section-new { padding: 80px 0; background: var(--bg-secondary); overflow: hidden; }
+      .testi-track-outer { overflow: hidden; margin-top: 48px; position: relative; }
+      .testi-track-outer::before,
+      .testi-track-outer::after {
+        content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; pointer-events:none;
       }
+      .testi-track-outer::before { left:0; background:linear-gradient(to right,var(--bg-secondary),transparent); }
+      .testi-track-outer::after  { right:0; background:linear-gradient(to left,var(--bg-secondary),transparent); }
+      .testi-track { display:flex; gap:20px; width:max-content; margin-bottom:20px; }
+      .testi-track.row1 { animation:testi-scroll-l 36s linear infinite; }
+      .testi-track.row2 { animation:testi-scroll-r 40s linear infinite; }
+      @keyframes testi-scroll-l { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+      @keyframes testi-scroll-r { from{transform:translateX(-50%)} to{transform:translateX(0)} }
       .testi-card {
+        flex-shrink: 0; width: 300px;
         background: var(--bg-primary);
         border: 1px solid var(--border-color);
         border-radius: 16px;
-        padding: 28px 24px;
-        position: relative;
+        padding: 24px 22px;
+        transition: transform .2s, box-shadow .2s;
       }
-      .testi-quote { font-size: 2.5rem; color: var(--primary-light); line-height: 1; margin-bottom: 12px; }
-      .testi-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-      .testi-author { display: flex; align-items: center; gap: 12px; }
+      .testi-card:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,.09); }
+      .testi-stars { color: #f0a500; font-size: 0.85rem; margin-bottom: 10px; letter-spacing:1px; }
+      .testi-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+      .testi-author { display: flex; align-items: center; gap: 10px; }
       .testi-avatar {
-        width: 40px; height: 40px; border-radius: 50%;
+        width: 38px; height: 38px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 1rem; color: #fff;
+        font-weight: 700; font-size: 0.95rem; color: #fff;
         flex-shrink: 0;
       }
-      .testi-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
-      .testi-role { font-size: 0.78rem; color: var(--text-secondary); }
-      .testi-stars { color: #f0a500; font-size: 0.9rem; margin-bottom: 14px; }
+      .testi-name { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
+      .testi-role { font-size: 0.75rem; color: var(--text-secondary); }
 
       /* ── Template Showcase ─────────────────────────────────── */
       .tpl-showcase-section { padding: 80px 0; background: var(--bg-primary); overflow: hidden; }
@@ -889,55 +896,39 @@
                     <h2 class="sec-title">Loved by Job Seekers Across India</h2>
                     <p class="sec-desc">Thousands of people have used CMR to land interviews and get hired.</p>
                 </div>
-                <div class="testi-grid">
-                    <div class="testi-card">
-                        <div class="testi-stars">★★★★★</div>
-                        <div class="testi-quote">"</div>
-                        <p class="testi-text">I landed 3 interviews in the first week after using CMR. The ATS score showed me exactly what was missing. Completely changed my job search.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar" style="background:linear-gradient(135deg,#2d8653,#52c27a)">R</div>
-                            <div>
-                                <div class="testi-name">Rahul Sharma</div>
-                                <div class="testi-role">Software Engineer at Infosys</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testi-card">
-                        <div class="testi-stars">★★★★★</div>
-                        <div class="testi-quote">"</div>
-                        <p class="testi-text">The AI generator is unreal. I typed 2 sentences about myself and it filled my entire resume. Got a callback from TCS within 4 days.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar" style="background:linear-gradient(135deg,#f0a500,#e67e22)">P</div>
-                            <div>
-                                <div class="testi-name">Priya Nair</div>
-                                <div class="testi-role">Data Analyst at Wipro</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testi-card">
-                        <div class="testi-stars">★★★★★</div>
-                        <div class="testi-quote">"</div>
-                        <p class="testi-text">Finally a resume builder that's truly free — no watermarks, no hidden plans. The PDF quality is exactly like premium tools. Best free tool available.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">S</div>
-                            <div>
-                                <div class="testi-name">Sneha Kapoor</div>
-                                <div class="testi-role">UX Designer at Razorpay</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testi-card">
-                        <div class="testi-stars">★★★★★</div>
-                        <div class="testi-quote">"</div>
-                        <p class="testi-text">Switched between 5 templates before finding the perfect one for my PM role. My data stayed perfect every time. The cover letter builder sealed the deal.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">A</div>
-                            <div>
-                                <div class="testi-name">Arjun Mehta</div>
-                                <div class="testi-role">Product Manager at Zoho</div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="testi-track-outer">
+                <!-- Row 1 — scrolls left -->
+                <div class="testi-track row1">
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Landed 3 interviews in the first week. The ATS score showed exactly what was missing. Completely changed my job search."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#2d8653,#52c27a)">R</div><div><div class="testi-name">Rahul Sharma</div><div class="testi-role">Software Engineer · Infosys</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The AI is unreal. I typed 2 sentences and it filled my entire resume. Got a callback from TCS within 4 days."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#f0a500,#e67e22)">P</div><div><div class="testi-name">Priya Nair</div><div class="testi-role">Data Analyst · Wipro</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"100% free, no watermarks, no hidden plans. PDF quality exactly like premium tools. Best free builder I've used."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">S</div><div><div class="testi-name">Sneha Kapoor</div><div class="testi-role">UX Designer · Razorpay</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Switched between 5 templates before finding the perfect one. My data stayed intact every time. Cover letter builder sealed the deal."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">A</div><div><div class="testi-name">Arjun Mehta</div><div class="testi-role">Product Manager · Zoho</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Got my first job offer after freshers season using CMR. The ATS checker helped me score 96 — the recruiter specifically mentioned my clean resume."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)">K</div><div><div class="testi-name">Kiran Patel</div><div class="testi-role">Frontend Dev · Freshworks</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The Harvard ATS template plus the AI summary writer — my resume went from 0 callbacks to 4 in one week. Incredible tool."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">D</div><div><div class="testi-name">Divya Menon</div><div class="testi-role">Business Analyst · Accenture</div></div></div></div>
+                    <!-- duplicate for seamless loop -->
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Landed 3 interviews in the first week. The ATS score showed exactly what was missing. Completely changed my job search."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#2d8653,#52c27a)">R</div><div><div class="testi-name">Rahul Sharma</div><div class="testi-role">Software Engineer · Infosys</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The AI is unreal. I typed 2 sentences and it filled my entire resume. Got a callback from TCS within 4 days."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#f0a500,#e67e22)">P</div><div><div class="testi-name">Priya Nair</div><div class="testi-role">Data Analyst · Wipro</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"100% free, no watermarks, no hidden plans. PDF quality exactly like premium tools. Best free builder I've used."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">S</div><div><div class="testi-name">Sneha Kapoor</div><div class="testi-role">UX Designer · Razorpay</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Switched between 5 templates before finding the perfect one. My data stayed intact every time. Cover letter builder sealed the deal."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">A</div><div><div class="testi-name">Arjun Mehta</div><div class="testi-role">Product Manager · Zoho</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Got my first job offer after freshers season using CMR. The ATS checker helped me score 96 — the recruiter specifically mentioned my clean resume."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)">K</div><div><div class="testi-name">Kiran Patel</div><div class="testi-role">Frontend Dev · Freshworks</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The Harvard ATS template plus the AI summary writer — my resume went from 0 callbacks to 4 in one week. Incredible tool."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">D</div><div><div class="testi-name">Divya Menon</div><div class="testi-role">Business Analyst · Accenture</div></div></div></div>
+                </div>
+                <!-- Row 2 — scrolls right -->
+                <div class="testi-track row2">
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"I'm a career switcher and the Career Switch ATS template was perfect. Got into KPMG after 3 months of searching — CMR made the difference."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#166534,#22c55e)">M</div><div><div class="testi-name">Meera Krishnan</div><div class="testi-role">Business Analyst · KPMG</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Used CMR for my MBA application. The Academic template was exactly what I needed. Admitted to IIM Bangalore with this resume."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#b45309,#f59e0b)">V</div><div><div class="testi-name">Vishal Gupta</div><div class="testi-role">MBA Candidate · IIM Bangalore</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"No account needed, no ads, no nonsense. Just a brilliant resume builder. Downloaded my PDF and landed a role at Amazon India."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">N</div><div><div class="testi-name">Nisha Agarwal</div><div class="testi-role">SDE-2 · Amazon India</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The cover letter builder saved me hours. I used it for 12 applications and got 5 interviews. The AI wrote better than I could!"</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#4338ca,#6366f1)">T</div><div><div class="testi-name">Tarun Nair</div><div class="testi-role">Marketing Manager · PhonePe</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Showed CMR to 6 friends — all 4 who used it got interviews within 2 weeks. The real-time ATS feedback is a game changer."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#dc2626,#f87171)">R</div><div><div class="testi-name">Rohit Verma</div><div class="testi-role">Senior Dev · Flipkart</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"I was skeptical of a free tool but CMR proved me wrong. The Pro Sidebar template got me into Deloitte. Will recommend to everyone."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">A</div><div><div class="testi-name">Ananya Singh</div><div class="testi-role">Consultant · Deloitte</div></div></div></div>
+                    <!-- duplicate for seamless loop -->
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"I'm a career switcher and the Career Switch ATS template was perfect. Got into KPMG after 3 months of searching — CMR made the difference."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#166534,#22c55e)">M</div><div><div class="testi-name">Meera Krishnan</div><div class="testi-role">Business Analyst · KPMG</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Used CMR for my MBA application. The Academic template was exactly what I needed. Admitted to IIM Bangalore with this resume."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#b45309,#f59e0b)">V</div><div><div class="testi-name">Vishal Gupta</div><div class="testi-role">MBA Candidate · IIM Bangalore</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"No account needed, no ads, no nonsense. Just a brilliant resume builder. Downloaded my PDF and landed a role at Amazon India."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">N</div><div><div class="testi-name">Nisha Agarwal</div><div class="testi-role">SDE-2 · Amazon India</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The cover letter builder saved me hours. I used it for 12 applications and got 5 interviews. The AI wrote better than I could!"</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#4338ca,#6366f1)">T</div><div><div class="testi-name">Tarun Nair</div><div class="testi-role">Marketing Manager · PhonePe</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Showed CMR to 6 friends — all 4 who used it got interviews within 2 weeks. The real-time ATS feedback is a game changer."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#dc2626,#f87171)">R</div><div><div class="testi-name">Rohit Verma</div><div class="testi-role">Senior Dev · Flipkart</div></div></div></div>
+                    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"I was skeptical of a free tool but CMR proved me wrong. The Pro Sidebar template got me into Deloitte. Will recommend to everyone."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">A</div><div><div class="testi-name">Ananya Singh</div><div class="testi-role">Consultant · Deloitte</div></div></div></div>
                 </div>
             </div>
         </section>
