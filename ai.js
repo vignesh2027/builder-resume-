@@ -197,45 +197,14 @@ function applyAIResume(jsonStr) {
 
 // ── Resume generation prompt ──────────────────────────────────────
 async function generateResumeFromAI(description, onChunk) {
-  const system = `You are an expert resume writer. Generate complete, ATS-optimized resumes as pure JSON. No markdown, no explanation.`;
-  const user = `Create a complete professional resume for this person: ${description}
+  const user = `You are a professional resume writer. Create a complete ATS-optimized resume for: ${description}
 
-Return ONLY this exact JSON structure with all fields filled:
-{
-  "name": "Full Name",
-  "jobTitle": "Professional Title",
-  "email": "email@example.com",
-  "phone": "+91 99999 99999",
-  "location": "City, State, Country",
-  "linkedin": "linkedin.com/in/username",
-  "summary": "Write a powerful 3-4 sentence professional summary with quantifiable achievements and strong action verbs",
-  "technicalSkills": "Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8",
-  "softSkills": "Communication, Leadership, Problem-solving, Team collaboration",
-  "experience": [
-    {
-      "title": "Job Title",
-      "company": "Company Name",
-      "startDate": "2020-06",
-      "endDate": "2023-12",
-      "description": "• Led development of X resulting in 30% improvement\\n• Managed team of 5 engineers\\n• Delivered Y on time and 15% under budget"
-    }
-  ],
-  "education": [
-    {
-      "degree": "B.Tech Computer Science",
-      "school": "University Name",
-      "year": "2020"
-    }
-  ],
-  "projects": "Project Name — Brief description with tech used and outcome\nProject 2 — Description",
-  "certifications": "AWS Solutions Architect — Amazon, 2023\nGoogle Cloud Professional",
-  "awards": "Employee of the Year 2022 — Company Name",
-  "languages": "English (Fluent), Hindi (Native)"
-}
+IMPORTANT: Return ONLY valid JSON. All string fields must be strings (NOT arrays). Use exactly this format:
+{"name":"Full Name","jobTitle":"Senior Software Engineer","email":"name@email.com","phone":"+91 99999 99999","location":"City, India","linkedin":"linkedin.com/in/username","summary":"3-4 sentence professional summary with strong action verbs and quantifiable achievements like 30% improvement or team of 5 engineers.","technicalSkills":"Java, React, Python, Spring Boot, Node.js, MySQL, Git, Docker","softSkills":"Communication, Leadership, Problem Solving, Team Collaboration","experience":[{"title":"Senior Software Engineer","company":"TCS","startDate":"2020-06","endDate":"2025-05","description":"• Led development of microservices platform reducing latency by 40%\\n• Managed team of 6 engineers delivering 3 major product releases\\n• Implemented CI/CD pipeline cutting deployment time by 60%"},{"title":"Software Engineer","company":"TCS","startDate":"2018-06","endDate":"2020-05","description":"• Built RESTful APIs for 500K+ daily users\\n• Reduced database query time by 35% through optimization\\n• Collaborated with cross-functional team of 12 members"}],"education":[{"degree":"B.Tech Computer Science","school":"Vels University","year":"2020"}],"projects":"E-Commerce Platform — Built scalable platform using React and Java serving 10K+ users daily\\nInventory Management System — Developed real-time system with Python reducing manual work by 70%","certifications":"AWS Solutions Architect Associate — Amazon, 2023\\nOracle Java Certified Professional — Oracle, 2021","awards":"Best Employee Q3 2022 — TCS\\nInnovation Award 2021 — TCS","languages":"English (Fluent), Tamil (Native), Hindi (Conversational)"}
 
-Make it realistic, professional, and ATS-friendly. Fill in realistic details based on the description.`;
+Fill realistic details based on the user description. Keep all field values as STRINGS, not arrays.`;
 
-  const result = await callGroq(system, user, 2500);
+  const result = await callGroq('You are an expert resume writer. Return only valid JSON with string values.', user, 2000);
   if (onChunk) onChunk(result);
   return result;
 }
