@@ -32,6 +32,29 @@ function updateAIStatus(ready) {
   if (label) label.textContent = ready ? (rem < 20 ? `AI Ready · ${rem} left` : 'AI Ready') : 'AI Unavailable';
 }
 
+// ── Low-temp call for structured JSON output ──────────────────────
+async function callGroqLow(userPrompt, maxTokens) {
+  if (getRemainingToday() <= 0) throw new Error('Daily limit reached. Resets at midnight.');
+  bumpRate();
+  const res = await fetch(`${GROQ_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_k}` },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [
+        { role: 'system', content: 'You are a resume writer. Output ONLY a valid JSON object. No text before or after the JSON. No notes. No explanations. Just the JSON.' },
+        { role: 'user', content: userPrompt }
+      ],
+      max_tokens: maxTokens || 2000,
+      temperature: 0.1  // very low temperature = consistent, no creative additions
+    })
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e?.error?.message||`Error ${res.status}`); }
+  const data = await res.json();
+  updateAIStatus(true);
+  return data.choices?.[0]?.message?.content || '';
+}
+
 // ── Core Groq call ────────────────────────────────────────────────
 async function callGroq(systemPrompt, userPrompt, maxTokens) {
   if (getRemainingToday() <= 0) throw new Error('Daily limit reached. Resets at midnight.');
@@ -56,16 +79,34 @@ async function callGroq(systemPrompt, userPrompt, maxTokens) {
 }
 
 // ── Apply AI resume to ALL form fields (with correct selectors) ───
+// Robust JSON extractor — counts brace depth to find matching {} even if AI adds text after
+function extractJSON(text) {
+  const start = text.indexOf('{');
+  if (start === -1) return null;
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < text.length; i++) {
+    const c = text[i];
+    if (esc) { esc = false; continue; }
+    if (c === '\\' && inStr) { esc = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (!inStr) {
+      if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) return text.slice(start, i + 1);
+    }
+  }
+  return null;
+}
+
 function applyAIResume(jsonStr) {
   let data;
   try {
-    // Strip markdown code fences (Groq wraps JSON in ```json...```)
     let clean = jsonStr.replace(/```json/gi,'').replace(/```/g,'').trim();
-    const match = clean.match(/\{[\s\S]*\}/);
-    data = JSON.parse(match ? match[0] : clean);
+    const extracted = extractJSON(clean);
+    if (!extracted) throw new Error('No JSON object found in response');
+    data = JSON.parse(extracted);
   } catch(e) {
     console.error('[CMR AI] JSON parse failed:', e.message);
-    console.error('[CMR AI] Raw response:', jsonStr.slice(0, 300));
+    console.error('[CMR AI] Raw response:', jsonStr.slice(0, 400));
     return false;
   }
 
@@ -204,7 +245,7 @@ IMPORTANT: Return ONLY valid JSON. All string fields must be strings (NOT arrays
 
 Fill realistic details based on the user description. Keep all field values as STRINGS, not arrays.`;
 
-  const result = await callGroq('You are an expert resume writer. Return only valid JSON with string values.', user, 2000);
+  const result = await callGroqLow(user, 2000);
   if (onChunk) onChunk(result);
   return result;
 }
