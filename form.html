@@ -1525,40 +1525,50 @@
         const seen = new WeakSet();
         const blocks = [];
 
-        // Patterns that indicate a section-level block (not layout containers)
-        const BLOCK_CLS = /\br-block\b|\bpb-block\b|\bblock\b|\bsec-wrap\b/;
-        // Layout containers we should NOT cross (stop BEFORE these)
-        const LAYOUT_CLS = /\bpb-main\b|\br-main\b|\br-body\b|\br-columns\b|\br-side\b|\br-aside\b|\bresu?me-template\b/;
+        // Block = draggable section (r-block for new ATS, section for modern/classic, pb-block for sidebar)
+        const BLOCK_CLS = /\br-block\b|\bpb-block\b|\bsec-wrap\b|\bsection\b|\bsummary-section\b/;
+        // Layout = stop BEFORE these (they contain multiple sections, not one)
+        const LAYOUT_CLS = /\bpb-main\b|\br-main\b|\br-body\b|\br-columns\b|\br-side\b|\br-aside\b|\bresume-template\b|\bmodern-template\b|\bresume-body\b|\bresume-header\b|\blayout-container\b/;
 
         secIds.forEach(id => {
           const el = preview.querySelector('#' + id);
-          if (!el || !el.textContent.trim()) return; // skip empty sections
+          if (!el) return;
 
           let node = el;
+          let prev = el;
           let found = null;
 
-          for (let i = 0; i < 8; i++) {
+          for (let i = 0; i < 10; i++) {
             if (!node || node === preview) break;
             const cls = node.getAttribute('class') || '';
 
-            // If we hit a layout container, the PREVIOUS node was the block
-            if (LAYOUT_CLS.test(cls)) { found = node === el ? el : node; break; }
-
-            // If this node is a block-level container, use it
+            // This node IS a draggable section block
             if (BLOCK_CLS.test(cls)) { found = node; break; }
 
-            // If parent IS the preview or a layout container, this node is the section
-            const parentCls = (node.parentElement?.getAttribute('class') || '');
-            if (node.parentElement === preview || LAYOUT_CLS.test(parentCls)) {
+            // This node is a layout container — the previous node was the block
+            if (LAYOUT_CLS.test(cls)) {
+              found = (prev !== el) ? prev : node.parentElement;
+              break;
+            }
+
+            // If my direct parent is a layout container, I AM the section
+            const parentCls = node.parentElement?.getAttribute('class') || '';
+            if (LAYOUT_CLS.test(parentCls) || node.parentElement === preview) {
               found = node; break;
             }
 
+            prev = node;
             node = node.parentElement;
           }
 
           if (!found) found = el.parentElement || el;
 
-          if (found && found !== preview && !seen.has(found)) {
+          // Never select the template root or preview root
+          if (!found || found === preview) return;
+          const fc = found.getAttribute('class') || '';
+          if (LAYOUT_CLS.test(fc)) return;
+
+          if (!seen.has(found)) {
             seen.add(found);
             blocks.push({ node: found, id });
           }
