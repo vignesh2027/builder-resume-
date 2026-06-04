@@ -714,26 +714,13 @@
 
                     <div class="tools-divider"></div>
 
-                    <!-- Section Reorder -->
+                    <!-- Section Reorder — direct preview drag -->
                     <div class="tools-group">
-                        <div class="sb-label">Section Order <span style="font-size:0.7rem;color:var(--text-muted);font-weight:400">drag to reorder</span></div>
-                        <ul id="sectionOrderList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;">
-                            <li class="sec-order-item" data-sec="summary" draggable="true"><span class="sec-drag-handle">⠿</span> Summary</li>
-                            <li class="sec-order-item" data-sec="experience" draggable="true"><span class="sec-drag-handle">⠿</span> Experience</li>
-                            <li class="sec-order-item" data-sec="education" draggable="true"><span class="sec-drag-handle">⠿</span> Education</li>
-                            <li class="sec-order-item" data-sec="skills" draggable="true"><span class="sec-drag-handle">⠿</span> Skills</li>
-                            <li class="sec-order-item" data-sec="projects" draggable="true"><span class="sec-drag-handle">⠿</span> Projects</li>
-                            <li class="sec-order-item" data-sec="certifications" draggable="true"><span class="sec-drag-handle">⠿</span> Certifications</li>
-                            <li class="sec-order-item" data-sec="awards" draggable="true"><span class="sec-drag-handle">⠿</span> Awards</li>
-                            <li class="sec-order-item" data-sec="languages" draggable="true"><span class="sec-drag-handle">⠿</span> Languages</li>
-                        </ul>
-                        <style>
-                          .sec-order-item { display:flex; align-items:center; gap:8px; padding:7px 10px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:6px; font-size:0.8rem; cursor:grab; user-select:none; transition:background .15s; }
-                          .sec-order-item:active { cursor:grabbing; }
-                          .sec-order-item.drag-over { background:var(--primary-light); border-color:var(--primary-color); }
-                          .sec-order-item.dragging { opacity:0.4; }
-                          .sec-drag-handle { color:var(--text-muted); font-size:1rem; line-height:1; }
-                        </style>
+                        <div class="sb-label">Reorder Sections</div>
+                        <button id="toggleReorderBtn" onclick="togglePreviewReorder()" class="btn btn-secondary btn-full" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+                            <span>⠿</span> <span id="reorderBtnLabel">Enable Section Drag</span>
+                        </button>
+                        <p style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 0;line-height:1.5;" id="reorderHint">Click to turn on drag mode — then drag sections directly in the preview</p>
                     </div>
 
                     <div class="tools-divider"></div>
@@ -1463,90 +1450,180 @@
         watchList('educationList', 'educationEmpty');
       }
     })();
-    // ── Force light theme on builder ─────────────────────────────
+    // ── Force light theme on builder (override script.js updateTheme) ──
     (function() {
+      // Override updateTheme so dark mode never applies on the builder page
+      window.updateTheme = function() {
+        document.documentElement.removeAttribute('data-theme');
+        document.querySelectorAll('.theme-icon').forEach(i => i.textContent = '🌙');
+      };
+      // Also patch uiSettings immediately
+      if (typeof uiSettings !== 'undefined') uiSettings.theme = 'light';
       document.documentElement.removeAttribute('data-theme');
-      localStorage.removeItem('cmr-theme');
+      // Re-apply after every animation frame (catches DOMContentLoaded call)
+      requestAnimationFrame(function fix() {
+        document.documentElement.removeAttribute('data-theme');
+        if (document.documentElement.dataset.theme) requestAnimationFrame(fix);
+      });
     })();
 
-    // ── Section drag-to-reorder ───────────────────────────────────
+    // ── Preview direct drag-to-reorder ───────────────────────────
     (function() {
+      let reorderActive = false;
       let dragSrc = null;
+      const DRAG_HANDLE_CLASS = 'pvw-drag-handle';
 
-      function initSectionReorder() {
-        const list = document.getElementById('sectionOrderList');
-        if (!list) return;
-        list.querySelectorAll('.sec-order-item').forEach(item => {
-          item.addEventListener('dragstart', e => {
-            dragSrc = item;
-            item.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-          });
-          item.addEventListener('dragend', () => {
-            item.classList.remove('dragging');
-            list.querySelectorAll('.sec-order-item').forEach(i => i.classList.remove('drag-over'));
-            applyReorder();
-          });
-          item.addEventListener('dragover', e => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            list.querySelectorAll('.sec-order-item').forEach(i => i.classList.remove('drag-over'));
-            if (item !== dragSrc) item.classList.add('drag-over');
-          });
-          item.addEventListener('drop', e => {
-            e.preventDefault();
-            if (dragSrc && dragSrc !== item) {
-              const items = [...list.querySelectorAll('.sec-order-item')];
-              const fromIdx = items.indexOf(dragSrc);
-              const toIdx = items.indexOf(item);
-              if (fromIdx < toIdx) list.insertBefore(dragSrc, item.nextSibling);
-              else list.insertBefore(dragSrc, item);
-            }
-          });
-        });
-      }
+      // Inject drag-handle styles once
+      const st = document.createElement('style');
+      st.textContent = `
+        .pvw-section-wrap { position:relative; }
+        .pvw-section-wrap.reorder-on { outline:2px dashed #cce5d3; border-radius:6px; margin:2px 0; cursor:grab; transition:outline .15s; }
+        .pvw-section-wrap.reorder-on:hover { outline:2px solid #2d8653; }
+        .pvw-section-wrap.drag-over-top { border-top:3px solid #2d8653 !important; }
+        .pvw-section-wrap.drag-over-bot { border-bottom:3px solid #2d8653 !important; }
+        .pvw-section-wrap.dragging-now { opacity:.35; }
+        .pvw-drag-handle {
+          display:none; position:absolute; top:4px; right:4px;
+          background:#2d8653; color:#fff; border-radius:5px;
+          padding:3px 7px; font-size:11px; cursor:grab; user-select:none;
+          z-index:99; font-weight:700; letter-spacing:.5px; line-height:1.4;
+          box-shadow:0 2px 8px rgba(0,0,0,.18);
+        }
+        .reorder-on .pvw-drag-handle { display:block; }
+        body.reorder-mode .preview-content { outline:2px dashed #cce5d3; border-radius:8px; }
+      `;
+      document.head.appendChild(st);
 
-      function applyReorder() {
-        const list = document.getElementById('sectionOrderList');
-        if (!list) return;
-        const order = [...list.querySelectorAll('.sec-order-item')].map(i => i.dataset.sec);
-        const preview = document.getElementById('previewContent') || document.querySelector('.preview-content');
-        if (!preview) return;
-
-        const secMap = {
-          summary:       '#previewSummary',
-          experience:    '#previewExperience',
-          education:     '#previewEducation',
-          skills:        '#previewSkills',
-          projects:      '#previewProjects',
-          certifications:'#previewCertifications',
-          awards:        '#previewAwards',
-          languages:     '#previewLanguages',
-        };
-
-        order.forEach((sec, idx) => {
-          const el = preview.querySelector(secMap[sec]);
+      function getSectionBlocks(preview) {
+        const secIds = ['previewSummary','previewExperience','previewEducation','previewSkills','previewProjects','previewCertifications','previewAwards','previewLanguages'];
+        const blocks = [];
+        secIds.forEach(id => {
+          const el = preview.querySelector('#' + id);
           if (!el) return;
-          // Walk up to the nearest .r-block or direct preview child
-          let block = el;
-          for (let i = 0; i < 4; i++) {
-            if (!block.parentElement) break;
-            const p = block.parentElement;
-            if (p === preview || p.classList.contains('r-main') || p.classList.contains('r-body') || p.classList.contains('pb-main')) break;
-            block = p;
+          // walk up to find a block-level parent inside preview
+          let node = el;
+          for (let i = 0; i < 6; i++) {
+            if (!node.parentElement) break;
+            const p = node.parentElement;
+            if (p === preview) { blocks.push({ node, id }); return; }
+            // stop at known layout containers
+            if (p.classList.contains('r-main') || p.classList.contains('pb-main') ||
+                p.classList.contains('r-body') || p.classList.contains('r-columns') ||
+                p.classList.contains('r-side') || p.classList.contains('r-aside')) {
+              blocks.push({ node, id }); return;
+            }
+            // if node has class r-block, stop here
+            if (node.classList.contains('r-block') || node.classList.contains('pb-block') ||
+                node.classList.contains('section') || node.classList.contains('r-block-wrap')) {
+              blocks.push({ node, id }); return;
+            }
+            node = p;
           }
-          block.style.order = idx;
-          const parent = block.parentElement;
-          if (parent) parent.style.display = 'flex', parent.style.flexDirection = 'column';
+          blocks.push({ node, id });
+        });
+        return blocks;
+      }
+
+      function wrapSections(preview) {
+        // remove old wraps
+        preview.querySelectorAll('.pvw-section-wrap').forEach(w => {
+          while (w.firstChild) w.parentNode.insertBefore(w.firstChild, w);
+          w.remove();
+        });
+        const blocks = getSectionBlocks(preview);
+        blocks.forEach(({ node }) => {
+          if (node.parentElement && !node.parentElement.classList.contains('pvw-section-wrap')) {
+            const wrap = document.createElement('div');
+            wrap.className = 'pvw-section-wrap';
+            node.parentNode.insertBefore(wrap, node);
+            wrap.appendChild(node);
+            // drag handle button
+            const handle = document.createElement('div');
+            handle.className = DRAG_HANDLE_CLASS;
+            handle.textContent = '⠿ drag';
+            handle.title = 'Drag to reorder section';
+            wrap.appendChild(handle);
+          }
+        });
+        if (reorderActive) activateWraps(preview);
+      }
+
+      function activateWraps(preview) {
+        preview.querySelectorAll('.pvw-section-wrap').forEach(wrap => {
+          wrap.classList.add('reorder-on');
+          wrap.setAttribute('draggable', 'true');
+          wrap.ondragstart = e => {
+            dragSrc = wrap;
+            wrap.classList.add('dragging-now');
+            e.dataTransfer.effectAllowed = 'move';
+          };
+          wrap.ondragend = () => {
+            dragSrc = null;
+            preview.querySelectorAll('.pvw-section-wrap').forEach(w => {
+              w.classList.remove('dragging-now','drag-over-top','drag-over-bot');
+            });
+          };
+          wrap.ondragover = e => {
+            e.preventDefault();
+            if (!dragSrc || dragSrc === wrap) return;
+            preview.querySelectorAll('.pvw-section-wrap').forEach(w => w.classList.remove('drag-over-top','drag-over-bot'));
+            const rect = wrap.getBoundingClientRect();
+            const mid = rect.top + rect.height / 2;
+            if (e.clientY < mid) wrap.classList.add('drag-over-top');
+            else wrap.classList.add('drag-over-bot');
+          };
+          wrap.ondrop = e => {
+            e.preventDefault();
+            if (!dragSrc || dragSrc === wrap) return;
+            wrap.classList.remove('drag-over-top','drag-over-bot');
+            const rect = wrap.getBoundingClientRect();
+            const mid = rect.top + rect.height / 2;
+            if (e.clientY < mid) wrap.parentNode.insertBefore(dragSrc, wrap);
+            else wrap.parentNode.insertBefore(dragSrc, wrap.nextSibling);
+          };
         });
       }
 
+      function deactivateWraps(preview) {
+        preview.querySelectorAll('.pvw-section-wrap').forEach(wrap => {
+          wrap.classList.remove('reorder-on');
+          wrap.removeAttribute('draggable');
+          wrap.ondragstart = wrap.ondragend = wrap.ondragover = wrap.ondrop = null;
+        });
+      }
+
+      window.togglePreviewReorder = function() {
+        const preview = document.querySelector('.preview-content');
+        const btn = document.getElementById('toggleReorderBtn');
+        const label = document.getElementById('reorderBtnLabel');
+        const hint = document.getElementById('reorderHint');
+        if (!preview) return;
+        reorderActive = !reorderActive;
+        if (reorderActive) {
+          wrapSections(preview);
+          activateWraps(preview);
+          document.body.classList.add('reorder-mode');
+          if (btn) { btn.style.background='var(--primary-color)'; btn.style.color='#fff'; btn.style.borderColor='var(--primary-color)'; }
+          if (label) label.textContent = '✅ Drag Mode ON — click to turn off';
+          if (hint) hint.textContent = 'Drag the green ⠿ handle in the preview to move sections up/down';
+        } else {
+          deactivateWraps(preview);
+          document.body.classList.remove('reorder-mode');
+          if (btn) { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
+          if (label) label.textContent = 'Enable Section Drag';
+          if (hint) hint.textContent = 'Click to turn on drag mode — then drag sections directly in the preview';
+        }
+      };
+
+      // Re-wrap on template change
       document.addEventListener('DOMContentLoaded', () => {
-        initSectionReorder();
-        // re-apply on template change
-        const obs = new MutationObserver(() => setTimeout(applyReorder, 150));
         const pc = document.querySelector('.preview-content');
-        if (pc) obs.observe(pc, { childList: true, subtree: false });
+        if (pc) {
+          const obs = new MutationObserver(() => {
+            if (reorderActive) setTimeout(() => { wrapSections(pc); activateWraps(pc); }, 200);
+          });
+          obs.observe(pc, { childList: true });
+        }
       });
     })();
     </script>
