@@ -1439,15 +1439,19 @@
       if (btn) btn.style.background = isBig ? 'var(--primary-color)' : '';
     };
 
-    // ── Welcome Guide ─────────────────────────────────────────────
+    // ── Welcome Guide — show ONCE ever ───────────────────────────
     (function() {
-      if (!localStorage.getItem('cmr_welcomed')) {
-        document.getElementById('welcomeGuide').style.display = 'flex';
+      // Use a single key shared across all pages — set it immediately on show
+      const KEY = 'cmr_seen_v3';
+      if (!localStorage.getItem(KEY)) {
+        localStorage.setItem(KEY, '1'); // set immediately so nav away still counts
+        const guide = document.getElementById('welcomeGuide');
+        if (guide) guide.style.display = 'flex';
       }
     })();
     function closeWelcomeGuide() {
-      document.getElementById('welcomeGuide').style.display = 'none';
-      localStorage.setItem('cmr_welcomed', '1');
+      const guide = document.getElementById('welcomeGuide');
+      if (guide) guide.style.display = 'none';
     }
 
     // ── Empty State Hide on Add ───────────────────────────────────
@@ -1521,31 +1525,45 @@
         const seen = new WeakSet();
         const blocks = [];
 
-        // Block-class patterns to stop at
-        const BLOCK_RE = /\br-block\b|\bpb-block\b|\br-block-wrap\b|\br-sec-wrap\b|\bsection\b/;
+        // Patterns that indicate a section-level block (not layout containers)
+        const BLOCK_CLS = /\br-block\b|\bpb-block\b|\bblock\b|\bsec-wrap\b/;
+        // Layout containers we should NOT cross (stop BEFORE these)
+        const LAYOUT_CLS = /\bpb-main\b|\br-main\b|\br-body\b|\br-columns\b|\br-side\b|\br-aside\b|\bresu?me-template\b/;
 
         secIds.forEach(id => {
           const el = preview.querySelector('#' + id);
-          if (!el) return;
+          if (!el || !el.textContent.trim()) return; // skip empty sections
 
           let node = el;
           let found = null;
 
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < 8; i++) {
             if (!node || node === preview) break;
             const cls = node.getAttribute('class') || '';
-            if (BLOCK_RE.test(cls)) { found = node; break; }
+
+            // If we hit a layout container, the PREVIOUS node was the block
+            if (LAYOUT_CLS.test(cls)) { found = node === el ? el : node; break; }
+
+            // If this node is a block-level container, use it
+            if (BLOCK_CLS.test(cls)) { found = node; break; }
+
+            // If parent IS the preview or a layout container, this node is the section
+            const parentCls = (node.parentElement?.getAttribute('class') || '');
+            if (node.parentElement === preview || LAYOUT_CLS.test(parentCls)) {
+              found = node; break;
+            }
+
             node = node.parentElement;
           }
 
-          // Fallback: use immediate parent of the preview element
-          if (!found) found = el.parentElement === preview ? el : (el.parentElement || el);
+          if (!found) found = el.parentElement || el;
 
-          if (found && !seen.has(found)) {
+          if (found && found !== preview && !seen.has(found)) {
             seen.add(found);
             blocks.push({ node: found, id });
           }
         });
+
         return blocks;
       }
 
