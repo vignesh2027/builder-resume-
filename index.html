@@ -1341,17 +1341,18 @@ ${text.slice(0, 3500)}`;
     </style>
     <script>
       (function() {
-        if (!localStorage.getItem('cmr_welcomed_v2')) {
+        const KEY = 'cmr_seen_v3';
+        if (!localStorage.getItem(KEY)) {
+          localStorage.setItem(KEY, '1'); // set immediately — one-time only, even if user navigates away
           setTimeout(function() {
             const popup = document.getElementById('cmrWelcome');
             if (popup) { popup.style.display = 'flex'; }
-          }, 1200);
+          }, 1400);
         }
       })();
       function closeWelcomePopup() {
         const popup = document.getElementById('cmrWelcome');
         if (popup) { popup.style.opacity = '0'; popup.style.transition = 'opacity .25s'; setTimeout(() => popup.style.display = 'none', 250); }
-        localStorage.setItem('cmr_welcomed_v2', '1');
       }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
