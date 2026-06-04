@@ -304,21 +304,33 @@ async function sendAIMessage() {
         ? '✅ Done! Your entire resume has been filled — name, summary, experience, education, skills, and more. Review the preview and edit anything you want.'
         : '⚠️ AI generated a resume but had trouble parsing it. Try being more specific:\n"I am a software engineer with 5 years at TCS, B.Tech CS from VIT 2020, skilled in Java, React, Python"');
 
-    } else if ((lower.includes('improve') || lower.includes('rewrite')) && lower.includes('summary')) {
-      updateStreamingMessage(bubble, '⏳ Rewriting your summary...');
+    } else if ((lower.includes('improve') || lower.includes('rewrite') || lower.includes('write')) && lower.includes('summary')) {
+      updateStreamingMessage(bubble, '⏳ Writing a complete professional summary...');
       const sumEl = document.getElementById('summary');
       const jobEl = document.getElementById('jobTitle');
+      const nameEl = document.getElementById('fullName');
+      const techEl = document.getElementById('technicalSkills');
+      // Gather full context from the whole resume, not just old summary
+      const expText = (document.querySelector('.preview-content #previewExperience')?.innerText || '').slice(0, 800);
+      const eduText = (document.querySelector('.preview-content #previewEducation')?.innerText || '').slice(0, 300);
+      const ctx = [
+        jobEl?.value ? `Target role: ${jobEl.value}` : '',
+        techEl?.value ? `Skills: ${techEl.value}` : '',
+        expText ? `Experience:\n${expText}` : '',
+        eduText ? `Education: ${eduText}` : '',
+        sumEl?.value ? `Existing summary (for reference only): ${sumEl.value}` : ''
+      ].filter(Boolean).join('\n');
       const improved = await callGroq(
-        'You are a resume expert. Rewrite summaries to be powerful, ATS-optimized, and results-focused.',
-        `Rewrite this professional summary for a ${jobEl?.value || 'professional'}. Make it 3-4 sentences, strong action verbs, quantifiable results. Return only the improved text.\n\nCurrent: "${sumEl?.value || 'No summary yet.'}"`,
-        300
+        'You are an elite resume writer. Write powerful, ATS-optimized professional summaries based on the candidate\'s FULL background — their experience, skills, and education — not just their old summary.',
+        `Write a brand-new, complete professional summary for this candidate based on ALL their details below. Make it 3-4 impactful sentences with strong action verbs, quantifiable achievements, and keywords for their target role. Do NOT just rephrase the old summary — build a fresh one from their whole profile. Return ONLY the summary text, no quotes, no preamble.\n\n${ctx || 'A professional seeking new opportunities.'}`,
+        350
       );
       if (improved && sumEl) {
-        sumEl.value = improved.trim();
+        sumEl.value = improved.trim().replace(/^["']|["']$/g, '');
         sumEl.dispatchEvent(new Event('input', { bubbles: true }));
         setTimeout(() => { if (typeof updatePreview === 'function') updatePreview(); }, 100);
       }
-      updateStreamingMessage(bubble, improved ? `✅ Summary updated!\n\n"${improved.trim().slice(0,120)}..."` : '❌ Could not improve summary.');
+      updateStreamingMessage(bubble, improved ? `✅ New summary written from your full profile!\n\n"${improved.trim().slice(0,140)}..."` : '❌ Could not write summary.');
 
     } else if (lower.includes('cover letter')) {
       updateStreamingMessage(bubble, '⏳ Writing your cover letter...');
