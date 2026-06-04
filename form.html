@@ -1492,188 +1492,105 @@
       });
     })();
 
-    // ── Preview direct drag-to-reorder (fixed) ───────────────────
-    (function() {
-      let reorderActive = false;
-      let dragSrc = null;
-
-      const st = document.createElement('style');
-      st.textContent = `
-        .pvw-section-wrap { position:relative; transition:opacity .15s; }
-        .pvw-section-wrap.reorder-on { outline:2px dashed #b7e4c7; border-radius:6px; margin-bottom:4px; }
-        .pvw-section-wrap.reorder-on:hover { outline:2px solid #2d8653; background:rgba(45,134,83,.03); }
-        .pvw-section-wrap.drag-indicator-top { border-top:3px solid #2d8653 !important; }
-        .pvw-section-wrap.drag-indicator-bot { border-bottom:3px solid #2d8653 !important; }
-        .pvw-section-wrap.dragging-now { opacity:.3; }
-        .pvw-drag-handle {
-          display:none; position:absolute; top:50%; right:-2px;
-          transform:translateY(-50%);
-          background:#2d8653; color:#fff; border-radius:6px;
-          padding:5px 8px; font-size:11px; cursor:grab; user-select:none;
-          z-index:999; font-weight:700; line-height:1; white-space:nowrap;
-          box-shadow:0 2px 10px rgba(0,0,0,.25); letter-spacing:.3px;
-        }
-        .pvw-drag-handle:active { cursor:grabbing; }
-        .reorder-on .pvw-drag-handle { display:flex; align-items:center; gap:4px; }
-        body.reorder-mode .preview-panel { background:#e8f5e3 !important; }
-        body.reorder-mode .preview-content > * { transform:scale(0.88); transform-origin:top center; }
-      `;
-      document.head.appendChild(st);
-
-      function getSectionBlocks(preview) {
-        const seen = new WeakSet();
-        const candidates = [];
-
-        // Strategy 1: Direct query for known section class names across all templates
-        const SELECTORS = [
-          '.r-block',          // new ATS templates (atsPinnacle, atsCrossRule, etc.)
-          '.pb-block',         // proSidebar template
-          '.section',          // modern.html, classic.html templates
-          '.summary-section',  // modern.html summary
-          '.r-sec-wrap',       // some older templates
-        ];
-
-        SELECTORS.forEach(sel => {
-          preview.querySelectorAll(sel).forEach(el => {
-            // Skip elements that contain other candidate elements (avoid nesting)
-            const alreadyHasChild = candidates.some(c => el.contains(c.node));
-            const isChildOfCandidate = candidates.some(c => c.node.contains(el));
-            if (!seen.has(el) && !alreadyHasChild && !isChildOfCandidate) {
-              seen.add(el);
-              candidates.push({ node: el, id: el.id || '' });
-            }
-          });
-        });
-
-        // Strategy 2: Fallback — find elements 1-2 levels above [id^="preview"] elements
-        if (candidates.length === 0) {
-          const PREVIEW_IDS = ['previewSummary','previewExperience','previewEducation','previewSkills','previewProjects','previewCertifications','previewAwards'];
-          PREVIEW_IDS.forEach(id => {
-            const el = preview.querySelector('#' + id);
-            if (!el) return;
-            // Use direct parent (1 level up), or grandparent if parent is too generic
-            let block = el.parentElement;
-            if (!block || block === preview) return;
-            if (!seen.has(block)) {
-              seen.add(block);
-              candidates.push({ node: block, id });
-            }
-          });
-        }
-
-        return candidates;
+    // ── Preview drag-to-reorder (bulletproof v2) ─────────────────
+    (function(){
+      var on = false, src = null;
+      var styled = false;
+      function injectStyle(){
+        if(styled) return; styled = true;
+        var s = document.createElement('style');
+        s.textContent =
+          '.pvw-wrap{position:relative;}'+
+          '.pvw-wrap.on{outline:2px dashed #8fd0a8;border-radius:6px;margin-bottom:5px;cursor:grab;}'+
+          '.pvw-wrap.on:hover{outline:2px solid #2d8653;background:rgba(45,134,83,.04);}'+
+          '.pvw-wrap.over{border-top:3px solid #2d8653 !important;}'+
+          '.pvw-wrap.drag{opacity:.35;}'+
+          '.pvw-h{display:none;position:absolute;top:4px;right:4px;background:#2d8653;color:#fff;'+
+          'border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:grab;z-index:9999;'+
+          'box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap;}'+
+          '.pvw-wrap.on .pvw-h{display:block;}';
+        document.head.appendChild(s);
       }
 
-      function wrapSections(preview) {
-        // remove old wraps
-        preview.querySelectorAll('.pvw-section-wrap').forEach(w => {
-          while (w.firstChild) w.parentNode.insertBefore(w.firstChild, w);
+      function findBlocks(root){
+        // Direct, recursive query — works on every template
+        var nodes = root.querySelectorAll('.r-block,.pb-block,.section,.summary-section');
+        var out = [];
+        nodes.forEach(function(n){
+          // skip if it's nested inside another already-collected block
+          for(var i=0;i<out.length;i++){ if(out[i].contains(n)||n.contains(out[i])) return; }
+          out.push(n);
+        });
+        // Fallback: wrap parents of preview-id elements
+        if(out.length===0){
+          ['previewSummary','previewExperience','previewEducation','previewSkills','previewProjects','previewCertifications','previewAwards'].forEach(function(id){
+            var el = root.querySelector('#'+id);
+            if(el && el.parentElement && el.parentElement!==root) out.push(el.parentElement);
+          });
+        }
+        return out;
+      }
+
+      function wrap(root){
+        // unwrap old
+        root.querySelectorAll('.pvw-wrap').forEach(function(w){
+          var h = w.querySelector('.pvw-h'); if(h) h.remove();
+          while(w.firstChild) w.parentNode.insertBefore(w.firstChild,w);
           w.remove();
         });
-        const blocks = getSectionBlocks(preview);
-        blocks.forEach(({ node }) => {
-          if (node.parentElement && !node.parentElement.classList.contains('pvw-section-wrap')) {
-            const wrap = document.createElement('div');
-            wrap.className = 'pvw-section-wrap';
-            node.parentNode.insertBefore(wrap, node);
-            wrap.appendChild(node);
-            // drag handle button
-            const handle = document.createElement('div');
-            handle.className = DRAG_HANDLE_CLASS;
-            handle.textContent = '⠿ drag';
-            handle.title = 'Drag to reorder section';
-            wrap.appendChild(handle);
-          }
+        var blocks = findBlocks(root);
+        blocks.forEach(function(b){
+          if(b.parentElement && b.parentElement.classList.contains('pvw-wrap')) return;
+          var w = document.createElement('div');
+          w.className = 'pvw-wrap on';
+          w.setAttribute('draggable','true');
+          b.parentNode.insertBefore(w,b);
+          w.appendChild(b);
+          var h = document.createElement('div');
+          h.className = 'pvw-h'; h.textContent = '⠿ drag';
+          w.appendChild(h);
+          w.addEventListener('dragstart',function(e){ src=w; w.classList.add('drag'); e.dataTransfer.effectAllowed='move'; });
+          w.addEventListener('dragend',function(){ src=null; root.querySelectorAll('.pvw-wrap').forEach(function(x){x.classList.remove('drag','over');}); });
+          w.addEventListener('dragover',function(e){ e.preventDefault(); if(!src||src===w)return; root.querySelectorAll('.pvw-wrap').forEach(function(x){x.classList.remove('over');}); w.classList.add('over'); });
+          w.addEventListener('drop',function(e){ e.preventDefault(); if(!src||src===w)return; w.classList.remove('over'); var r=w.getBoundingClientRect(); if(e.clientY<r.top+r.height/2) w.parentNode.insertBefore(src,w); else w.parentNode.insertBefore(src,w.nextSibling); });
         });
-        if (reorderActive) activateWraps(preview);
+        return blocks.length;
       }
 
-      function activateWraps(preview) {
-        preview.querySelectorAll('.pvw-section-wrap').forEach(wrap => {
-          wrap.classList.add('reorder-on');
-          wrap.setAttribute('draggable', 'true');
-
-          wrap.ondragstart = e => {
-            dragSrc = wrap;
-            setTimeout(() => wrap.classList.add('dragging-now'), 0);
-            e.dataTransfer.effectAllowed = 'move';
-            // Custom drag image — shows section label, not full resume
-            const ghost = document.createElement('div');
-            const label = (wrap.querySelector('[id^="preview"]')?.id || '').replace('preview','') || 'Section';
-            ghost.textContent = '⠿  Moving ' + label;
-            ghost.style.cssText = 'position:fixed;top:-200px;left:-200px;background:#2d8653;color:#fff;padding:10px 18px;border-radius:8px;font-family:Inter,sans-serif;font-size:13px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.3);white-space:nowrap;';
-            document.body.appendChild(ghost);
-            e.dataTransfer.setDragImage(ghost, 60, 20);
-            setTimeout(() => ghost.remove(), 200);
-          };
-
-          wrap.ondragend = () => {
-            dragSrc = null;
-            preview.querySelectorAll('.pvw-section-wrap').forEach(w => {
-              w.classList.remove('dragging-now','drag-indicator-top','drag-indicator-bot');
-            });
-          };
-
-          wrap.ondragover = e => {
-            e.preventDefault();
-            if (!dragSrc || dragSrc === wrap) return;
-            preview.querySelectorAll('.pvw-section-wrap').forEach(w => w.classList.remove('drag-indicator-top','drag-indicator-bot'));
-            const rect = wrap.getBoundingClientRect();
-            if (e.clientY < rect.top + rect.height / 2) wrap.classList.add('drag-indicator-top');
-            else wrap.classList.add('drag-indicator-bot');
-          };
-
-          wrap.ondrop = e => {
-            e.preventDefault();
-            if (!dragSrc || dragSrc === wrap) return;
-            wrap.classList.remove('drag-indicator-top','drag-indicator-bot');
-            const rect = wrap.getBoundingClientRect();
-            if (e.clientY < rect.top + rect.height / 2) wrap.parentNode.insertBefore(dragSrc, wrap);
-            else wrap.parentNode.insertBefore(dragSrc, wrap.nextSibling);
-          };
+      function unwrap(root){
+        root.querySelectorAll('.pvw-wrap').forEach(function(w){
+          w.classList.remove('on');
+          w.removeAttribute('draggable');
         });
       }
 
-      function deactivateWraps(preview) {
-        preview.querySelectorAll('.pvw-section-wrap').forEach(wrap => {
-          wrap.classList.remove('reorder-on');
-          wrap.removeAttribute('draggable');
-          wrap.ondragstart = wrap.ondragend = wrap.ondragover = wrap.ondrop = null;
-        });
-      }
-
-      window.togglePreviewReorder = function() {
-        const preview = document.querySelector('.preview-content');
-        const btn = document.getElementById('toggleReorderBtn');
-        const label = document.getElementById('reorderBtnLabel');
-        const hint = document.getElementById('reorderHint');
-        if (!preview) return;
-        reorderActive = !reorderActive;
-        if (reorderActive) {
-          wrapSections(preview);
-          activateWraps(preview);
+      window.togglePreviewReorder = function(){
+        injectStyle();
+        var root = document.querySelector('.preview-content') || document.getElementById('previewContent');
+        var btn = document.getElementById('toggleReorderBtn');
+        var label = document.getElementById('reorderBtnLabel');
+        var hint = document.getElementById('reorderHint');
+        if(!root){ alert('Preview not found — fill your resume first.'); return; }
+        on = !on;
+        if(on){
+          var count = wrap(root);
           document.body.classList.add('reorder-mode');
-          if (btn) { btn.style.background='var(--primary-color)'; btn.style.color='#fff'; btn.style.borderColor='var(--primary-color)'; }
-          if (label) label.textContent = '✅ Drag Mode ON — click to turn off';
-          if (hint) hint.textContent = 'Drag the green ⠿ handle in the preview to move sections up/down';
+          if(btn){ btn.style.background='#2d8653'; btn.style.color='#fff'; btn.style.borderColor='#2d8653'; }
+          if(label) label.textContent = '✅ Drag ON ('+count+' sections)';
+          if(hint) hint.textContent = count>0 ? 'Drag the green ⠿ handles to reorder sections.' : 'No sections found — fill your resume first.';
         } else {
-          deactivateWraps(preview);
+          unwrap(root);
           document.body.classList.remove('reorder-mode');
-          if (btn) { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
-          if (label) label.textContent = 'Enable Section Drag';
-          if (hint) hint.textContent = 'Click to turn on drag mode — then drag sections directly in the preview';
+          if(btn){ btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
+          if(label) label.textContent = 'Enable Section Drag';
+          if(hint) hint.textContent = 'Click to turn on drag mode — then drag sections directly in the preview';
         }
       };
 
-      // Re-wrap on template change
-      document.addEventListener('DOMContentLoaded', () => {
-        const pc = document.querySelector('.preview-content');
-        if (pc) {
-          const obs = new MutationObserver(() => {
-            if (reorderActive) setTimeout(() => { wrapSections(pc); activateWraps(pc); }, 200);
-          });
-          obs.observe(pc, { childList: true });
-        }
+      // Keep wraps fresh when template/preview re-renders while ON
+      document.addEventListener('DOMContentLoaded',function(){
+        var pc = document.querySelector('.preview-content');
+        if(pc){ new MutationObserver(function(){ if(on) setTimeout(function(){ wrap(pc); },150); }).observe(pc,{childList:true}); }
       });
     })();
     // ── ATS File Checker ─────────────────────────────────────────
