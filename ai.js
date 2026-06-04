@@ -59,88 +59,139 @@ async function callGroq(systemPrompt, userPrompt, maxTokens) {
 function applyAIResume(jsonStr) {
   let data;
   try {
-    const clean = jsonStr.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    // Strip markdown code fences (Groq wraps JSON in ```json...```)
+    let clean = jsonStr.replace(/```json/gi,'').replace(/```/g,'').trim();
     const match = clean.match(/\{[\s\S]*\}/);
     data = JSON.parse(match ? match[0] : clean);
-  } catch(e) { console.error('JSON parse failed:', e, jsonStr.slice(0,200)); return false; }
+  } catch(e) {
+    console.error('[CMR AI] JSON parse failed:', e.message);
+    console.error('[CMR AI] Raw response:', jsonStr.slice(0, 300));
+    return false;
+  }
 
-  // Helper to set a field and fire input event
+  // Convert date "2020-06-01" → "2020-06" (month input format)
+  function toMonth(d) {
+    if (!d) return '';
+    const s = String(d);
+    if (/^\d{4}-\d{2}$/.test(s)) return s;       // already YYYY-MM
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,7); // YYYY-MM-DD → YYYY-MM
+    if (/^\d{4}$/.test(s)) return s + '-01';       // YYYY → YYYY-01
+    return s.slice(0,7);
+  }
+
+  // Convert any array/object to a clean string
+  function toStr(val) {
+    if (!val) return '';
+    if (typeof val === 'string') return val;
+    if (Array.isArray(val)) {
+      return val.map(item => {
+        if (typeof item === 'string') return item;
+        if (typeof item === 'object') {
+          // Handle {name, fluency} → "English (Fluent)"
+          if (item.name && item.fluency) return `${item.name} (${item.fluency})`;
+          // Handle {title/name, description, ...} → "Title — Description"
+          const title = item.title || item.name || '';
+          const desc = item.description || '';
+          const extra = item.issuer || item.technology?.join?.(', ') || '';
+          const date = item.date || item.year || '';
+          let result = title;
+          if (extra) result += ` — ${extra}`;
+          if (date) result += `, ${date}`;
+          if (desc && desc !== title) result += (result ? ': ' : '') + desc;
+          return result || JSON.stringify(item);
+        }
+        return String(item);
+      }).join('\n');
+    }
+    return JSON.stringify(val);
+  }
+
+  // Set a DOM field value and trigger input event
   function set(id, val) {
-    if (!val) return;
+    const v = toStr(val);
+    if (!v) return;
     const el = document.getElementById(id);
-    if (el) { el.value = String(val); el.dispatchEvent(new Event('input', { bubbles: true })); }
+    if (!el) return;
+    el.value = v;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  // ─ Personal info ─
-  set('fullName', data.name || data.fullName);
-  set('jobTitle', data.jobTitle || data.title);
-  set('email', data.email);
-  set('phone', data.phone);
-  set('location', data.location);
-  set('linkedin', data.linkedin);
-  set('summary', data.summary);
+  // ─ Personal info (matches form field IDs exactly) ─
+  set('fullName',  data.name || data.fullName || data.personal?.fullName);
+  set('jobTitle',  data.jobTitle || data.title || data.personal?.jobTitle);
+  set('email',     data.email || data.personal?.email);
+  set('phone',     data.phone || data.personal?.phone);
+  set('location',  data.location || data.personal?.location);
+  set('linkedin',  data.linkedin || data.personal?.linkedin);
+  set('summary',   data.summary || data.personal?.summary);
 
-  // ─ Skills (exact IDs from script.js) ─
-  if (data.technicalSkills || data.skills) {
-    const techSkills = data.technicalSkills || (Array.isArray(data.skills) ? data.skills.join(', ') : data.skills);
-    set('technicalSkills', techSkills);
+  // ─ Skills (IDs: technicalSkills, softSkills, languages) ─
+  const tech = data.technicalSkills || data.skills?.technical || data.skills;
+  if (tech) {
+    const techStr = Array.isArray(tech) && typeof tech[0] === 'string'
+      ? tech.join(', ')
+      : toStr(tech);
+    set('technicalSkills', techStr);
   }
-  if (data.softSkills) set('softSkills', data.softSkills);
+  const soft = data.softSkills || data.skills?.soft;
+  if (soft) {
+    const softStr = Array.isArray(soft) && typeof soft[0] === 'string'
+      ? soft.join(', ')
+      : toStr(soft);
+    set('softSkills', softStr);
+  }
+  const langs = data.languages || data.skills?.languages;
+  if (langs) set('languages', langs);
 
-  // ─ Languages ─
-  if (data.languages) {
-    const lang = Array.isArray(data.languages) ? data.languages.join(', ') : data.languages;
-    set('languages', lang);
-  }
+  // ─ Additional (IDs: certifications, projects, awards) ─
+  set('certifications', data.certifications || data.additional?.certifications);
+  set('projects',       data.projects       || data.additional?.projects);
+  set('awards',         data.awards         || data.additional?.awards);
 
-  // ─ Additional fields ─
-  if (data.certifications) {
-    const certs = Array.isArray(data.certifications) ? data.certifications.join('\n') : data.certifications;
-    set('certifications', certs);
-  }
-  if (data.projects) {
-    const proj = Array.isArray(data.projects) ? data.projects.join('\n') : data.projects;
-    set('projects', proj);
-  }
-  if (data.awards) {
-    const aw = Array.isArray(data.awards) ? data.awards.join('\n') : data.awards;
-    set('awards', aw);
-  }
-
-  // ─ Experience (uses addExperience function from script.js) ─
-  if (Array.isArray(data.experience) && data.experience.length > 0 && typeof addExperience === 'function') {
+  // ─ Experience ─
+  const expArr = data.experience || [];
+  if (expArr.length > 0 && typeof addExperience === 'function') {
     const list = document.getElementById('experienceList');
     if (list) {
       list.innerHTML = '';
-      data.experience.forEach(exp => {
+      expArr.forEach(exp => {
         addExperience({
-          title: exp.title || exp.jobTitle || '',
-          company: exp.company || '',
-          startDate: exp.startDate || '',
-          endDate: exp.endDate || '',
-          description: exp.description || exp.responsibilities || ''
+          title:       exp.title || exp.jobTitle || '',
+          company:     exp.company || exp.organization || '',
+          startDate:   toMonth(exp.startDate || exp.start),
+          endDate:     toMonth(exp.endDate || exp.end),
+          description: exp.description || exp.responsibilities || exp.duties || ''
         });
       });
     }
   }
 
-  // ─ Education (uses addEducation from script.js) ─
-  if (Array.isArray(data.education) && data.education.length > 0 && typeof addEducation === 'function') {
+  // ─ Education ─
+  const eduArr = data.education || [];
+  if (eduArr.length > 0 && typeof addEducation === 'function') {
     const list = document.getElementById('educationList');
     if (list) {
       list.innerHTML = '';
-      data.education.forEach(edu => {
+      eduArr.forEach(edu => {
         addEducation({
-          degree: edu.degree || edu.course || '',
-          school: edu.school || edu.institution || '',
-          year: edu.year || edu.endDate || edu.graduationYear || ''
+          degree: edu.degree || edu.course || edu.qualification || '',
+          school: edu.school || edu.institution || edu.university || '',
+          year:   edu.year || edu.graduationYear || toMonth(edu.endDate || edu.end) || ''
         });
       });
     }
   }
 
-  // ─ Trigger full preview update ─
-  setTimeout(() => { if (typeof updatePreview === 'function') updatePreview(); }, 100);
+  // ─ Force full preview re-render ─
+  // updatePreview() reads from DOM → updates resumeData → renders template
+  setTimeout(() => {
+    if (typeof updatePreview === 'function') {
+      updatePreview();
+      // Second call to catch any debounce race conditions
+      setTimeout(() => updatePreview(), 350);
+    }
+  }, 150);
+
   return true;
 }
 
