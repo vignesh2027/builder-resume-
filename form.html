@@ -122,11 +122,7 @@
                     <a href="form.html" class="nav-link active">Builder</a>
                     <a href="cover.html" class="nav-link">Cover Letter</a>
                 </div>
-                <div class="nav-actions">
-                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                        <span class="theme-icon">🌙</span>
-                    </button>
-                </div>
+                <div class="nav-actions"></div>
             </nav>
         </div>
     </header>
@@ -718,6 +714,30 @@
 
                     <div class="tools-divider"></div>
 
+                    <!-- Section Reorder -->
+                    <div class="tools-group">
+                        <div class="sb-label">Section Order <span style="font-size:0.7rem;color:var(--text-muted);font-weight:400">drag to reorder</span></div>
+                        <ul id="sectionOrderList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;">
+                            <li class="sec-order-item" data-sec="summary" draggable="true"><span class="sec-drag-handle">⠿</span> Summary</li>
+                            <li class="sec-order-item" data-sec="experience" draggable="true"><span class="sec-drag-handle">⠿</span> Experience</li>
+                            <li class="sec-order-item" data-sec="education" draggable="true"><span class="sec-drag-handle">⠿</span> Education</li>
+                            <li class="sec-order-item" data-sec="skills" draggable="true"><span class="sec-drag-handle">⠿</span> Skills</li>
+                            <li class="sec-order-item" data-sec="projects" draggable="true"><span class="sec-drag-handle">⠿</span> Projects</li>
+                            <li class="sec-order-item" data-sec="certifications" draggable="true"><span class="sec-drag-handle">⠿</span> Certifications</li>
+                            <li class="sec-order-item" data-sec="awards" draggable="true"><span class="sec-drag-handle">⠿</span> Awards</li>
+                            <li class="sec-order-item" data-sec="languages" draggable="true"><span class="sec-drag-handle">⠿</span> Languages</li>
+                        </ul>
+                        <style>
+                          .sec-order-item { display:flex; align-items:center; gap:8px; padding:7px 10px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:6px; font-size:0.8rem; cursor:grab; user-select:none; transition:background .15s; }
+                          .sec-order-item:active { cursor:grabbing; }
+                          .sec-order-item.drag-over { background:var(--primary-light); border-color:var(--primary-color); }
+                          .sec-order-item.dragging { opacity:0.4; }
+                          .sec-drag-handle { color:var(--text-muted); font-size:1rem; line-height:1; }
+                        </style>
+                    </div>
+
+                    <div class="tools-divider"></div>
+
                     <!-- Download actions -->
                     <div class="tools-group">
                         <div class="sb-label">Download</div>
@@ -1161,11 +1181,11 @@
         <div>
           <div class="ai-panel-title">
             <span class="ai-panel-emoji">🤖</span>
-            <span>Mistral AI Assistant</span>
+            <span>AI Resume Assistant</span>
           </div>
           <div class="ai-status-row">
             <span class="ai-status-dot" id="aiStatusDot"></span>
-            <span id="aiStatusLabel">Checking Ollama…</span>
+            <span id="aiStatusLabel">Ready</span>
           </div>
         </div>
         <button class="ai-panel-close" onclick="toggleAIPanel()" aria-label="Close AI panel">✕</button>
@@ -1442,6 +1462,92 @@
         watchList('experienceList', 'experienceEmpty');
         watchList('educationList', 'educationEmpty');
       }
+    })();
+    // ── Force light theme on builder ─────────────────────────────
+    (function() {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.removeItem('cmr-theme');
+    })();
+
+    // ── Section drag-to-reorder ───────────────────────────────────
+    (function() {
+      let dragSrc = null;
+
+      function initSectionReorder() {
+        const list = document.getElementById('sectionOrderList');
+        if (!list) return;
+        list.querySelectorAll('.sec-order-item').forEach(item => {
+          item.addEventListener('dragstart', e => {
+            dragSrc = item;
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+            list.querySelectorAll('.sec-order-item').forEach(i => i.classList.remove('drag-over'));
+            applyReorder();
+          });
+          item.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            list.querySelectorAll('.sec-order-item').forEach(i => i.classList.remove('drag-over'));
+            if (item !== dragSrc) item.classList.add('drag-over');
+          });
+          item.addEventListener('drop', e => {
+            e.preventDefault();
+            if (dragSrc && dragSrc !== item) {
+              const items = [...list.querySelectorAll('.sec-order-item')];
+              const fromIdx = items.indexOf(dragSrc);
+              const toIdx = items.indexOf(item);
+              if (fromIdx < toIdx) list.insertBefore(dragSrc, item.nextSibling);
+              else list.insertBefore(dragSrc, item);
+            }
+          });
+        });
+      }
+
+      function applyReorder() {
+        const list = document.getElementById('sectionOrderList');
+        if (!list) return;
+        const order = [...list.querySelectorAll('.sec-order-item')].map(i => i.dataset.sec);
+        const preview = document.getElementById('previewContent') || document.querySelector('.preview-content');
+        if (!preview) return;
+
+        const secMap = {
+          summary:       '#previewSummary',
+          experience:    '#previewExperience',
+          education:     '#previewEducation',
+          skills:        '#previewSkills',
+          projects:      '#previewProjects',
+          certifications:'#previewCertifications',
+          awards:        '#previewAwards',
+          languages:     '#previewLanguages',
+        };
+
+        order.forEach((sec, idx) => {
+          const el = preview.querySelector(secMap[sec]);
+          if (!el) return;
+          // Walk up to the nearest .r-block or direct preview child
+          let block = el;
+          for (let i = 0; i < 4; i++) {
+            if (!block.parentElement) break;
+            const p = block.parentElement;
+            if (p === preview || p.classList.contains('r-main') || p.classList.contains('r-body') || p.classList.contains('pb-main')) break;
+            block = p;
+          }
+          block.style.order = idx;
+          const parent = block.parentElement;
+          if (parent) parent.style.display = 'flex', parent.style.flexDirection = 'column';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initSectionReorder();
+        // re-apply on template change
+        const obs = new MutationObserver(() => setTimeout(applyReorder, 150));
+        const pc = document.querySelector('.preview-content');
+        if (pc) obs.observe(pc, { childList: true, subtree: false });
+      });
     })();
     </script>
 </body>
